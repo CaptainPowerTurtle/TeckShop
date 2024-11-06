@@ -59,6 +59,7 @@ namespace Catalog.Infrastructure
                 });
             });
 
+            // Automaticly register services.
             builder.Services.Scan(selector => selector
             .FromAssemblies(
                 applicationAssembly,

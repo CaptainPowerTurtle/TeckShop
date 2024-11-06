@@ -12,6 +12,7 @@ bool enableSwagger = false;
 bool enableFastEndpoints = false;
 bool enableCaching = false;
 
+// Add keycloak Authentication.
 builder.Services.AddKeycloak(builder.Configuration, builder.Environment);
 
 builder.AddInfrastructure(swaggerDocumentOptions: [], enableSwagger: enableSwagger, enableFastEndpoints: enableFastEndpoints, addCaching: enableCaching);
