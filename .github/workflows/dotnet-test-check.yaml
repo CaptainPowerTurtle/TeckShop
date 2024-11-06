@@ -134,8 +134,8 @@ jobs:
   build-test-docker:
     runs-on: ubuntu-latest
     name: Build and test docker image
-    needs: [pre-checks]
-    if: needs.pre-checks.outputs.hasChanged == 'true'
+    needs: [pre-checks, check-label]
+    if: ${{ needs.pre-checks.outputs.hasChanged == 'true' && needs.check-label.outputs.status == 'success'}}
     strategy:
       matrix:
         # Parse JSON array containing names of all filters matching any of changed files
