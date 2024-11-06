@@ -80,6 +80,7 @@ version-resolver:
     labels:
     - minor
     - feat
+    - feature
   patch:
     labels:
     - patch
