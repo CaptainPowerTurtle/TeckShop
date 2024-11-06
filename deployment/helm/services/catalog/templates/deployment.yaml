@@ -1,0 +1,76 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+  labels:
+    app: {{ .Values.label.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.label.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.label.name }}
+        environment: {{ .Values.environment }}
+    spec:
+      containers:
+        - name: {{ .Values.containers.name }}
+          # Replace with your docker registry info
+          image: {{ .Values.containers.image.name }}:{{ .Values.containers.image.tag }}
+          # image: ghcr.io/captainpowerturtle/teckshop/catalog.api:0.2.2
+          imagePullPolicy: {{ .Values.containers.image.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.containers.ports.containerPort }}
+          resources:
+            limits:
+              cpu: {{ .Values.containers.resources.imits.cpu }}
+              memory: {{ .Values.containers.resources.imits.memory }}
+          env:
+            - name: CachingOptions__Password
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: password
+            - name: CachingOptions__RedisURL
+              value: redis-master.teckshop-prod.svc.cluster.local
+            - name: RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: username
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: password
+            - name: RabbitMqOptions__Host
+              value: amqp://$(RABBITMQ_USERNAME):$(RABBITMQ_PASSWORD)@teckshop-rabbitmq.teckshop-prod.svc.cluster.local:5672
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: DatabaseOptions__ConnectionString
+              value: Host=pgbounce-teckshop-postgres-rw.teckshop-prod.svc;Port=5432;Database=Catalog;Username=$(POSTGRES_USERNAME);Password=$(POSTGRES_PASSWORD);Include Error Detail=true
+            - name: ASPNETCORE_HTTP_PORTS
+              value: "8080"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: KEYCLOAK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-secret
+                  key: secret
+            - name: Keycloak__credentials__secret
+              value: $(KEYCLOAK_SECRET)
+      imagePullSecrets:
+        - name: ghcr-login-secret

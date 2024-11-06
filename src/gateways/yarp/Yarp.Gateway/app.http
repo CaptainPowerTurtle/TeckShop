@@ -1,0 +1,18 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@hostname=localhost
+@port=7068
+
+###
+GET https://{{hostname}}:{{port}}/business/swagger/index.html
+
+
+###
+GET https://{{hostname}}:{{port}}/business/api/projects/qsdf
+Accept: application/json
+
+###
+GET https://{{hostname}}:{{port}}/business/api/projects/string
+Accept: application/json
+
+###
+GET https://{{hostname}}:{{port}}/security/swagger/index.html

@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <Authors></Authors>
+    <Product></Product>
+    <Company>Teck</Company>
+    <Copyright>Copyright © 2024</Copyright>
+	<PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+    <PackageLicenseExpression></PackageLicenseExpression>
+  </PropertyGroup>
+</Project>

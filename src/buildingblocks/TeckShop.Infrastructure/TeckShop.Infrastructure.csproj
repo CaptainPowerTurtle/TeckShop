@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.ApplicationStatus" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
+    <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" />
+    <PackageReference Include="AspNetCore.HealthChecks.Prometheus.Metrics" />
+    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" />
+    <PackageReference Include="AspNetCore.HealthChecks.SignalR" />
+    <PackageReference Include="AspNetCore.HealthChecks.System"/>
+    <PackageReference Include="AspNetCore.HealthChecks.Uris" />
+    <PackageReference Include="DistributedLock.Redis" />
+    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="FastEndpoints.Messaging.Core" />
+    <PackageReference Include="FastEndpoints.Messaging.Remote" />
+    <PackageReference Include="FastEndpoints.Security" />
+    <PackageReference Include="FastEndpoints.Swagger" />
+    <PackageReference Include="FluentStorage" />
+    <PackageReference Include="FluentStorage.AWS"/>
+    <PackageReference Include="FluentValidation"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="IdempotentAPI"/>
+    <PackageReference Include="IdempotentAPI.Cache.DistributedCache" />
+    <PackageReference Include="IdempotentAPI.Cache.FusionCache" />
+    <PackageReference Include="IdempotentAPI.DistributedAccessLock.MadelsonDistributedLock" />
+    <PackageReference Include="IdempotentAPI.MinimalAPI" />
+    <PackageReference Include="Keycloak.AuthServices.Authentication" />
+    <PackageReference Include="Keycloak.AuthServices.Authorization" />
+    <PackageReference Include="Keycloak.AuthServices.Sdk" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="NSwag.Annotations" />
+    <PackageReference Include="prometheus-net" />
+    <PackageReference Include="Scrutor" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Enrichers.Environment" />
+    <PackageReference Include="Serilog.Enrichers.Process" />
+    <PackageReference Include="Serilog.Enrichers.Thread" />
+    <PackageReference Include="Serilog.Exceptions" />
+    <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />
+    <PackageReference Include="Serilog.Expressions" />
+    <PackageReference Include="Serilog.Formatting.Compact" />
+    <PackageReference Include="Serilog.Sinks.Async" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.File" />
+    <PackageReference Include="StackExchange.Redis" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="System.Text.Json"/>
+    <PackageReference Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" />
+    <PackageReference Include="ZiggyCreatures.FusionCache.Serialization.SystemTextJson" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TeckShop.Core\TeckShop.Core.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+</Project>
