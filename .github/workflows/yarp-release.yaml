@@ -54,7 +54,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
   build-gateway:
-    name: Buld and push Yarp Gateway image v${{ needs.release.outputs.version }}
+    name: Build and push Yarp Gateway image v${{ needs.release.outputs.version }}
     runs-on: ubuntu-latest
     needs: [release]
     steps:
@@ -79,6 +79,10 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=sha
+      - id: string
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ env.REPOSITORY }}
       - name: Build and push container image to registry
         uses: docker/build-push-action@v4
         with:
@@ -93,5 +97,5 @@ jobs:
           file: src/gateways/yarp/Yarp.Gateway/Dockerfile
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.REPOSITORY }}/yarp.gateway:dockercache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.REPOSITORY }}/yarp.gateway:dockercache,mode=max,image-manifest=true
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}/yarp.gateway:dockercache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}/yarp.gateway:dockercache,mode=max,image-manifest=true
