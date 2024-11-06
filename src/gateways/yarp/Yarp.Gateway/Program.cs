@@ -26,10 +26,10 @@ builder.Services.AddReverseProxy()
 // TRACES AND LOGS OF THE GATEWAY
 builder.Services.AddOpenTelemetry()
     .WithMetrics(builder => builder.AddPrometheusExporter())
-    .WithTracing(t =>
+    .WithTracing(yarp =>
     {
         // Listen to the YARP tracing activities
-        t.AddSource("Yarp.ReverseProxy");
+        yarp.AddSource("Yarp.ReverseProxy");
     });
 
 // SWAGGER
