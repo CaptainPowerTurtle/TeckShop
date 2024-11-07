@@ -8,21 +8,12 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\buildingblocks\TeckShop.Core\TeckShop.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\src\services\catalog\Catalog.Application\Catalog.Application.csproj" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="AutoFixture" />
-    <PackageReference Include="AutoFixture.AutoNSubstitute" />
-    <PackageReference Include="Soenneker.Utils.AutoBogus" />
-    <PackageReference Include="Soenneker.Utils.AutoBogus.NSubstitute" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
@@ -30,15 +21,25 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.TestPlatform" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-	  <PackageReference Include="FluentAssertions" />
-	  <PackageReference Include="Mapster" />
-	  <PackageReference Include="ErrorOr" />
-	  <PackageReference Include="Bogus" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="ErrorOr" />
+    <PackageReference Include="Bogus" />
     <PackageReference Include="NSubstitute" />
+    <PackageReference Include="TngTech.ArchUnitNET" />
+    <PackageReference Include="TngTech.ArchUnitNET.xUnit" />
     <PackageReference Include="coverlet.collector">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\buildingblocks\TeckShop.Core\TeckShop.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\src\services\catalog\Catalog.Application\Catalog.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\src\services\catalog\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\..\src\services\catalog\Catalog.Domain\Catalog.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\src\services\catalog\Catalog.Api\Catalog.Api.csproj" />
   </ItemGroup>
 
 </Project>

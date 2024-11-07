@@ -5,7 +5,7 @@ namespace Catalog.Domain.Entities.Brands
     /// <summary>
     /// The brand created domain event.
     /// </summary>
-    public class BrandCreatedDomainEvent : DomainEvent
+    public sealed class BrandCreatedDomainEvent : DomainEvent
     {
         /// <summary>
         /// Gets the brand id.

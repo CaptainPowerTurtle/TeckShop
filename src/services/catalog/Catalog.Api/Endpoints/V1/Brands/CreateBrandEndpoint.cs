@@ -46,7 +46,7 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <returns></returns>
         public override async Task HandleAsync(CreateBrandRequest req, CancellationToken ct)
         {
-            var command = new CreateBrand.Command(req);
+            var command = new CreateBrandCommand(req);
             var commandResponse = await _mediatr.Send(command, ct);
             await this.SendCreatedAtAsync<GetBrandEndpoint, ErrorOr<BrandResponse>>(routeValues: new { commandResponse.Value?.Id }, commandResponse, cancellation: ct);
         }

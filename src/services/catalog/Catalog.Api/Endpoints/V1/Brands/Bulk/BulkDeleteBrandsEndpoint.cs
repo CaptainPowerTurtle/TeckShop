@@ -48,7 +48,7 @@ namespace Catalog.Api.Endpoints.V1.Brands.Bulk
         /// <returns></returns>
         public override async Task HandleAsync(DeleteBrandsRequest req, CancellationToken ct)
         {
-            var command = new DeleteBrands.Command(req);
+            var command = new DeleteBrandsCommand(req);
             var commandResponse = await _mediatr.Send(command, ct);
             await this.SendNoContentResponseAsync(commandResponse, cancellation: ct);
         }

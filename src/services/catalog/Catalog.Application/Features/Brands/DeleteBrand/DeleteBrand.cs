@@ -1,4 +1,4 @@
-﻿using Catalog.Application.Contracts.Caching;
+using Catalog.Application.Contracts.Caching;
 using Catalog.Application.Contracts.Repositories;
 using Catalog.Domain.Common.Errors;
 using ErrorOr;
@@ -8,84 +8,78 @@ using TeckShop.Core.Database;
 namespace Catalog.Application.Features.Brands.DeleteBrand
 {
     /// <summary>
-    /// The delete brand.
+    /// Delete brand command.
     /// </summary>
-    public static class DeleteBrand
+    public sealed record DeleteBrandCommand : ICommand<ErrorOr<Deleted>>
     {
         /// <summary>
-        /// The command.
+        /// The id.
         /// </summary>
-        public sealed record Command : ICommand<ErrorOr<Deleted>>
-        {
-            /// <summary>
-            /// The id.
-            /// </summary>
-            public readonly Guid Id;
+        public readonly Guid Id;
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="Command"/> class.
-            /// </summary>
-            /// <param name="request">The request.</param>
-            public Command(DeleteBrandRequest request)
-            {
-                Id = request.Id;
-            }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteBrandCommand"/> class.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        public DeleteBrandCommand(DeleteBrandRequest request)
+        {
+            Id = request.Id;
+        }
+    }
+
+    /// <summary>
+    /// Delete Brand command handler.
+    /// </summary>
+    internal sealed class DeleteBrandCommandHandler : ICommandHandler<DeleteBrandCommand, ErrorOr<Deleted>>
+    {
+        /// <summary>
+        /// The unit of work.
+        /// </summary>
+        private readonly IUnitOfWork _unitOfWork;
+
+        /// <summary>
+        /// The brand repository.
+        /// </summary>
+        private readonly IBrandRepository _brandRepository;
+
+        /// <summary>
+        /// The cache.
+        /// </summary>
+        private readonly IBrandCache _cache;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteBrandCommandHandler"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">The unit of work.</param>
+        /// <param name="cache">The cache.</param>
+        /// <param name="brandRepository">The brand repository.</param>
+        public DeleteBrandCommandHandler(IUnitOfWork unitOfWork, IBrandCache cache, IBrandRepository brandRepository)
+        {
+            _unitOfWork = unitOfWork;
+            _brandRepository = brandRepository;
+            _cache = cache;
         }
 
         /// <summary>
-        /// The handler.
+        /// Handle and return a task of type erroror.
         /// </summary>
-        public sealed class Handler : ICommandHandler<Command, ErrorOr<Deleted>>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns><![CDATA[Task<ErrorOr<Deleted>>]]></returns>
+        public async Task<ErrorOr<Deleted>> Handle(DeleteBrandCommand request, CancellationToken cancellationToken)
         {
-            /// <summary>
-            /// The unit of work.
-            /// </summary>
-            private readonly IUnitOfWork _unitOfWork;
+            var brandToDelete = await _brandRepository.FindOneAsync(brand => brand.Id.Equals(request.Id), true, cancellationToken);
 
-            /// <summary>
-            /// The brand repository.
-            /// </summary>
-            private readonly IBrandRepository _brandRepository;
-
-            /// <summary>
-            /// The cache.
-            /// </summary>
-            private readonly IBrandCache _cache;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="Handler"/> class.
-            /// </summary>
-            /// <param name="unitOfWork">The unit of work.</param>
-            /// <param name="cache">The cache.</param>
-            /// <param name="brandRepository">The brand repository.</param>
-            public Handler(IUnitOfWork unitOfWork, IBrandCache cache, IBrandRepository brandRepository)
+            if (brandToDelete is null)
             {
-                _unitOfWork = unitOfWork;
-                _brandRepository = brandRepository;
-                _cache = cache;
+                return Errors.Brand.NotFound;
             }
 
-            /// <summary>
-            /// Handle and return a task of type erroror.
-            /// </summary>
-            /// <param name="request">The request.</param>
-            /// <param name="cancellationToken">The cancellation token.</param>
-            /// <returns><![CDATA[Task<ErrorOr<Deleted>>]]></returns>
-            public async Task<ErrorOr<Deleted>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var brandToDelete = await _brandRepository.FindOneAsync(brand => brand.Id.Equals(request.Id), true, cancellationToken);
+            _brandRepository.Delete(brandToDelete);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _cache.RemoveAsync(request.Id, cancellationToken);
 
-                if (brandToDelete is null)
-                {
-                    return Errors.Brand.NotFound;
-                }
-
-                _brandRepository.Delete(brandToDelete);
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
-                await _cache.RemoveAsync(request.Id, cancellationToken);
-
-                return Result.Deleted;
-            }
+            return Result.Deleted;
         }
     }
 }

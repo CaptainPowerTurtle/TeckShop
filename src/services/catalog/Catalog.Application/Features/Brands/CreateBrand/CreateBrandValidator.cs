@@ -1,4 +1,4 @@
-﻿using Catalog.Application.Contracts.Repositories;
+using Catalog.Application.Contracts.Repositories;
 using FastEndpoints;
 using FluentValidation;
 
@@ -21,7 +21,7 @@ namespace Catalog.Application.Features.Brands.CreateBrand
                 .MustAsync(async (name, ct) =>
                 {
                     var _brandRepository = Resolve<IBrandRepository>();
-                    return !await _brandRepository.ExistsAsync(brand => brand.Name == name, cancellationToken: ct);
+                    return !await _brandRepository.ExistsAsync(brand => brand.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase), cancellationToken: ct);
                 })
                 .WithMessage((_, productSku) => $"Brand with the name '{productSku}' already Exists.");
         }

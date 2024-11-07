@@ -44,9 +44,9 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <returns></returns>
         public override async Task HandleAsync(GetPaginatedBrandsRequest req, CancellationToken ct)
         {
-            var query = new GetBrands.Query(req);
+            var query = new GetPaginatedBrandsQuery(req);
             var queryResponse = await _mediatr.Send(query, ct);
-            await SendAsync(queryResponse);
+            await SendAsync(queryResponse, cancellation: ct);
         }
     }
 }

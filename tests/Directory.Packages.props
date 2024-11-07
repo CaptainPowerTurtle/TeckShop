@@ -9,8 +9,6 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AutoBogus" Version="2.13.1" />
-    <PackageVersion Include="AutoBogus.NSubstitute" Version="2.13.1" />
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
     <PackageVersion Include="FluentAssertions" Version="6.12.1" />
     <PackageVersion Include="FluentAssertions.Web" Version="1.4.0" />
@@ -26,5 +24,8 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.0-pre.42" />
     <PackageVersion Include="Microsoft.VisualStudio.TestPlatform" Version="14.0.0" />
+    <PackageVersion Include="Soenneker.Utils.AutoBogus" Version="2.1.388" />
+    <PackageVersion Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
+    <PackageVersion Include="Soenneker.Utils.AutoBogus.NSubstitute" Version="2.1.96" />
   </ItemGroup>
 </Project>

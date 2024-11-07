@@ -1,4 +1,4 @@
-﻿using Catalog.Application.Contracts.Caching;
+using Catalog.Application.Contracts.Caching;
 using Catalog.Application.Contracts.Repositories;
 using ErrorOr;
 using TeckShop.Core.CQRS;
@@ -6,72 +6,66 @@ using TeckShop.Core.CQRS;
 namespace Catalog.Application.Features.Brands.DeleteBrands
 {
     /// <summary>
-    /// The delete brands.
+    /// Delete brands command.
     /// </summary>
-    public static class DeleteBrands
+    public sealed record DeleteBrandsCommand : ICommand<ErrorOr<Deleted>>
     {
         /// <summary>
-        /// The command.
+        /// Gets or sets the brand ids.
         /// </summary>
-        public sealed record Command : ICommand<ErrorOr<Deleted>>
-        {
-            /// <summary>
-            /// Gets or sets the brand ids.
-            /// </summary>
-            public IReadOnlyCollection<Guid> BrandIds { get; set; }
+        public IReadOnlyCollection<Guid> BrandIds { get; set; }
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="Command"/> class.
-            /// </summary>
-            /// <param name="deleteBrandsRequest">The delete brands request.</param>
-            public Command(DeleteBrandsRequest deleteBrandsRequest)
-            {
-                BrandIds = new ReadOnlyCollection<Guid>([.. deleteBrandsRequest.Ids]);
-            }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteBrandsCommand"/> class.
+        /// </summary>
+        /// <param name="deleteBrandsRequest">The delete brands request.</param>
+        public DeleteBrandsCommand(DeleteBrandsRequest deleteBrandsRequest)
+        {
+            BrandIds = new ReadOnlyCollection<Guid>([.. deleteBrandsRequest.Ids]);
+        }
+    }
+
+    /// <summary>
+    /// Delete brands command handler.
+    /// </summary>
+    internal sealed class DeleteBrandsCommandHandler : ICommandHandler<DeleteBrandsCommand, ErrorOr<Deleted>>
+    {
+        /// <summary>
+        /// The brand repository.
+        /// </summary>
+        private readonly IBrandRepository _brandRepository;
+
+        /// <summary>
+        /// The cache.
+        /// </summary>
+        private readonly IBrandCache _cache;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteBrandsCommandHandler"/> class.
+        /// </summary>
+        /// <param name="cache">The cache.</param>
+        /// <param name="brandRepository">The brand repository.</param>
+        public DeleteBrandsCommandHandler(IBrandCache cache, IBrandRepository brandRepository)
+        {
+            _brandRepository = brandRepository;
+            _cache = cache;
         }
 
         /// <summary>
-        /// The handler.
+        /// Handle and return a task of type erroror.
         /// </summary>
-        public sealed class Handler : ICommandHandler<Command, ErrorOr<Deleted>>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns><![CDATA[Task<ErrorOr<Deleted>>]]></returns>
+        public async Task<ErrorOr<Deleted>> Handle(DeleteBrandsCommand request, CancellationToken cancellationToken)
         {
-            /// <summary>
-            /// The brand repository.
-            /// </summary>
-            private readonly IBrandRepository _brandRepository;
-
-            /// <summary>
-            /// The cache.
-            /// </summary>
-            private readonly IBrandCache _cache;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="Handler"/> class.
-            /// </summary>
-            /// <param name="cache">The cache.</param>
-            /// <param name="brandRepository">The brand repository.</param>
-            public Handler(IBrandCache cache, IBrandRepository brandRepository)
+            await _brandRepository.ExcecutSoftDeleteAsync(request.BrandIds, cancellationToken);
+            foreach (var id in request.BrandIds)
             {
-                _brandRepository = brandRepository;
-                _cache = cache;
+                await _cache.RemoveAsync(id, cancellationToken);
             }
 
-            /// <summary>
-            /// Handle and return a task of type erroror.
-            /// </summary>
-            /// <param name="request">The request.</param>
-            /// <param name="cancellationToken">The cancellation token.</param>
-            /// <returns><![CDATA[Task<ErrorOr<Deleted>>]]></returns>
-            public async Task<ErrorOr<Deleted>> Handle(Command request, CancellationToken cancellationToken)
-            {
-                await _brandRepository.ExcecutSoftDeleteAsync(request.BrandIds, cancellationToken);
-                foreach (var id in request.BrandIds)
-                {
-                    await _cache.RemoveAsync(id, cancellationToken);
-                }
-
-                return Result.Deleted;
-            }
+            return Result.Deleted;
         }
     }
 }
