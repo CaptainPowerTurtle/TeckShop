@@ -12,34 +12,7 @@ namespace Catalog.Application.Features.Brands.CreateBrand
     /// <summary>
     /// Create brand command.
     /// </summary>
-    public sealed record CreateBrandCommand : ICommand<ErrorOr<BrandResponse>>
-    {
-        /// <summary>
-        /// Name.
-        /// </summary>
-        internal readonly string Name;
-
-        /// <summary>
-        /// The description.
-        /// </summary>
-        internal readonly string? Description;
-
-        /// <summary>
-        /// The website.
-        /// </summary>
-        internal readonly string? Website;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreateBrandCommand"/> class.
-        /// </summary>
-        /// <param name="createBrandRequest">The create brand request.</param>
-        public CreateBrandCommand(CreateBrandRequest createBrandRequest)
-        {
-            Name = createBrandRequest.Name;
-            Description = createBrandRequest.Description;
-            Website = createBrandRequest.Website;
-        }
-    }
+    public sealed record CreateBrandCommand(string Name, string? Description, string? Website) : ICommand<ErrorOr<BrandResponse>>;
 
     /// <summary>
     /// Create Brand command handler.

@@ -44,7 +44,7 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <returns></returns>
         public override async Task HandleAsync(UpdateBrandRequest req, CancellationToken ct)
         {
-            var command = new UpdateBrandCommand(req);
+            var command = new UpdateBrandCommand(req.Id, req.Name, req.Description, req.Website);
             var commandResponse = await _mediatr.Send(command, ct);
             await this.SendNoContentResponseAsync(commandResponse, cancellation: ct);
         }

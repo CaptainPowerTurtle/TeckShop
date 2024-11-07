@@ -10,22 +10,7 @@ namespace Catalog.Application.Features.Brands.DeleteBrand
     /// <summary>
     /// Delete brand command.
     /// </summary>
-    public sealed record DeleteBrandCommand : ICommand<ErrorOr<Deleted>>
-    {
-        /// <summary>
-        /// The id.
-        /// </summary>
-        public readonly Guid Id;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteBrandCommand"/> class.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        public DeleteBrandCommand(DeleteBrandRequest request)
-        {
-            Id = request.Id;
-        }
-    }
+    public sealed record DeleteBrandCommand(Guid Id) : ICommand<ErrorOr<Deleted>>;
 
     /// <summary>
     /// Delete Brand command handler.

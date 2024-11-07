@@ -10,22 +10,7 @@ namespace Catalog.Application.Features.Brands.GetBrand
     /// <summary>
     /// Get Brand query.
     /// </summary>
-    public sealed record GetBrandQuery : IQuery<ErrorOr<BrandResponse>>
-    {
-        /// <summary>
-        /// The id.
-        /// </summary>
-        public readonly Guid Id;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetBrandQuery"/> class.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        public GetBrandQuery(GetBrandRequest request)
-        {
-            Id = request.Id;
-        }
-    }
+    public sealed record GetBrandQuery(Guid Id) : IQuery<ErrorOr<BrandResponse>>;
 
     /// <summary>
     /// Get brand query handler.

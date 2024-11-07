@@ -8,34 +8,7 @@ namespace Catalog.Application.Features.Brands.GetPaginatedBrands
     /// <summary>
     /// Get paginated brands query.
     /// </summary>
-    public sealed record GetPaginatedBrandsQuery : IRequest<PagedList<BrandResponse>>
-    {
-        /// <summary>
-        /// The page.
-        /// </summary>
-        internal readonly int Page;
-
-        /// <summary>
-        /// The size.
-        /// </summary>
-        internal readonly int Size;
-
-        /// <summary>
-        /// The keyword.
-        /// </summary>
-        internal readonly string? Keyword;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetPaginatedBrandsQuery"/> class.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        public GetPaginatedBrandsQuery(GetPaginatedBrandsRequest request)
-        {
-            Page = request.Page;
-            Size = request.Size;
-            Keyword = request.Keyword;
-        }
-    }
+    public sealed record GetPaginatedBrandsQuery(int Page, int Size, string? Keyword) : IRequest<PagedList<BrandResponse>>;
 
     /// <summary>
     /// Get paginated brands query handler.

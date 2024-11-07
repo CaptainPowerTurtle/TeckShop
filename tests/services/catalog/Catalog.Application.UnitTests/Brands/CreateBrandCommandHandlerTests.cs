@@ -1,23 +1,13 @@
-using Amazon.S3;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
-using Bogus;
-using Castle.Core.Resource;
-using Catalog.Application.Contracts.Caching;
-using Catalog.Application.Contracts.Repositories;
 using Catalog.Application.Features.Brands.CreateBrand;
 using Catalog.Application.Features.Brands.Dtos;
 using ErrorOr;
 using FluentAssertions;
-using MapsterMapper;
-using MassTransit;
-using NSubstitute;
 using Soenneker.Utils.AutoBogus;
 using Soenneker.Utils.AutoBogus.Config;
 using Soenneker.Utils.AutoBogus.Context;
-using Soenneker.Utils.AutoBogus.Generators;
 using Soenneker.Utils.AutoBogus.Override;
-using TeckShop.Core.Database;
 
 namespace Catalog.Application.UnitTests.Brands
 {
@@ -26,7 +16,7 @@ namespace Catalog.Application.UnitTests.Brands
         //private readonly Substitute<IBrandRepository> _brandRepositoryMock;
 
         [Fact]
-        public async Task Handle_Should_ReturnSuccessResult_WhenBrandIsUniqueAsync()
+        public async Task Handle_Should_ReturnSuccessResult_WhenBrandIsUnique_Async()
         {
             //Arrange
             IFixture fixture = new Fixture().Customize(new AutoNSubstituteCustomization() { ConfigureMembers = true});
@@ -37,9 +27,7 @@ namespace Catalog.Application.UnitTests.Brands
             var autoFaker = new AutoFaker(optionalConfig);
             autoFaker.Config.Overrides = [new CreateBrandRequestOverride()];
 
-            var request = autoFaker.Generate<CreateBrandRequest>();
-
-            var command = new CreateBrandCommand(request);
+            var command = autoFaker.Generate<CreateBrandCommand>();
 
             //Act
             ErrorOr<BrandResponse> result = await sut.Handle(command, default);

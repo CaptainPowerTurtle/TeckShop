@@ -12,40 +12,7 @@ namespace Catalog.Application.Features.Brands.UpdateBrand
     /// <summary>
     /// Update brand command.
     /// </summary>
-    public sealed record UpdateBrandCommand : IRequest<ErrorOr<BrandResponse>>
-    {
-        /// <summary>
-        /// The id.
-        /// </summary>
-        internal readonly Guid Id;
-
-        /// <summary>
-        /// Name.
-        /// </summary>
-        internal readonly string? Name;
-
-        /// <summary>
-        /// The description.
-        /// </summary>
-        internal readonly string? Description;
-
-        /// <summary>
-        /// The website.
-        /// </summary>
-        internal readonly string? Website;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateBrandCommand"/> class.
-        /// </summary>
-        /// <param name="updateBrandRequest">The update brand request.</param>
-        public UpdateBrandCommand(UpdateBrandRequest updateBrandRequest)
-        {
-            Id = updateBrandRequest.Id;
-            Name = updateBrandRequest.Name;
-            Description = updateBrandRequest.Description;
-            Website = updateBrandRequest.Website;
-        }
-    }
+    public sealed record UpdateBrandCommand(Guid Id, string? Name, string? Description, string? Website) : IRequest<ErrorOr<BrandResponse>>;
 
     /// <summary>
     /// The handler.
