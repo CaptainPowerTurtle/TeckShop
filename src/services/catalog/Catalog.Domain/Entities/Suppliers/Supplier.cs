@@ -1,26 +1,26 @@
 using TeckShop.Core.Domain;
 
-namespace Catalog.Domain.Entities.Brands
+namespace Catalog.Domain.Entities.Suppliers
 {
     /// <summary>
-    /// The brand.
+    /// The product.
     /// </summary>
-    public class Brand : BaseEntity
+    public class Supplier : BaseEntity
     {
         /// <summary>
-        /// Gets the name.
+        /// Gets the name of the supplier.
         /// </summary>
         public string Name { get; private set; } = default!;
 
         /// <summary>
-        /// Gets the description.
+        /// Gets the description of the supplier.
         /// </summary>
-        public string? Description { get; private set; } = null!;
+        public string? Description { get; private set; }
 
         /// <summary>
-        /// Gets the website.
+        /// Gets the website of the supplier.
         /// </summary>
-        public string? Website { get; private set; } = null!;
+        public string? Website { get; private set; }
 
         /// <summary>
         /// Update a brand.
@@ -29,14 +29,17 @@ namespace Catalog.Domain.Entities.Brands
         /// <param name="description"></param>
         /// <param name="website"></param>
         /// <returns></returns>
-        public Brand Update(
+        public Supplier Update(
         string? name,
         string? description,
         string? website)
         {
-            if (name is not null && Name?.Equals(name, StringComparison.Ordinal) is not true) Name = name;
-            if (Description?.Equals(description, StringComparison.Ordinal) is not true) Description = description;
-            if (Website?.Equals(website, StringComparison.Ordinal) is not true) Website = website;
+            if (name is not null && Name?.Equals(name, StringComparison.Ordinal) is not true)
+                Name = name;
+            if (Description?.Equals(description, StringComparison.Ordinal) is not true)
+                Description = description;
+            if (Website?.Equals(website, StringComparison.Ordinal) is not true)
+                Website = website;
             return this;
         }
 
@@ -47,20 +50,17 @@ namespace Catalog.Domain.Entities.Brands
         /// <param name="description"></param>
         /// <param name="website"></param>
         /// <returns></returns>
-        public static Brand Create(
+        public static Supplier Create(
         string name, string? description, string? website)
         {
-            Brand brand = new()
+            Supplier supplier = new()
             {
                 Name = name,
-                Description = description!,
+                Description = description,
                 Website = website
             };
 
-            var @event = new BrandCreatedDomainEvent(brand.Id, brand.Name);
-            brand.AddDomainEvent(@event);
-
-            return brand;
+            return supplier;
         }
     }
 }

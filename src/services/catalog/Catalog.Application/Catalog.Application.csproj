@@ -12,6 +12,10 @@
     <ProjectReference Include="..\..\..\buildingblocks\TeckShop.Infrastructure\TeckShop.Infrastructure.csproj" />
     <ProjectReference Include="..\Catalog.Domain\Catalog.Domain.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Riok.Mapperly" ExcludeAssets="runtime" PrivateAssets="all" />
+  </ItemGroup>
   
   <ItemGroup>
     <InternalsVisibleTo Include="Catalog.Arch.UnitTests" />

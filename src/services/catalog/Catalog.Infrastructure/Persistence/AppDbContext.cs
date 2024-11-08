@@ -1,4 +1,5 @@
 using Catalog.Domain.Entities.Brands;
+using Catalog.Domain.Entities.Products;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using TeckShop.Persistence.Database.EFCore;
@@ -33,11 +34,20 @@ namespace Catalog.Infrastructure.Persistence
             modelBuilder.Entity<Brand>()
                 .HasIndex(brand => brand.IsDeleted)
                 .HasFilter("Brands.IsDeleted = 0");
+
+            modelBuilder.Entity<Product>()
+                .HasIndex(product => product.IsDeleted)
+                .HasFilter("Products.IsDeleted = 0");
         }
 
         /// <summary>
         /// Gets or sets the brands.
         /// </summary>
         public DbSet<Brand> Brands { get; set; }
+
+        /// <summary>
+        /// Gets or sets the products.
+        /// </summary>
+        public DbSet<Product> Products { get; set; }
     }
 }

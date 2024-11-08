@@ -1,3 +1,4 @@
+using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using TeckShop.Core.Domain;
 
@@ -13,6 +14,7 @@ namespace TeckShop.Persistence.Database.EFCore
         /// </summary>
         /// <param name="options">The options.</param>
         protected BaseDbContext(DbContextOptions options) : base(options)
+
         {
         }
 
@@ -24,6 +26,15 @@ namespace TeckShop.Persistence.Database.EFCore
         {
             modelBuilder.AppendGlobalQueryFilter<ISoftDeletable>(entity => !entity.IsDeleted);
             base.OnModelCreating(modelBuilder);
+        }
+
+        /// <summary>
+        /// On configuring.
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseExceptionProcessor();
         }
     }
 }
