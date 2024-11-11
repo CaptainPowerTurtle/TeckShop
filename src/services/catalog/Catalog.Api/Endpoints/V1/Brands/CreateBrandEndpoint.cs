@@ -1,4 +1,4 @@
-using Catalog.Application.Features.Brands.CreateBrand;
+using Catalog.Application.Features.Brands.CreateBrand.V1;
 using Catalog.Application.Features.Brands.Dtos;
 using ErrorOr;
 using FastEndpoints;

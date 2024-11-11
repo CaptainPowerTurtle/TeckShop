@@ -1,5 +1,10 @@
 using Catalog.Domain.Entities.Brands;
+using Catalog.Domain.Entities.Categories;
+using Catalog.Domain.Entities.ProductPrices;
+using Catalog.Domain.Entities.ProductPriceTypes;
 using Catalog.Domain.Entities.Products;
+using Catalog.Domain.Entities.Promotions;
+using Catalog.Domain.Entities.Suppliers;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using TeckShop.Persistence.Database.EFCore;
@@ -49,5 +54,30 @@ namespace Catalog.Infrastructure.Persistence
         /// Gets or sets the products.
         /// </summary>
         public DbSet<Product> Products { get; set; }
+
+        /// <summary>
+        /// Gets or sets the categories.
+        /// </summary>
+        public DbSet<Category> Categories { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product prices.
+        /// </summary>
+        public DbSet<ProductPrice> ProductPrices { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product price types.
+        /// </summary>
+        public DbSet<ProductPriceType> ProductPriceTypes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the promotions.
+        /// </summary>
+        public DbSet<Promotion> Promotions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the suppliers.
+        /// </summary>
+        public DbSet<Supplier> Suppliers { get; set; }
     }
 }

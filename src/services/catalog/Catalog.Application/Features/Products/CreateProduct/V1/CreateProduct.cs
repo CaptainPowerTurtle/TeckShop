@@ -1,22 +1,24 @@
 using Catalog.Application.Contracts.Repositories;
+using Catalog.Application.Features.Products.Response;
 using Catalog.Domain.Common.Errors;
 using Catalog.Domain.Entities.Brands;
+using Catalog.Domain.Entities.Categories;
 using Catalog.Domain.Entities.Products;
 using ErrorOr;
 using TeckShop.Core.CQRS;
 using TeckShop.Core.Database;
 
-namespace Catalog.Application.Features.Products.CreateProduct
+namespace Catalog.Application.Features.Products.CreateProduct.V1
 {
     /// <summary>
     /// Create brand command.
     /// </summary>
-    public sealed record CreateProductCommand(string Name, string? Description, string? ProductSku, string? GTIN, bool IsActive, Guid? BrandId) : ICommand<ErrorOr<Created>>;
+    public sealed record CreateProductCommand(string Name, string? Description, string? ProductSku, string? GTIN, bool IsActive, Guid? BrandId, IReadOnlyCollection<Guid> Categories) : ICommand<ErrorOr<ProductResponse>>;
 
     /// <summary>
     /// Create Brand command handler.
     /// </summary>
-    internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, ErrorOr<Created>>
+    internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, ErrorOr<ProductResponse>>
     {
         /// <summary>
         /// The unit of work.
@@ -33,17 +35,21 @@ namespace Catalog.Application.Features.Products.CreateProduct
         /// </summary>
         private readonly IBrandRepository _brandRepository;
 
+        private readonly ICategoryRepository _categoryRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateProductCommandHandler"/> class.
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
         /// <param name="productRepository">The brand repository.</param>
         /// <param name="brandRepository"></param>
-        public CreateProductCommandHandler(IUnitOfWork unitOfWork, IProductRepository productRepository, IBrandRepository brandRepository)
+        /// <param name="categoryRepository"></param>
+        public CreateProductCommandHandler(IUnitOfWork unitOfWork, IProductRepository productRepository, IBrandRepository brandRepository, ICategoryRepository categoryRepository)
         {
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
             _brandRepository = brandRepository;
+            _categoryRepository = categoryRepository;
         }
 
         /// <summary>
@@ -52,9 +58,11 @@ namespace Catalog.Application.Features.Products.CreateProduct
         /// <param name="request">The request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns><![CDATA[Task<ErrorOr<Created>>]]></returns>
-        public async Task<ErrorOr<Created>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<ProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             Brand? exisitingBrand = null;
+            IReadOnlyList<Category> categories = [];
+
             if (request.BrandId.HasValue)
             {
                 exisitingBrand = await _brandRepository.FindByIdAsync(request.BrandId.Value, true, cancellationToken);
@@ -65,7 +73,17 @@ namespace Catalog.Application.Features.Products.CreateProduct
                 }
             }
 
-            var productToAdd = Product.Create(request.Name, request.Description, request.ProductSku, request.GTIN, request.IsActive, exisitingBrand);
+            if (request.Categories.Count > 0)
+            {
+                categories = await _categoryRepository.FindAsync(category => request.Categories.Contains(category.Id), cancellationToken: cancellationToken);
+
+                if (categories.Count.Equals(0))
+                {
+                    return Errors.Category.NotFound;
+                }
+            }
+
+            var productToAdd = Product.Create(request.Name, request.Description, request.ProductSku, request.GTIN, categories.ToList(), request.IsActive, exisitingBrand);
 
             await _productRepository.AddAsync(productToAdd, cancellationToken);
 
@@ -76,7 +94,7 @@ namespace Catalog.Application.Features.Products.CreateProduct
                 return Errors.Product.NotCreated;
             }
 
-            return Result.Created;
+            return ProductMappings.ProductToProductResponse(productToAdd);
         }
     }
 }

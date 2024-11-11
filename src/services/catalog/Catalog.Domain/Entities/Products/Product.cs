@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
 using Catalog.Domain.Entities.Brands;
+using Catalog.Domain.Entities.Categories;
 using Catalog.Domain.Entities.ProductPrices;
+using Catalog.Domain.Entities.Promotions;
 using TeckShop.Core.Domain;
 
 namespace Catalog.Domain.Entities.Products
@@ -51,9 +53,19 @@ namespace Catalog.Domain.Entities.Products
         public Brand? Brand { get; private set; }
 
         /// <summary>
+        /// Gets the categories.
+        /// </summary>
+        public ICollection<Category> Categories { get; private set; } = [];
+
+        /// <summary>
         /// Gets the product prices.
         /// </summary>
         public ICollection<ProductPrice> ProductPrices { get; private set; } = [];
+
+        /// <summary>
+        /// Gets the promotions.
+        /// </summary>
+        public ICollection<Promotion> Promotions { get; private set; } = [];
 
         /// <summary>
         /// Update a brand.
@@ -79,6 +91,7 @@ namespace Catalog.Domain.Entities.Products
         /// <param name="description"></param>
         /// <param name="productSku"></param>
         /// <param name="gtin"></param>
+        /// <param name="categories"></param>
         /// <param name="isActive"></param>
         /// <param name="brand"></param>
         public static Product Create(
@@ -86,6 +99,7 @@ namespace Catalog.Domain.Entities.Products
             string? description,
             string? productSku,
             string? gtin,
+            ICollection<Category> categories,
             bool? isActive = false,
             Brand? brand = null)
         {
@@ -97,8 +111,9 @@ namespace Catalog.Domain.Entities.Products
                 IsActive = isActive ?? false,
                 ProductSKU = productSku!,
                 GTIN = gtin,
-                BrandId = brand?.Id,
+                Categories = categories,
                 Brand = brand,
+                BrandId = brand?.Id
             };
 
             var @event = new ProductCreatedDomainEvent(product.Id, product.Name);

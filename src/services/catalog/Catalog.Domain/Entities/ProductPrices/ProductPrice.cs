@@ -1,7 +1,5 @@
-using Catalog.Domain.Entities.ProductPriceOffers;
 using Catalog.Domain.Entities.ProductPriceTypes;
 using Catalog.Domain.Entities.Products;
-using Catalog.Domain.Entities.Promotions;
 using TeckShop.Core.Domain;
 
 namespace Catalog.Domain.Entities.ProductPrices
@@ -40,12 +38,6 @@ namespace Catalog.Domain.Entities.ProductPrices
         /// Gets the product price type id.
         /// </summary>
         public Guid? ProductPriceTypeId { get; private set; } = null!;
-
-
-        /// <summary>
-        /// Gets the promotions.
-        /// </summary>
-        public ICollection<Promotion> Promotions { get; private set; } = [];
 
         /// <summary>
         /// Update product price.

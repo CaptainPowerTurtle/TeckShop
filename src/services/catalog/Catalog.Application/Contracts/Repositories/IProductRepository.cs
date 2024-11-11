@@ -18,6 +18,6 @@ namespace Catalog.Application.Contracts.Repositories
         /// <param name="keyword"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-        Task<PagedList<TProductResponse>> GetPagedBrandsAsync<TProductResponse>(int page, int size, string? keyword, CancellationToken cancellationToken = default);
+        Task<PagedList<TProductResponse>> GetPagedProductsAsync<TProductResponse>(int page, int size, string? keyword, CancellationToken cancellationToken = default);
     }
 }

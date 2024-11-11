@@ -7,7 +7,7 @@ using MapsterMapper;
 using TeckShop.Core.CQRS;
 using TeckShop.Core.Database;
 
-namespace Catalog.Application.Features.Brands.CreateBrand
+namespace Catalog.Application.Features.Brands.CreateBrand.V1
 {
     /// <summary>
     /// Create brand command.

@@ -7,7 +7,7 @@ using TeckShop.Persistence.Database.EFCore;
 namespace Catalog.Infrastructure.Persistence.Repositories
 {
     /// <summary>
-    /// The brand repository.
+    /// The product repository.
     /// </summary>
     public class ProductRepository : GenericRepository<Product, Guid>, IProductRepository
     {
@@ -27,7 +27,7 @@ namespace Catalog.Infrastructure.Persistence.Repositories
         }
 
         /// <summary>
-        /// Get paged brands asynchronously.
+        /// Get paged products asynchronously.
         /// </summary>
         /// <typeparam name="TProductResponse"/>
         /// <param name="page">The page.</param>
@@ -35,16 +35,16 @@ namespace Catalog.Infrastructure.Persistence.Repositories
         /// <param name="keyword">The keyword.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns><![CDATA[Task<PagedList<ProductResponse>>]]></returns>
-        public async Task<PagedList<TProductResponse>> GetPagedBrandsAsync<TProductResponse>(int page, int size, string? keyword, CancellationToken cancellationToken = default)
+        public async Task<PagedList<TProductResponse>> GetPagedProductsAsync<TProductResponse>(int page, int size, string? keyword, CancellationToken cancellationToken = default)
         {
             var queryable = _context.Products.AsQueryable();
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = keyword.ToLowerInvariant();
-                queryable = queryable.Where(brand => brand.Name.Contains(keyword, StringComparison.InvariantCultureIgnoreCase));
+                queryable = queryable.Where(product => product.Name.Contains(keyword, StringComparison.InvariantCultureIgnoreCase));
             }
 
-            queryable = queryable.OrderBy(brand => brand.CreatedOn);
+            queryable = queryable.OrderBy(product => product.CreatedOn);
             return await queryable.ApplyPagingAsync<Product, TProductResponse>(page, size, cancellationToken);
         }
     }

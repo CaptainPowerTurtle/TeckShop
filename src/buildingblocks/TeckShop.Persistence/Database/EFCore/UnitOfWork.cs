@@ -1,3 +1,5 @@
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using TeckShop.Core.Database;
 using TeckShop.Core.Exceptions;
@@ -33,15 +35,16 @@ namespace TeckShop.Persistence.Database.EFCore
         /// <summary>
         /// Begins the transaction asynchronously.
         /// </summary>
+        /// <param name="isolationLevel"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="InvalidTransactionException">.</exception>
         /// <returns><![CDATA[Task<IDbContextTransaction>]]></returns>
-        public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+        public async Task<IDbTransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
         {
             if (_transaction is not null)
                 throw new InvalidTransactionException("A transaction has already been started.");
-            _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-            return _transaction;
+            _transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+            return _transaction.GetDbTransaction();
         }
 
         /// <summary>
@@ -58,6 +61,19 @@ namespace TeckShop.Persistence.Database.EFCore
         }
 
         /// <summary>
+        /// Creates transaction savepoint asynchronously.
+        /// </summary>
+        /// <param name="savePoint"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
+        public async Task CreateTransactionSavepoint(string savePoint, CancellationToken cancellationToken = default)
+        {
+            if (_transaction is null)
+                throw new InvalidTransactionException("A transaction has not been started.");
+            await _transaction.CreateSavepointAsync(savePoint, cancellationToken);
+        }
+
+        /// <summary>
         /// Rollbacks the transaction asynchronously.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -71,6 +87,19 @@ namespace TeckShop.Persistence.Database.EFCore
         }
 
         /// <summary>
+        /// Rollbacks the transaction to the savepoint asynchronously.
+        /// </summary>
+        /// <param name="savePoint"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
+        public async Task RollbackTransactionToSavepointAsync(string savePoint, CancellationToken cancellationToken = default)
+        {
+            if (_transaction is null)
+                throw new InvalidTransactionException("A transaction has not been started.");
+            await _transaction.RollbackToSavepointAsync(savePoint, cancellationToken);
+        }
+
+        /// <summary>
         /// Save the changes asynchronously.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -78,6 +107,26 @@ namespace TeckShop.Persistence.Database.EFCore
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return _context.SaveChangesAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Virtual dispose.
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            _transaction?.Dispose();
+
+            _context.Dispose();
         }
     }
 }

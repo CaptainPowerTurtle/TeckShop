@@ -2,7 +2,7 @@ using Catalog.Application.Contracts.Repositories;
 using FastEndpoints;
 using FluentValidation;
 
-namespace Catalog.Application.Features.Brands.CreateBrand
+namespace Catalog.Application.Features.Brands.CreateBrand.V1
 {
     /// <summary>
     /// The create brand validator.

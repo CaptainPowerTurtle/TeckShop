@@ -1,3 +1,4 @@
+using Catalog.Domain.Entities.Categories;
 using Catalog.Domain.Entities.Products;
 using TeckShop.Core.Domain;
 
@@ -32,6 +33,11 @@ namespace Catalog.Domain.Entities.Promotions
         /// Gets the products.
         /// </summary>
         public ICollection<Product> Products { get; private set; } = [];
+
+        /// <summary>
+        /// Gets the categories.
+        /// </summary>
+        public ICollection<Category> Categories { get; private set; } = [];
 
         /// <summary>
         /// Update a brand.
