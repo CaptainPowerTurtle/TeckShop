@@ -14,7 +14,7 @@ builder.AddServiceDefaults();
 var migrationAssembly = typeof(IAssemblyMarker).Assembly;
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("catalog"), sqlOptions =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("catalogdb"), sqlOptions =>
     {
         sqlOptions.MigrationsAssembly(migrationAssembly.FullName);
     }));
