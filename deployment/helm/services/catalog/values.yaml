@@ -34,7 +34,7 @@ migration:
     image:
       repository: ghcr.io/captainpowerturtle/teckshop
       name: catalog.migration
-      tag: 0.2.2
+      tag: 1.0.2
       imagePullPolicy: Always
     resources:
       imits:
