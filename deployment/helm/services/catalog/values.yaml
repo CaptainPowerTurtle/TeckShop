@@ -33,7 +33,7 @@ migration:
       containerPort: 8080
     image:
       repository: ghcr.io/captainpowerturtle/teckshop
-      name: catalog.migration
+      name: ghcr.io/captainpowerturtle/teckshop/catalog.migration
       tag: 1.0.2
       imagePullPolicy: Always
     resources:
