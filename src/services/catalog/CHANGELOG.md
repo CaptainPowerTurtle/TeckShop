@@ -1,5 +1,13 @@
 # Changelog
 
+## catalog-v1.0.4 - 2024-11-15
+
+### What Changed 👀
+
+### 🐛 Bug Fixes
+
+- fix: db connection for migration @CaptainPowerTurtle (#35)
+
 ## catalog-v1.0.3 - 2024-11-15
 
 ### What Changed 👀
