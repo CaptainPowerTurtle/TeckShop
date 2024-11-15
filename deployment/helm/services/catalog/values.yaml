@@ -3,7 +3,7 @@ api:
   label:
     name: catalog-api
     namespace: teckshop-prod
-    replicas: 2
+  replicas: 2
 
   containers:
     name: catalog-api
@@ -26,7 +26,7 @@ migration:
   label:
     name: catalog-migration
     namespace: teckshop-prod
-    replicas: 1
+  replicas: 1
   containers:
     name: catalog-migration
     ports:
