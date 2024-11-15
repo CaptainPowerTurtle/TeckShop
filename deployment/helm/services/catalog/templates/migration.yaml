@@ -51,3 +51,5 @@ spec:
               value: Production
       imagePullSecrets:
         - name: ghcr-login-secret
+    restartPolicy: Never
+  backoffLimit: 1
