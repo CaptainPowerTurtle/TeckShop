@@ -4,7 +4,7 @@ metadata:
   name: catalog-api
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: catalog-api=ghcr.io/captainpowerturtle/teckshop/catalog.api:x.x.x,catalog-migration=ghcr.io/captainpowerturtle/teckshop/catalog.migration:x.x.x
+    argocd-image-updater.argoproj.io/image-list: catalog-api=ghcr.io/captainpowerturtle/teckshop/catalog.api:x.x.x, catalog-migration=ghcr.io/captainpowerturtle/teckshop/catalog.migration:x.x.x
     argocd-image-updater.argoproj.io/catalog-api.update-strategy: semver
     argocd-image-updater.argoproj.io/catalog-api.allow-tags: regexp:^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
     argocd-image-updater.argoproj.io/catalog-api.helm.image-name: api.containers.image.name
