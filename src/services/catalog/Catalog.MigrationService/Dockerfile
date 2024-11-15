@@ -22,12 +22,12 @@ COPY ["src/services/catalog/Catalog.Infrastructure/Catalog.Infrastructure.csproj
 RUN dotnet restore "./src/services/catalog/Catalog.MigrationService/Catalog.MigrationService.csproj"
 COPY . .
 WORKDIR "/src/src/services/catalog/Catalog.MigrationService"
-RUN dotnet build "./Catalog.MigrationService.csproj" -c $BUILD_CONFIGURATION -o /app/build -r linux-x64 /p:PublishReadyToRun=true
+RUN dotnet build "./Catalog.MigrationService.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Catalog.MigrationService.csproj" -c $BUILD_CONFIGURATION -o /app/publish -r linux-x64 --self-contained true --no-restore /p:UseAppHost=true /p:PublishReadyToRun=true /p:PublishTrimmed=true
+RUN dotnet publish "./Catalog.MigrationService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
