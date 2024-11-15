@@ -1,5 +1,13 @@
 # Changelog
 
+## catalog-v1.0.5 - 2024-11-15
+
+### What Changed 👀
+
+### 🐛 Bug Fixes
+
+- fix: headers @CaptainPowerTurtle (#41)
+
 ## catalog-v1.0.4 - 2024-11-15
 
 ### What Changed 👀
