@@ -1,5 +1,14 @@
 # Changelog
 
+## yarp-v1.0.1 - 2024-11-15
+
+### What Changed 👀
+
+### 🐛 Bug Fixes
+
+- fix: url @CaptainPowerTurtle (#44)
+- fix: headers @CaptainPowerTurtle (#41)
+
 ## yarp-v1.0.0 - 2024-11-15
 
 ### What Changed 👀
