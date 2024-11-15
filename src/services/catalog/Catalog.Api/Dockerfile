@@ -7,7 +7,6 @@ EXPOSE 8080
 EXPOSE 8081
 
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0-jammy AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/services/catalog/Directory.Build.props", "src/services/catalog/"]
 COPY ["src/Directory.Packages.props", "src/"]
