@@ -3,14 +3,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-service
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.api.namespace }}
   labels:
-    name: {{ .Values.label.name }}
+    name: {{ .Values.api.label.name }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   ports:
-  - port: {{ .Values.service.port}}
-    targetPort: {{ .Values.service.targetPort }}
+  - port: {{ .Values.api.service.port}}
+    targetPort: {{ .Values.api.service.targetPort }}
   selector:
-    app: {{ .Values.label.name }}
+    app: {{ .Values.api.label.name }}
