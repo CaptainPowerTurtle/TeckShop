@@ -41,6 +41,10 @@ spec:
                   key: password
             - name: ConnectionStrings__catalogdb
               value: Host=pgbounce-teckshop-postgres-rw.teckshop-prod.svc;Port=5432;Database=Catalog;Username=$(POSTGRES_USERNAME);Password=$(POSTGRES_PASSWORD);Include Error Detail=true
+            - name: ReverseProxy__Clusters__catalog__Destinations__catalog/destination1__Address
+              value: http://catalog-api-service.teckshop-prod::8080
+            - name: ReverseProxy__Clusters__catalog__Destinations__catalog/destination1__Health
+              value: http://catalog-api-service.teckshop-prod::8080
             - name: ASPNETCORE_HTTP_PORTS
               value: "8080"
             - name: ASPNETCORE_ENVIRONMENT
