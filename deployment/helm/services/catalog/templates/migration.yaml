@@ -10,7 +10,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
-  replicas: {{ .Values.migration.replicas }}
   template:
     metadata:
       labels:
