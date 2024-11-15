@@ -12,10 +12,8 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Directory.Packages.props", "src/"]
 COPY ["src/services/catalog/Directory.Build.props", "src/services/catalog/"]
-COPY ["src/Directory.Build.props", "src/"]
 COPY ["src/services/catalog/Catalog.MigrationService/Catalog.MigrationService.csproj", "src/services/catalog/Catalog.MigrationService/"]
 COPY ["src/buildingblocks/TeckShop.Core/TeckShop.Core.csproj", "src/buildingblocks/TeckShop.Core/"]
-COPY ["src/buildingblocks/TeckShop.Infrastructure/TeckShop.Infrastructure.csproj", "src/buildingblocks/TeckShop.Infrastructure/"]
 COPY ["src/buildingblocks/TeckShop.Persistence/TeckShop.Persistence.csproj", "src/buildingblocks/TeckShop.Persistence/"]
 COPY ["src/aspire/TeckShop.ServiceDefaults/TeckShop.ServiceDefaults.csproj", "src/aspire/TeckShop.ServiceDefaults/"]
 COPY ["src/services/catalog/Catalog.Infrastructure/Catalog.Infrastructure.csproj", "src/services/catalog/Catalog.Infrastructure/"]
