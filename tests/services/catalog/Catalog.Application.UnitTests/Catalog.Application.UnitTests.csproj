@@ -19,6 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="System.Text.RegularExpressions" />
     <PackageReference Include="AutoFixture" />
     <PackageReference Include="AutoFixture.AutoNSubstitute" />
     <PackageReference Include="Soenneker.Utils.AutoBogus" />
@@ -35,6 +37,7 @@
 	  <PackageReference Include="ErrorOr" />
 	  <PackageReference Include="Bogus" />
     <PackageReference Include="NSubstitute" />
+    <PackageReference Include="System.Text.Encodings.Web" />
     <PackageReference Include="coverlet.collector">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
