@@ -1,3 +1,4 @@
+using System.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using TeckShop.Core.CQRS;
@@ -10,20 +11,18 @@ namespace TeckShop.Infrastructure.Behaviors
         : IPipelineBehavior<TRequest, TResponse>
         where TRequest : notnull, ITransactionalCommand<TResponse>
     {
-#pragma warning disable AV1755 // Name of async method should end with Async or TaskAsync
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             logger.LogInformation("Beginning transaction for {RequestName}", typeof(TRequest).Name);
 
-            await unitOfWork.BeginTransactionAsync(cancellationToken);
+            using IDbTransaction transaction = await unitOfWork.BeginTransactionAsync(cancellationToken: cancellationToken);
             TResponse response = await next();
 
-            await unitOfWork.CommitTransactionAsync(cancellationToken);
+            transaction.Commit();
 
             logger.LogInformation("Committed transaction for {RequestName}", typeof(TRequest).Name);
 
             return response;
         }
     }
-#pragma warning restore AV1755 // Name of async method should end with Async or TaskAsync
 }

@@ -5,27 +5,21 @@ namespace Catalog.Domain.Entities.Brands
     /// <summary>
     /// The brand created domain event.
     /// </summary>
-    public class BrandCreatedDomainEvent : DomainEvent
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="BrandCreatedDomainEvent"/> class.
+    /// </remarks>
+    /// <param name="brandId">The brand id.</param>
+    /// <param name="brandName">The brand name.</param>
+    public sealed class BrandCreatedDomainEvent(Guid brandId, string brandName) : DomainEvent
     {
         /// <summary>
         /// Gets the brand id.
         /// </summary>
-        public Guid BrandId { get; }
+        public Guid BrandId { get; } = brandId;
 
         /// <summary>
         /// Gets the brand name.
         /// </summary>
-        public string BrandName { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BrandCreatedDomainEvent"/> class.
-        /// </summary>
-        /// <param name="brandId">The brand id.</param>
-        /// <param name="brandName">The brand name.</param>
-        public BrandCreatedDomainEvent(Guid brandId, string brandName)
-        {
-            BrandId = brandId;
-            BrandName = brandName;
-        }
+        public string BrandName { get; } = brandName;
     }
 }

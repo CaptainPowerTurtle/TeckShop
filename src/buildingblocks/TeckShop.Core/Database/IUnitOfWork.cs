@@ -1,18 +1,19 @@
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 
 namespace TeckShop.Core.Database
 {
     /// <summary>
     /// Unit of work interface.
     /// </summary>
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         /// <summary>
         /// Begin a unit of work transaction.
         /// </summary>
+        /// <param name="isolationLevel"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-        Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+        Task<IDbTransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Commit a unit of work transaction.

@@ -9,35 +9,28 @@ namespace TeckShop.Persistence.Caching
     /// </summary>
     /// <typeparam name="TEntity"/>
     /// <typeparam name="TId"/>
-    public class GenericCacheService<TEntity, TId> : IGenericCacheService<TEntity, TId>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GenericCacheService{TEntity, TId}"/> class.
+    /// </remarks>
+    /// <param name="fusionCache">The fusion cache.</param>
+    /// <param name="genericRepository">The generic repository.</param>
+    public class GenericCacheService<TEntity, TId>(IFusionCache fusionCache, IGenericRepository<TEntity, TId> genericRepository) : IGenericCacheService<TEntity, TId>
         where TEntity : class
     {
         /// <summary>
         /// The fusion cache.
         /// </summary>
-        private readonly IFusionCache _fusionCache;
+        private readonly IFusionCache _fusionCache = fusionCache;
 
         /// <summary>
         /// The repository.
         /// </summary>
-        private readonly IGenericRepository<TEntity, TId> _repository;
+        private readonly IGenericRepository<TEntity, TId> _repository = genericRepository;
 
         /// <summary>
         /// The cache key prefix.
         /// </summary>
-        private readonly string _cacheKeyPrefix;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GenericCacheService{TEntity, TId}"/> class.
-        /// </summary>
-        /// <param name="fusionCache">The fusion cache.</param>
-        /// <param name="genericRepository">The generic repository.</param>
-        public GenericCacheService(IFusionCache fusionCache, IGenericRepository<TEntity, TId> genericRepository)
-        {
-            _fusionCache = fusionCache;
-            _repository = genericRepository;
-            _cacheKeyPrefix = typeof(TEntity).Name;
-        }
+        private readonly string _cacheKeyPrefix = typeof(TEntity).Name;
 
         /// <summary>
         /// Get or set by id asynchronously.
@@ -48,13 +41,13 @@ namespace TeckShop.Persistence.Caching
         /// <returns><![CDATA[Task<TEntity?>]]></returns>
         public async Task<TEntity?> GetOrSetByIdAsync(TId id, bool enableTracking = false, CancellationToken cancellationToken = default)
         {
-            var key = GenerateCacheKey(id!.ToString()!);
+            string key = GenerateCacheKey(id!.ToString()!);
 
             return await _fusionCache.GetOrSetAsync<TEntity?>(
                 key,
                 async (context, ct) =>
                 {
-                    var result = await _repository.FindByIdAsync(id, enableTracking: false, cancellationToken: cancellationToken);
+                    TEntity? result = await _repository.FindByIdAsync(id, enableTracking: false, cancellationToken: cancellationToken);
                     if (result is null)
                     {
                         context.Options.Duration = TimeSpan.FromMinutes(5);
@@ -74,7 +67,7 @@ namespace TeckShop.Persistence.Caching
         /// <returns><![CDATA[Task]]></returns>
         public async Task SetAsync(TId id, TEntity entity, CancellationToken cancellationToken = default)
         {
-            var key = GenerateCacheKey(id!.ToString()!);
+            string key = GenerateCacheKey(id!.ToString()!);
 
             await _fusionCache.SetAsync(key, entity, token: cancellationToken);
         }
@@ -87,7 +80,7 @@ namespace TeckShop.Persistence.Caching
         /// <returns><![CDATA[Task]]></returns>
         public async Task ExpireAsync(TId id, CancellationToken cancellationToken = default)
         {
-            var key = GenerateCacheKey(id!.ToString()!);
+            string key = GenerateCacheKey(id!.ToString()!);
 
             await _fusionCache.ExpireAsync(key, token: cancellationToken);
         }
@@ -100,7 +93,7 @@ namespace TeckShop.Persistence.Caching
         /// <returns></returns>
         public async Task RemoveAsync(TId id, CancellationToken cancellationToken = default)
         {
-            var key = GenerateCacheKey(id!.ToString()!);
+            string key = GenerateCacheKey(id!.ToString()!);
 
             await _fusionCache.RemoveAsync(key, token: cancellationToken);
         }
@@ -116,7 +109,7 @@ namespace TeckShop.Persistence.Caching
 
             list.AddRange(data);
 
-            var key = string.Join(":", list);
+            string key = string.Join(":", list);
             return key;
         }
     }

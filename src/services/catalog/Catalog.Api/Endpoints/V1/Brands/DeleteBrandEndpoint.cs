@@ -1,4 +1,5 @@
 using Catalog.Application.Features.Brands.DeleteBrand;
+using ErrorOr;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
@@ -10,21 +11,16 @@ namespace Catalog.Api.Endpoints.V1.Brands
     /// <summary>
     /// The delete brand endpoint.
     /// </summary>
-    public class DeleteBrandEndpoint : Endpoint<DeleteBrandRequest, NoContent>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="DeleteBrandEndpoint"/> class.
+    /// </remarks>
+    /// <param name="mediatr">The mediatr.</param>
+    public class DeleteBrandEndpoint(ISender mediatr) : Endpoint<DeleteBrandRequest, NoContent>
     {
         /// <summary>
         /// The mediatr.
         /// </summary>
-        private readonly ISender _mediatr;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteBrandEndpoint"/> class.
-        /// </summary>
-        /// <param name="mediatr">The mediatr.</param>
-        public DeleteBrandEndpoint(ISender mediatr)
-        {
-            _mediatr = mediatr;
-        }
+        private readonly ISender _mediatr = mediatr;
 
         /// <summary>
         /// Configure the endpoint.
@@ -45,8 +41,8 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <returns></returns>
         public override async Task HandleAsync(DeleteBrandRequest req, CancellationToken ct)
         {
-            var command = new DeleteBrand.Command(req);
-            var commandResponse = await _mediatr.Send(command, ct);
+            DeleteBrandCommand command = new(req.Id);
+            ErrorOr<Deleted> commandResponse = await _mediatr.Send(command, ct);
             await this.SendNoContentResponseAsync(commandResponse, cancellation: ct);
         }
     }

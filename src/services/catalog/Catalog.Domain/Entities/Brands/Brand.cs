@@ -1,3 +1,4 @@
+using Catalog.Domain.Entities.Products;
 using TeckShop.Core.Domain;
 
 namespace Catalog.Domain.Entities.Brands
@@ -23,6 +24,11 @@ namespace Catalog.Domain.Entities.Brands
         public string? Website { get; private set; } = null!;
 
         /// <summary>
+        /// Gets the products.
+        /// </summary>
+        public ICollection<Product> Products { get; private set; } = [];
+
+        /// <summary>
         /// Update a brand.
         /// </summary>
         /// <param name="name"></param>
@@ -34,9 +40,21 @@ namespace Catalog.Domain.Entities.Brands
         string? description,
         string? website)
         {
-            if (name is not null && Name?.Equals(name, StringComparison.Ordinal) is not true) Name = name;
-            if (description is not null && Description?.Equals(description, StringComparison.Ordinal) is not true) Description = description;
-            if (website is not null && Website?.Equals(website, StringComparison.Ordinal) is not true) Website = website;
+            if (name is not null && Name?.Equals(name, StringComparison.Ordinal) is not true)
+            {
+                Name = name;
+            }
+
+            if (Description?.Equals(description, StringComparison.Ordinal) is not true)
+            {
+                Description = description;
+            }
+
+            if (Website?.Equals(website, StringComparison.Ordinal) is not true)
+            {
+                Website = website;
+            }
+
             return this;
         }
 
@@ -57,7 +75,7 @@ namespace Catalog.Domain.Entities.Brands
                 Website = website
             };
 
-            var @event = new BrandCreatedDomainEvent(brand.Id, brand.Name);
+            BrandCreatedDomainEvent @event = new(brand.Id, brand.Name);
             brand.AddDomainEvent(@event);
 
             return brand;

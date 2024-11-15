@@ -10,21 +10,16 @@ namespace Catalog.Api.Endpoints.V1.Brands
     /// <summary>
     /// The get paginated brands endpoint.
     /// </summary>
-    public class GetPaginatedBrandsEndpoint : Endpoint<GetPaginatedBrandsRequest, PagedList<BrandResponse>>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GetPaginatedBrandsEndpoint"/> class.
+    /// </remarks>
+    /// <param name="mediatr">The mediatr.</param>
+    public class GetPaginatedBrandsEndpoint(ISender mediatr) : Endpoint<GetPaginatedBrandsRequest, PagedList<BrandResponse>>
     {
         /// <summary>
         /// The mediatr.
         /// </summary>
-        private readonly ISender _mediatr;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetPaginatedBrandsEndpoint"/> class.
-        /// </summary>
-        /// <param name="mediatr">The mediatr.</param>
-        public GetPaginatedBrandsEndpoint(ISender mediatr)
-        {
-            _mediatr = mediatr;
-        }
+        private readonly ISender _mediatr = mediatr;
 
         /// <summary>
         /// Configure the endpoint.
@@ -44,9 +39,9 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <returns></returns>
         public override async Task HandleAsync(GetPaginatedBrandsRequest req, CancellationToken ct)
         {
-            var query = new GetBrands.Query(req);
-            var queryResponse = await _mediatr.Send(query, ct);
-            await SendAsync(queryResponse);
+            GetPaginatedBrandsQuery query = new(req.Page, req.Size, req.Keyword);
+            PagedList<BrandResponse> queryResponse = await _mediatr.Send(query, ct);
+            await SendAsync(queryResponse, cancellation: ct);
         }
     }
 }

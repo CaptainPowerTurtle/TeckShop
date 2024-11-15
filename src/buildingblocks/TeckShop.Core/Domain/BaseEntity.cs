@@ -1,9 +1,9 @@
+using System.Text.Json.Serialization;
+using MassTransit;
+using TeckShop.Core.Events;
+
 namespace TeckShop.Core.Domain
 {
-    using System.Text.Json.Serialization;
-    using MassTransit;
-    using TeckShop.Core.Events;
-
     /// <summary>
     /// The base entity.
     /// </summary>
@@ -97,10 +97,7 @@ namespace TeckShop.Core.Domain
         /// <param name="createdBy">The created by.</param>
         public void SetCreatedByProperties(string? createdBy)
         {
-            if (CreatedBy == null)
-            {
-                CreatedBy = createdBy;
-            }
+            CreatedBy ??= createdBy;
         }
 
         /// <summary>
@@ -129,7 +126,7 @@ namespace TeckShop.Core.Domain
         /// <returns>An array of IDomainEvents.</returns>
         public IDomainEvent[] ClearDomainEvents()
         {
-            var dequeuedEvents = _domainEvents.ToArray();
+            IDomainEvent[] dequeuedEvents = [.. _domainEvents];
             _domainEvents.Clear();
             return dequeuedEvents;
         }
@@ -140,7 +137,7 @@ namespace TeckShop.Core.Domain
         /// <returns><![CDATA[IReadOnlyList<IDomainEvent>]]></returns>
         public IReadOnlyList<IDomainEvent> GetDomainEvents()
         {
-            return _domainEvents.ToList();
+            return [.. _domainEvents];
         }
     }
 }

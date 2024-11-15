@@ -1,9 +1,8 @@
 using System.Reflection;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using TeckShop.Core.Database;
-using TeckShop.Infrastructure.Options;
 using TeckShop.Persistence.Database.EFCore;
 using TeckShop.Persistence.Database.EFCore.Interceptors;
 
@@ -15,43 +14,37 @@ namespace TeckShop.Persistence.Database
     public static class Extensions
     {
         /// <summary>
-        /// Add ef db context.
+        /// Add db context.
         /// </summary>
         /// <typeparam name="TContext"/>
-        /// <param name="services">The services.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <param name="webHostEnvironment">The web host environment.</param>
-        /// <param name="dbContextAssembly">The db context assembly.</param>
-        /// <exception cref="ArgumentNullException">.</exception>
-        /// <returns>An IServiceCollection.</returns>
-        public static IServiceCollection AddEfDbContext<TContext>(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment webHostEnvironment, Assembly dbContextAssembly)
+        /// <param name="builder">The builder.</param>
+        /// <param name="assembly"></param>
+        /// <param name="connectionString"></param>
+        public static void AddCustomDbContext<TContext>(this WebApplicationBuilder builder, Assembly assembly, string connectionString)
             where TContext : BaseDbContext
         {
-            var databaseOptions = services.BindValidateReturn<DatabaseOptions>(configuration);
-            if (string.IsNullOrWhiteSpace(databaseOptions.DatabaseName))
+            builder.Services.AddSingleton<SoftDeleteInterceptor>();
+            builder.Services.AddSingleton<AuditingInterceptor>();
+            builder.Services.AddSingleton<DomainEventInterceptor>();
+
+            builder.Services.AddDbContext<TContext>((sp, options) =>
             {
-                var databaseName = nameof(databaseOptions.DatabaseName);
-                throw new ArgumentNullException(databaseName);
-            }
+                options.UseNpgsql(connectionString, migration => migration.MigrationsAssembly(assembly.FullName));
+                options.AddInterceptors(
+                    sp.GetRequiredService<SoftDeleteInterceptor>(),
+                    sp.GetRequiredService<AuditingInterceptor>(),
+                    sp.GetRequiredService<DomainEventInterceptor>());
+            });
 
-            if (string.IsNullOrWhiteSpace(databaseOptions.ConnectionString))
-            {
-                var connectionString = nameof(databaseOptions.ConnectionString);
-                throw new ArgumentNullException(connectionString);
-            }
+            builder.EnrichNpgsqlDbContext<TContext>();
 
-            services.AddSingleton<SoftDeleteInterceptor>();
-            services.AddSingleton<AuditingInterceptor>();
-            services.AddSingleton<DomainEventInterceptor>();
+            builder.Services.AddHealthChecks().AddNpgSql(
+                connectionString: connectionString,
+                tags: ["db", "sql", "postgres"]);
 
-            services.AddDbContext<TContext>((sp, options) => options
-            .UseNpgsql(databaseOptions.ConnectionString, migration => migration.MigrationsAssembly(dbContextAssembly.FullName))
-            .AddInterceptors(sp.GetRequiredService<SoftDeleteInterceptor>(), sp.GetRequiredService<AuditingInterceptor>(), sp.GetRequiredService<DomainEventInterceptor>())
-            );
-            services.AddScoped(typeof(TContext));
-            services.AddScoped<IBaseDbContext>(sp => sp.GetRequiredService<TContext>());
-            services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
-            return services;
+            builder.Services.AddScoped(typeof(TContext));
+            builder.Services.AddScoped<IBaseDbContext>(sp => sp.GetRequiredService<TContext>());
+            builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         }
     }
 }

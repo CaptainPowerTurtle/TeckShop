@@ -1,14 +1,19 @@
+using System.Reflection;
 using Catalog.Application;
 using Catalog.Application.EventHandlers.DomainEvents;
 using Catalog.Application.EventHandlers.IntegrationEvents;
 using Catalog.Infrastructure.Persistence;
 using FastEndpoints.Swagger;
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Common;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Scrutor;
 using TeckShop.Core.Database;
 using TeckShop.Core.Events;
+using TeckShop.Core.Exceptions;
 using TeckShop.Infrastructure;
 using TeckShop.Infrastructure.Auth;
 using TeckShop.Persistence.Database;
@@ -28,14 +33,23 @@ namespace Catalog.Infrastructure
         /// <param name="enableFastEndpoints">If true, enable fast endpoints.</param>
         public static void AddCatalogInfrastructure(this WebApplicationBuilder builder, bool enableSwagger = true, bool enableFastEndpoints = true)
         {
-            var applicationAssembly = typeof(ICatalogApplication).Assembly;
-            var dbContextAssembly = typeof(AppDbContext).Assembly;
+            Assembly applicationAssembly = typeof(ICatalogApplication).Assembly;
+            Assembly dbContextAssembly = typeof(AppDbContext).Assembly;
 
-            var swaggerDocumentOptions = new List<Action<DocumentOptions>>();
+            KeycloakAuthenticationOptions keycloakOptions = builder.Configuration.GetKeycloakOptions<KeycloakAuthenticationOptions>() ?? throw new ConfigurationMissingException("Keycloak");
 
-            builder.Services.AddKeycloak(builder.Configuration, builder.Environment);
-            builder.AddInfrastructure(swaggerDocumentOptions, applicationAssembly: applicationAssembly, enableSwagger: enableSwagger, enableFastEndpoints: enableFastEndpoints);
-            builder.Services.AddEfDbContext<AppDbContext>(builder.Configuration, builder.Environment, dbContextAssembly);
+            string postgresConnectionString = builder.Configuration.GetConnectionString("catalogdb") ?? throw new ConfigurationMissingException("Database");
+            string rabbitmqConnectionString = builder.Configuration.GetConnectionString("rabbitmq") ?? throw new ConfigurationMissingException("RabbitMq");
+
+            List<Action<DocumentOptions>> swaggerDocumentOptions = new();
+
+            builder.Services.AddKeycloak(builder.Configuration, builder.Environment, keycloakOptions);
+
+            builder.AddInfrastructure(swaggerDocumentOptions, keycloakOptions, applicationAssembly: applicationAssembly, enableSwagger: enableSwagger, enableFastEndpoints: enableFastEndpoints);
+
+            builder.AddCustomDbContext<AppDbContext>(dbContextAssembly, postgresConnectionString);
+
+            string? rabbitmqConnection = builder.Configuration.GetConnectionString("rabbitmq");
             builder.Services.AddMediator(consumer =>
             {
                 consumer.AddConsumer<BrandCreatedDomainEventConsumer>();
@@ -54,10 +68,11 @@ namespace Catalog.Infrastructure
                     cfg.DeployPublishTopology = true;
                     cfg.UseDelayedRedelivery(message => message.Intervals(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(30)));
                     cfg.UseMessageRetry(message => message.Immediate(5));
-                    cfg.Host(builder.Configuration["RabbitMqOptions:Host"]);
+                    cfg.Host(rabbitmqConnection);
                     cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter("catalog", false));
                 });
             });
+            builder.Services.AddHealthChecks().AddRabbitMQ(rabbitConnectionString: rabbitmqConnectionString, tags: ["messagebus", "rabbitmq"]);
 
             // Automatically register services.
             builder.Services.Scan(selector => selector
@@ -82,12 +97,7 @@ namespace Catalog.Infrastructure
         /// <param name="enableFastEndpoints">If true, enable fast endpoints.</param>
         public static void UseCatalogInfrastructure(this WebApplication app, bool enableSwagger = true, bool enableFastEndpoints = true)
         {
-            app.UseInfrastructure(app.Environment, enableSwagger, enableFastEndpoints);
-            using (var scope = app.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.Migrate();
-            }
+            app.UseInfrastructure(enableSwagger, enableFastEndpoints);
         }
     }
 }

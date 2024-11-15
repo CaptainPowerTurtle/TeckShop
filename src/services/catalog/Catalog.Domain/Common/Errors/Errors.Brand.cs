@@ -5,7 +5,7 @@ namespace Catalog.Domain.Common.Errors
     /// <summary>
     /// The errors.
     /// </summary>
-    public static class Errors
+    public static partial class Errors
     {
         /// <summary>
         /// The brand.

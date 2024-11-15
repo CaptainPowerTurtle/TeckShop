@@ -9,15 +9,12 @@ namespace Catalog.Infrastructure.Caching
     /// <summary>
     /// The brand cache.
     /// </summary>
-    public class BrandCache : GenericCacheService<Brand, Guid>, IBrandCache
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="BrandCache"/> class.
+    /// </remarks>
+    /// <param name="brandCache"></param>
+    /// <param name="brandRepository">The brand repository.</param>
+    public class BrandCache(IFusionCache brandCache, IBrandRepository brandRepository) : GenericCacheService<Brand, Guid>(brandCache, brandRepository), IBrandCache
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BrandCache"/> class.
-        /// </summary>
-        /// <param name="brandCache">The brand cache.</param>
-        /// <param name="brandRepository">The brand repository.</param>
-        public BrandCache(IFusionCache brandCache, IBrandRepository brandRepository) : base(brandCache, brandRepository)
-        {
-        }
     }
 }

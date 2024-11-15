@@ -84,12 +84,9 @@ namespace TeckShop.Persistence.Database.EFCore
         /// <returns><![CDATA[Task<bool>]]></returns>
         public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, bool enableTracking = true, CancellationToken cancellationToken = default)
         {
-            if (enableTracking)
-            {
-                return _dbSet.Where(predicate).AsTracking().AnyAsync(cancellationToken);
-            }
-
-            return _dbSet.Where(predicate).AsNoTracking().AnyAsync(cancellationToken);
+            return enableTracking
+                ? _dbSet.Where(predicate).AsTracking().AnyAsync(cancellationToken)
+                : _dbSet.Where(predicate).AsNoTracking().AnyAsync(cancellationToken);
         }
 
         /// <summary>
@@ -101,12 +98,9 @@ namespace TeckShop.Persistence.Database.EFCore
         /// <returns><![CDATA[Task<IReadOnlyList<TEntity>>]]></returns>
         public async Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, bool enableTracking = true, CancellationToken cancellationToken = default)
         {
-            if (enableTracking)
-            {
-                return await _dbSet.Where(predicate).AsTracking().ToListAsync(cancellationToken);
-            }
-
-            return await _dbSet.Where(predicate).AsNoTracking().ToListAsync(cancellationToken);
+            return enableTracking
+                ? await _dbSet.Where(predicate).AsTracking().ToListAsync(cancellationToken)
+                : (IReadOnlyList<TEntity>)await _dbSet.Where(predicate).AsNoTracking().ToListAsync(cancellationToken);
         }
 
         /// <summary>
@@ -130,16 +124,9 @@ namespace TeckShop.Persistence.Database.EFCore
         /// <returns><![CDATA[Task<TEntity?>]]></returns>
         public async Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate, bool enableTracking = true, CancellationToken cancellationToken = default)
         {
-            TEntity? result;
-
-            if (enableTracking)
-            {
-                result = await _dbSet.Where(predicate).AsTracking().SingleOrDefaultAsync(cancellationToken);
-            }
-            else
-            {
-                result = await _dbSet.Where(predicate).AsNoTracking().SingleOrDefaultAsync(cancellationToken);
-            }
+            TEntity? result = enableTracking
+                ? await _dbSet.Where(predicate).AsTracking().SingleOrDefaultAsync(cancellationToken)
+                : await _dbSet.Where(predicate).AsNoTracking().SingleOrDefaultAsync(cancellationToken);
 
             return result;
         }
@@ -168,7 +155,7 @@ namespace TeckShop.Persistence.Database.EFCore
         /// <returns>A Task.</returns>
         public async Task ExcecutSoftDeleteAsync(IReadOnlyCollection<TId> ids, CancellationToken cancellationToken = default)
         {
-            var currentUserId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string? currentUserId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             await _dbSet.Where(entity => ids.Contains(entity.Id)).ExecuteUpdateAsync(setters => setters.SetProperty(entity => entity.IsDeleted, true).SetProperty(entity => entity.DeletedOn, DateTimeOffset.UtcNow).SetProperty(entity => entity.DeletedBy, currentUserId), cancellationToken);
         }
@@ -181,7 +168,7 @@ namespace TeckShop.Persistence.Database.EFCore
         /// <returns>A Task.</returns>
         public async Task ExcecutSoftDeleteByAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            var currentUserId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string? currentUserId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             await _dbSet.Where(predicate).ExecuteUpdateAsync(setters => setters.SetProperty(entity => entity.IsDeleted, true).SetProperty(entity => entity.DeletedOn, DateTimeOffset.UtcNow).SetProperty(entity => entity.DeletedBy, currentUserId), cancellationToken);
         }
 

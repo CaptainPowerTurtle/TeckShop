@@ -6,6 +6,8 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     name: {{ .Values.label.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   ports:
   - port: {{ .Values.service.port}}

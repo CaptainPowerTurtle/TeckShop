@@ -1,5 +1,6 @@
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Common;
 using Microsoft.Extensions.Options;
-using OpenTelemetry.Metrics;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TeckShop.Infrastructure;
 using TeckShop.Infrastructure.Auth;
@@ -8,12 +9,15 @@ using Yarp.ReverseProxy.Swagger;
 using Yarp.ReverseProxy.Swagger.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 bool enableSwagger = false;
 bool enableFastEndpoints = false;
 bool enableCaching = false;
 
 // Add keycloak Authentication.
-builder.Services.AddKeycloak(builder.Configuration, builder.Environment);
+KeycloakAuthenticationOptions keycloakOptions = builder.Configuration.GetKeycloakOptions<KeycloakAuthenticationOptions>()!;
+builder.Services.AddKeycloak(builder.Configuration, builder.Environment, keycloakOptions);
 
 builder.AddInfrastructure(swaggerDocumentOptions: [], enableSwagger: enableSwagger, enableFastEndpoints: enableFastEndpoints, addCaching: enableCaching);
 
@@ -21,16 +25,8 @@ builder.AddInfrastructure(swaggerDocumentOptions: [], enableSwagger: enableSwagg
 var configuration = builder.Configuration.GetSection("ReverseProxy");
 builder.Services.AddReverseProxy()
     .LoadFromConfig(configuration)
-    .AddSwagger(configuration);
-
-// TRACES AND LOGS OF THE GATEWAY
-builder.Services.AddOpenTelemetry()
-    .WithMetrics(builder => builder.AddPrometheusExporter())
-    .WithTracing(yarp =>
-    {
-        // Listen to the YARP tracing activities
-        yarp.AddSource("Yarp.ReverseProxy");
-    });
+    .AddSwagger(configuration)
+    .AddServiceDiscoveryDestinationResolver();
 
 // SWAGGER
 builder.Services.AddEndpointsApiExplorer();
@@ -40,7 +36,9 @@ builder.Services.AddSwaggerGen();
 // APP
 var app = builder.Build();
 
-app.UseInfrastructure(builder.Environment, enableSwagger: enableSwagger, enableFastEndpoints: enableFastEndpoints);
+app.MapDefaultEndpoints();
+
+app.UseInfrastructure(enableSwagger: enableSwagger, enableFastEndpoints: enableFastEndpoints);
 
 // MIDDLEWARES
 // NOTE: optional middlerwares that might be used in the gateway.
@@ -49,7 +47,6 @@ app.UseInfrastructure(builder.Environment, enableSwagger: enableSwagger, enableF
 // app.UseMiddleware<CustomAuthenticationMiddleware>();
 // app.UseMiddleware<MembershipAndThrottlingMiddleware>();
 
-app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
 // REVERSE PROXY
 app.MapReverseProxy();

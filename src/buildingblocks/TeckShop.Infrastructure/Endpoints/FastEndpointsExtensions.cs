@@ -23,12 +23,9 @@ namespace TeckShop.Infrastructure.Endpoints
             where TEndpoint : IEndpoint
             where TResponse : IErrorOr<object>
         {
-            if (!response.IsError)
-            {
-                return ep.HttpContext.Response.SendCreatedAtAsync<TEndpoint>(routeValues, response.Value, cancellation: cancellation);
-            }
-
-            return HandleErrorOr(ep, response, cancellation);
+            return !response.IsError
+                ? ep.HttpContext.Response.SendCreatedAtAsync<TEndpoint>(routeValues, response.Value, cancellation: cancellation)
+                : HandleErrorOr(ep, response, cancellation);
         }
 
         /// <summary>
@@ -42,12 +39,9 @@ namespace TeckShop.Infrastructure.Endpoints
         public static Task SendAsync<TResponse>(this IEndpoint ep, TResponse response, CancellationToken cancellation = default)
             where TResponse : IErrorOr<object>
         {
-            if (!response.IsError)
-            {
-                return ep.HttpContext.Response.SendAsync(response.Value, cancellation: cancellation);
-            }
-
-            return HandleErrorOr(ep, response, cancellation);
+            return !response.IsError
+                ? ep.HttpContext.Response.SendAsync(response.Value, cancellation: cancellation)
+                : HandleErrorOr(ep, response, cancellation);
         }
 
         /// <summary>
@@ -61,12 +55,9 @@ namespace TeckShop.Infrastructure.Endpoints
         public static Task SendNoContentResponseAsync<TResponse>(this IEndpoint ep, TResponse response, CancellationToken cancellation = default)
             where TResponse : IErrorOr
         {
-            if (!response.IsError)
-            {
-                return ep.HttpContext.Response.SendNoContentAsync(cancellation: cancellation);
-            }
-
-            return HandleErrorOr(ep, response, cancellation);
+            return !response.IsError
+                ? ep.HttpContext.Response.SendNoContentAsync(cancellation: cancellation)
+                : HandleErrorOr(ep, response, cancellation);
         }
 
         /// <summary>
@@ -88,7 +79,7 @@ namespace TeckShop.Infrastructure.Endpoints
                     cancellation: cancellation);
             }
 
-            var problem = response.Errors?.Find(error => error.Type != ErrorType.Validation);
+            Error? problem = response.Errors?.Find(error => error.Type != ErrorType.Validation);
 
             switch (problem?.Type)
             {
@@ -102,6 +93,14 @@ namespace TeckShop.Infrastructure.Endpoints
                     return ep.HttpContext.Response.SendForbiddenAsync(cancellation);
                 case null:
                     throw new InvalidOperationException("No matching endpoint");
+                case ErrorType.Failure:
+                    break;
+                case ErrorType.Unexpected:
+                    break;
+                case ErrorType.Validation:
+                    break;
+                default:
+                    break;
             }
 
             throw new InvalidOperationException("No matching endpoint");

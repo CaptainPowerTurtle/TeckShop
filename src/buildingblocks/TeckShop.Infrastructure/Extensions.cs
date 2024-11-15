@@ -4,12 +4,13 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using FluentValidation;
 using IdempotentAPI.Extensions.DependencyInjection;
+using Keycloak.AuthServices.Authentication;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Configuration;
+using TeckShop.Core.Exceptions;
 using TeckShop.Infrastructure.Behaviors;
 using TeckShop.Infrastructure.Caching;
-using TeckShop.Infrastructure.Health;
 using TeckShop.Infrastructure.Logging;
 using TeckShop.Infrastructure.Mapping;
 using TeckShop.Infrastructure.Options;
@@ -32,22 +33,34 @@ namespace TeckShop.Infrastructure
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// /// <param name="swaggerDocumentOptions">The swagger document options.</param>
+        /// <param name="keycloakOptions"></param>
         /// <param name="applicationAssembly">The application assembly.</param>
         /// <param name="enableSwagger">If true, enable swagger.</param>
         /// <param name="enableFastEndpoints">If true, enable fast endpoints.</param>
         /// <param name="addCaching">If true, add caching.</param>
-        public static void AddInfrastructure(this WebApplicationBuilder builder, IList<Action<DocumentOptions>> swaggerDocumentOptions, Assembly? applicationAssembly = null, bool enableSwagger = true, bool enableFastEndpoints = true, bool addCaching = true)
+        public static void AddInfrastructure(
+            this WebApplicationBuilder builder,
+            IList<Action<DocumentOptions>> swaggerDocumentOptions,
+            KeycloakAuthenticationOptions? keycloakOptions = null,
+            Assembly? applicationAssembly = null,
+            bool enableSwagger = true,
+            bool enableFastEndpoints = true,
+            bool addCaching = true)
         {
-            var config = builder.Configuration;
-            var appOptions = builder.Services.BindValidateReturn<AppOptions>(config);
+            AppOptions appOptions = builder.Services.BindValidateReturn<AppOptions>(builder.Configuration);
+
             builder.Services.Configure<JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: AllowAllOrigins, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
             builder.Services.AddHttpContextAccessor();
-            if (addCaching) builder.Services.AddIdempotentMinimalAPI(new IdempotentAPI.Core.IdempotencyOptions() { HeaderKeyName = "Idempotency-Key" });
-            if (addCaching) builder.Services.AddCachingService(config);
+            if (addCaching)
+            {
+                string redisConnectionString = builder.Configuration.GetConnectionString("redis") ?? throw new ConfigurationMissingException("Redis");
+                builder.AddCachingService(redisConnectionString, builder.Environment);
+                builder.Services.AddIdempotentMinimalAPI(new IdempotentAPI.Core.IdempotencyOptions() { HeaderKeyName = "Idempotency-Key" });
+            }
 
             if (enableFastEndpoints)
             {
@@ -55,7 +68,7 @@ namespace TeckShop.Infrastructure
                 {
                 if (applicationAssembly is not null)
                 {
-                    ep.Assemblies = new[] { applicationAssembly };
+                    ep.Assemblies = [applicationAssembly];
                 }
             }).AddIdempotency();
             }
@@ -74,8 +87,11 @@ namespace TeckShop.Infrastructure
                 });
             }
 
-            builder.Services.AddHealthcheckService(config);
-            if (enableSwagger) builder.Services.AddSwaggerExtension(config, swaggerDocumentOptions);
+            if (enableSwagger)
+            {
+                builder.Services.AddSwaggerExtension(builder.Configuration, swaggerDocumentOptions, keycloakOptions);
+            }
+
             builder.Services.AddHeaderPropagation();
         }
 
@@ -83,10 +99,9 @@ namespace TeckShop.Infrastructure
         /// Use the infrastructure.
         /// </summary>
         /// <param name="app">The app.</param>
-        /// <param name="env">The env.</param>
         /// <param name="enableSwagger">If true, enable swagger.</param>
         /// <param name="enableFastEndpoints">If true, enable fast endpoints.</param>
-        public static void UseInfrastructure(this WebApplication app, IWebHostEnvironment env, bool enableSwagger = true, bool enableFastEndpoints = true)
+        public static void UseInfrastructure(this WebApplication app, bool enableSwagger = true, bool enableFastEndpoints = true)
         {
             // Preserve Order
             app.UseCors(AllowAllOrigins);
@@ -115,9 +130,12 @@ namespace TeckShop.Infrastructure
             });
             }
 
-            app.UseHealthcheckService(env);
-            app.MapHealthChecks("/health").AllowAnonymous();
-            if (enableSwagger) app.UseSwaggerExtension(env);
+            app.MapHealthChecks("/readiness").AllowAnonymous();
+            if (enableSwagger)
+            {
+                app.UseSwaggerExtension();
+            }
+
             app.UseHeaderPropagation();
         }
     }
