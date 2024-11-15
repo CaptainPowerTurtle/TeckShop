@@ -1,5 +1,17 @@
 # Changelog
 
+## catalog-v1.0.3 - 2024-11-15
+
+### What Changed 👀
+
+### 🐛 Bug Fixes
+
+- fix: changed from runtime to aspnet @CaptainPowerTurtle (#33)
+
+### 🧩 Dependency Updates
+
+- fix: changed from runtime to aspnet @CaptainPowerTurtle (#33)
+
 ## catalog-v1.0.2 - 2024-11-15
 
 ### What Changed 👀
