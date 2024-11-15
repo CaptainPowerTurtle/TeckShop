@@ -49,9 +49,15 @@ namespace Catalog.Domain.Entities.ProductPrices
             decimal? salePrice, string? currencyCode)
         {
             if (salePrice.HasValue && !SalePrice.Equals(salePrice))
+            {
                 SalePrice = salePrice.Value;
+            }
+
             if (currencyCode is not null && CurrencyCode?.Equals(currencyCode) is not true)
+            {
                 CurrencyCode = currencyCode;
+            }
+
             return this;
         }
 

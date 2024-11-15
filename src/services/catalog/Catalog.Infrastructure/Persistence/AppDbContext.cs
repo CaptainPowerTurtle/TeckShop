@@ -14,16 +14,12 @@ namespace Catalog.Infrastructure.Persistence
     /// <summary>
     /// The app db context.
     /// </summary>
-    public class AppDbContext : BaseDbContext
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="AppDbContext"/> class.
+    /// </remarks>
+    /// <param name="options">The options.</param>
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : BaseDbContext(options)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AppDbContext"/> class.
-        /// </summary>
-        /// <param name="options">The options.</param>
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
-
         /// <summary>
         /// On model creating.
         /// </summary>
@@ -35,49 +31,43 @@ namespace Catalog.Infrastructure.Persistence
             modelBuilder.AddInboxStateEntity();
             modelBuilder.AddOutboxMessageEntity();
             modelBuilder.AddOutboxStateEntity();
-
-            modelBuilder.Entity<Brand>()
-                .HasIndex(brand => brand.IsDeleted)
-                .HasFilter("Brands.IsDeleted = 0");
-
-            modelBuilder.Entity<Product>()
-                .HasIndex(product => product.IsDeleted)
-                .HasFilter("Products.IsDeleted = 0");
         }
 
         /// <summary>
         /// Gets or sets the brands.
         /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public DbSet<Brand> Brands { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
         /// <summary>
         /// Gets or sets the products.
         /// </summary>
-        public DbSet<Product> Products { get; set; }
+        public required DbSet<Product> Products { get; set; }
 
         /// <summary>
         /// Gets or sets the categories.
         /// </summary>
-        public DbSet<Category> Categories { get; set; }
+        public required DbSet<Category> Categories { get; set; }
 
         /// <summary>
         /// Gets or sets the product prices.
         /// </summary>
-        public DbSet<ProductPrice> ProductPrices { get; set; }
+        public required DbSet<ProductPrice> ProductPrices { get; set; }
 
         /// <summary>
         /// Gets or sets the product price types.
         /// </summary>
-        public DbSet<ProductPriceType> ProductPriceTypes { get; set; }
+        public required DbSet<ProductPriceType> ProductPriceTypes { get; set; }
 
         /// <summary>
         /// Gets or sets the promotions.
         /// </summary>
-        public DbSet<Promotion> Promotions { get; set; }
+        public required DbSet<Promotion> Promotions { get; set; }
 
         /// <summary>
         /// Gets or sets the suppliers.
         /// </summary>
-        public DbSet<Supplier> Suppliers { get; set; }
+        public required DbSet<Supplier> Suppliers { get; set; }
     }
 }

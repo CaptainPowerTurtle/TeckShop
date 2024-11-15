@@ -3,6 +3,7 @@ using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
 namespace TeckShop.Infrastructure.Auth
@@ -18,8 +19,9 @@ namespace TeckShop.Infrastructure.Auth
         /// <param name="services">The services.</param>
         /// <param name="config">The config.</param>
         /// <param name="hostEnvironment">The host environment.</param>
+        /// <param name="keycloakOptions"></param>
         /// <returns>An IServiceCollection.</returns>
-        public static IServiceCollection AddKeycloak(this IServiceCollection services, IConfiguration config, IHostEnvironment hostEnvironment)
+        public static IServiceCollection AddKeycloak(this IServiceCollection services, IConfiguration config, IHostEnvironment hostEnvironment, KeycloakAuthenticationOptions keycloakOptions)
         {
             bool isProductions = hostEnvironment.IsProduction();
             KeycloakAuthenticationOptions authenticationOptions = new();
@@ -28,8 +30,8 @@ namespace TeckShop.Infrastructure.Auth
             services.AddKeycloakWebApiAuthentication(config, options =>
             {
                 options.IncludeErrorDetails = true;
-                options.Authority = authenticationOptions.KeycloakUrlRealm;
-                options.Audience = authenticationOptions.Resource;
+                options.Authority = keycloakOptions.KeycloakUrlRealm;
+                options.Audience = keycloakOptions.Resource;
                 options.RequireHttpsMetadata = isProductions;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -44,8 +46,8 @@ namespace TeckShop.Infrastructure.Auth
                         context.HandleResponse();
                         if (!context.Response.HasStarted)
                         {
-                            var error = context.Error != null ? context.Error : "Unauthorized";
-                            var description = context.ErrorDescription != null ? context.ErrorDescription : "You are not authorized to access this resource";
+                            string error = context.Error != null ? context.Error : "Unauthorized";
+                            string description = context.ErrorDescription != null ? context.ErrorDescription : "You are not authorized to access this resource";
                             await context.Response.SendErrorsAsync([new(error, description)], 401);
                         }
 
@@ -58,6 +60,7 @@ namespace TeckShop.Infrastructure.Auth
                 };
             });
             services.AddAuthorization().AddKeycloakAuthorization().AddAuthorizationServer(config);
+            services.AddHealthChecks().AddIdentityServer(new Uri(uriString: $"{keycloakOptions.AuthServerUrl}/realms/{keycloakOptions.Realm}/"), tags: ["openId", "identity", "keycloak"], failureStatus: HealthStatus.Degraded);
             return services;
         }
     }

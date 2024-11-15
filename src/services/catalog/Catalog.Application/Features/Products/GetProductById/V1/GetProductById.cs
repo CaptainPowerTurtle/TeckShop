@@ -14,21 +14,16 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
     /// <summary>
     /// Get brand query handler.
     /// </summary>
-    internal sealed class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, ErrorOr<ProductResponse>>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GetProductByIdQueryHandler"/> class.
+    /// </remarks>
+    /// <param name="cache">The cache.</param>
+    internal sealed class GetProductByIdQueryHandler(IProductCache cache) : IQueryHandler<GetProductByIdQuery, ErrorOr<ProductResponse>>
     {
         /// <summary>
         /// The cache.
         /// </summary>
-        private readonly IProductCache _cache;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetProductByIdQueryHandler"/> class.
-        /// </summary>
-        /// <param name="cache">The cache.</param>
-        public GetProductByIdQueryHandler(IProductCache cache)
-        {
-            _cache = cache;
-        }
+        private readonly IProductCache _cache = cache;
 
         /// <summary>
         /// Handle and return a task of type erroror.
@@ -38,14 +33,9 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
         /// <returns><![CDATA[Task<ErrorOr<BrandResponse>>]]></returns>
         public async Task<ErrorOr<ProductResponse>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var product = await _cache.GetOrSetByIdAsync(request.Id, cancellationToken: cancellationToken);
+            Domain.Entities.Products.Product? product = await _cache.GetOrSetByIdAsync(request.Id, cancellationToken: cancellationToken);
 
-            if (product == null)
-            {
-                return Errors.Product.NotFound;
-            }
-
-            return ProductMappings.ProductToProductResponse(product);
+            return product == null ? (ErrorOr<ProductResponse>)Errors.Product.NotFound : (ErrorOr<ProductResponse>)ProductMappings.ProductToProductResponse(product);
         }
     }
 }

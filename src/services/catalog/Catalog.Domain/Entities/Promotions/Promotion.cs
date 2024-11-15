@@ -56,15 +56,30 @@ namespace Catalog.Domain.Entities.Promotions
         ICollection<Product>? products)
         {
             if (name is not null && Name?.Equals(name, StringComparison.Ordinal) is not true)
+            {
                 Name = name;
+            }
+
             if (Description?.Equals(description, StringComparison.Ordinal) is not true)
+            {
                 Description = description;
+            }
+
             if (validFrom.HasValue && !ValidFrom.Equals(validFrom))
+            {
                 ValidFrom = validFrom.Value;
+            }
+
             if (validTo.HasValue && !ValidTo.Equals(validTo))
+            {
                 ValidTo = validTo.Value;
+            }
+
             if (products is not null)
+            {
                 Products = products;
+            }
+
             return this;
         }
 

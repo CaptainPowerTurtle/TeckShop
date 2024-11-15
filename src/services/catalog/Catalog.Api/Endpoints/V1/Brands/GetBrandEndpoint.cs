@@ -1,5 +1,6 @@
 using Catalog.Application.Features.Brands.Dtos;
 using Catalog.Application.Features.Brands.GetBrand;
+using ErrorOr;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
@@ -10,21 +11,16 @@ namespace Catalog.Api.Endpoints.V1.Brands
     /// <summary>
     /// The get brand endpoint.
     /// </summary>
-    public class GetBrandEndpoint : Endpoint<GetBrandRequest, BrandResponse>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GetBrandEndpoint"/> class.
+    /// </remarks>
+    /// <param name="mediatr">The mediatr.</param>
+    public class GetBrandEndpoint(ISender mediatr) : Endpoint<GetBrandRequest, BrandResponse>
     {
         /// <summary>
         /// The mediatr.
         /// </summary>
-        private readonly ISender _mediatr;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetBrandEndpoint"/> class.
-        /// </summary>
-        /// <param name="mediatr">The mediatr.</param>
-        public GetBrandEndpoint(ISender mediatr)
-        {
-            _mediatr = mediatr;
-        }
+        private readonly ISender _mediatr = mediatr;
 
         /// <summary>
         /// Configure the endpoint.
@@ -46,8 +42,8 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <returns></returns>
         public override async Task HandleAsync(GetBrandRequest req, CancellationToken ct)
         {
-            var query = new GetBrandQuery(req.Id);
-            var queryResponse = await _mediatr.Send(query, ct);
+            GetBrandQuery query = new(req.Id);
+            ErrorOr<BrandResponse> queryResponse = await _mediatr.Send(query, ct);
             await this.SendAsync(queryResponse, ct);
         }
     }

@@ -1,5 +1,5 @@
 using Catalog.Application.Features.Brands.Dtos;
-using Catalog.Application.Features.Categories.Responses;
+using Catalog.Application.Features.Categories.Response;
 using Catalog.Application.Features.ProductPrices.Response;
 using Catalog.Application.Features.Promotions.Response;
 

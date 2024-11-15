@@ -1,4 +1,4 @@
-namespace Catalog.Application.Features.Categories.Responses
+namespace Catalog.Application.Features.Categories.Response
 {
     /// <summary>
     /// The category response.

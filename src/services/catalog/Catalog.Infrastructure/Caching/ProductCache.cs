@@ -9,15 +9,12 @@ namespace Catalog.Infrastructure.Caching
     /// <summary>
     /// The product cache.
     /// </summary>
-    public class ProductCache : GenericCacheService<Product, Guid>, IProductCache
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="ProductCache"/> class.
+    /// </remarks>
+    /// <param name="brandCache">The brand cache.</param>
+    /// <param name="brandRepository">The brand repository.</param>
+    public class ProductCache(IFusionCache brandCache, IProductRepository brandRepository) : GenericCacheService<Product, Guid>(brandCache, brandRepository), IProductCache
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProductCache"/> class.
-        /// </summary>
-        /// <param name="brandCache">The brand cache.</param>
-        /// <param name="brandRepository">The brand repository.</param>
-        public ProductCache(IFusionCache brandCache, IProductRepository brandRepository) : base(brandCache, brandRepository)
-        {
-        }
     }
 }

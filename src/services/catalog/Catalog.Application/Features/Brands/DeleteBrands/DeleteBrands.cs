@@ -13,28 +13,22 @@ namespace Catalog.Application.Features.Brands.DeleteBrands
     /// <summary>
     /// Delete brands command handler.
     /// </summary>
-    internal sealed class DeleteBrandsCommandHandler : ICommandHandler<DeleteBrandsCommand, ErrorOr<Deleted>>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="DeleteBrandsCommandHandler"/> class.
+    /// </remarks>
+    /// <param name="cache">The cache.</param>
+    /// <param name="brandRepository">The brand repository.</param>
+    internal sealed class DeleteBrandsCommandHandler(IBrandCache cache, IBrandRepository brandRepository) : ICommandHandler<DeleteBrandsCommand, ErrorOr<Deleted>>
     {
         /// <summary>
         /// The brand repository.
         /// </summary>
-        private readonly IBrandRepository _brandRepository;
+        private readonly IBrandRepository _brandRepository = brandRepository;
 
         /// <summary>
         /// The cache.
         /// </summary>
-        private readonly IBrandCache _cache;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeleteBrandsCommandHandler"/> class.
-        /// </summary>
-        /// <param name="cache">The cache.</param>
-        /// <param name="brandRepository">The brand repository.</param>
-        public DeleteBrandsCommandHandler(IBrandCache cache, IBrandRepository brandRepository)
-        {
-            _brandRepository = brandRepository;
-            _cache = cache;
-        }
+        private readonly IBrandCache _cache = cache;
 
         /// <summary>
         /// Handle and return a task of type erroror.
@@ -45,7 +39,7 @@ namespace Catalog.Application.Features.Brands.DeleteBrands
         public async Task<ErrorOr<Deleted>> Handle(DeleteBrandsCommand request, CancellationToken cancellationToken)
         {
             await _brandRepository.ExcecutSoftDeleteAsync(request.BrandIds, cancellationToken);
-            foreach (var id in request.BrandIds)
+            foreach (Guid id in request.BrandIds)
             {
                 await _cache.RemoveAsync(id, cancellationToken);
             }

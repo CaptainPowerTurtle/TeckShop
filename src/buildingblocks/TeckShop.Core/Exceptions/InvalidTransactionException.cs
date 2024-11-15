@@ -5,14 +5,11 @@ namespace TeckShop.Core.Exceptions
     /// <summary>
     /// The invalid transaction exception.
     /// </summary>
-    public class InvalidTransactionException : CustomException
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="InvalidTransactionException"/> class.
+    /// </remarks>
+    /// <param name="message">The message.</param>
+    public class InvalidTransactionException(string message) : CustomException(message, HttpStatusCode.InternalServerError)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidTransactionException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public InvalidTransactionException(string message) : base(message, HttpStatusCode.InternalServerError)
-        {
-        }
     }
 }

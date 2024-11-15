@@ -10,22 +10,17 @@ namespace Catalog.Infrastructure.Persistence.Repositories
     /// <summary>
     /// The brand repository.
     /// </summary>
-    public class BrandRepository : GenericRepository<Brand, Guid>, IBrandRepository
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="BrandRepository"/> class.
+    /// </remarks>
+    /// <param name="context">The context.</param>
+    /// <param name="httpContextAccessor">The http context accessor.</param>
+    public class BrandRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor) : GenericRepository<Brand, Guid>(context, httpContextAccessor), IBrandRepository
     {
         /// <summary>
         /// The context.
         /// </summary>
-        private readonly AppDbContext _context;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BrandRepository"/> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="httpContextAccessor">The http context accessor.</param>
-        public BrandRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         /// <summary>
         /// Get paged brands asynchronously.
@@ -38,7 +33,7 @@ namespace Catalog.Infrastructure.Persistence.Repositories
         /// <returns><![CDATA[Task<PagedList<BrandResponse>>]]></returns>
         public async Task<PagedList<TBrandResponse>> GetPagedBrandsAsync<TBrandResponse>(int page, int size, string? keyword, CancellationToken cancellationToken = default)
         {
-            var queryable = _context.Brands.AsQueryable();
+            IQueryable<Brand> queryable = _context.Brands.AsQueryable();
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = keyword.ToLowerInvariant();
@@ -57,7 +52,7 @@ namespace Catalog.Infrastructure.Persistence.Repositories
         /// <returns>A Task.</returns>
         public async Task DeleteBrandsAsync(ICollection<Guid> Ids, CancellationToken cancellationToken = default)
         {
-            var queryable = _context.Brands.AsQueryable();
+            IQueryable<Brand> queryable = _context.Brands.AsQueryable();
             await queryable.Where(existingBrand => Ids.Any(brandInput => existingBrand.Id.Equals(brandInput))).ExecuteDeleteAsync(cancellationToken);
         }
     }

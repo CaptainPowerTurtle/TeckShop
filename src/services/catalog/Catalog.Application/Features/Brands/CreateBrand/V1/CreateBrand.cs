@@ -17,42 +17,34 @@ namespace Catalog.Application.Features.Brands.CreateBrand.V1
     /// <summary>
     /// Create Brand command handler.
     /// </summary>
-    internal sealed class CreateBrandCommandHandler : ICommandHandler<CreateBrandCommand, ErrorOr<BrandResponse>>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="CreateBrandCommandHandler"/> class.
+    /// </remarks>
+    /// <param name="unitOfWork">The unit of work.</param>
+    /// <param name="mapper">The mapper.</param>
+    /// <param name="brandCache">The brand cache.</param>
+    /// <param name="brandRepository">The brand repository.</param>
+    internal sealed class CreateBrandCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IBrandCache brandCache, IBrandRepository brandRepository) : ICommandHandler<CreateBrandCommand, ErrorOr<BrandResponse>>
     {
         /// <summary>
         /// The unit of work.
         /// </summary>
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         /// <summary>
         /// The brand repository.
         /// </summary>
-        private readonly IBrandRepository _brandRepository;
+        private readonly IBrandRepository _brandRepository = brandRepository;
 
         /// <summary>
         /// The brand cache.
         /// </summary>
-        private readonly IBrandCache _brandCache;
+        private readonly IBrandCache _brandCache = brandCache;
 
         /// <summary>
         /// The mapper.
         /// </summary>
-        private readonly IMapper _mapper;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreateBrandCommandHandler"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <param name="mapper">The mapper.</param>
-        /// <param name="brandCache">The brand cache.</param>
-        /// <param name="brandRepository">The brand repository.</param>
-        public CreateBrandCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IBrandCache brandCache, IBrandRepository brandRepository)
-        {
-            _unitOfWork = unitOfWork;
-            _brandRepository = brandRepository;
-            _mapper = mapper;
-            _brandCache = brandCache;
-        }
+        private readonly IMapper _mapper = mapper;
 
         /// <summary>
         /// Handle and return a task of type erroror.
@@ -62,7 +54,7 @@ namespace Catalog.Application.Features.Brands.CreateBrand.V1
         /// <returns><![CDATA[Task<ErrorOr<BrandResponse>>]]></returns>
         public async Task<ErrorOr<BrandResponse>> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
         {
-            var brandToAdd = Brand.Create(
+            Brand brandToAdd = Brand.Create(
                 request.Name!, request.Description, request.Website);
 
             await _brandRepository.AddAsync(brandToAdd, cancellationToken);

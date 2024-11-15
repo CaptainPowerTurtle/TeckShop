@@ -11,21 +11,16 @@ namespace Catalog.Api.Endpoints.V1.Brands
     /// <summary>
     /// The create brand endpoint.
     /// </summary>
-    public class CreateBrandEndpoint : Endpoint<CreateBrandRequest, BrandResponse>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="CreateBrandEndpoint"/> class.
+    /// </remarks>
+    /// <param name="mediatr">The mediatr.</param>
+    public class CreateBrandEndpoint(ISender mediatr) : Endpoint<CreateBrandRequest, BrandResponse>
     {
         /// <summary>
         /// The mediatr.
         /// </summary>
-        private readonly ISender _mediatr;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreateBrandEndpoint"/> class.
-        /// </summary>
-        /// <param name="mediatr">The mediatr.</param>
-        public CreateBrandEndpoint(ISender mediatr)
-        {
-            _mediatr = mediatr;
-        }
+        private readonly ISender _mediatr = mediatr;
 
         /// <summary>
         /// Configure the endpoint.
@@ -46,8 +41,8 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <returns></returns>
         public override async Task HandleAsync(CreateBrandRequest req, CancellationToken ct)
         {
-            var command = new CreateBrandCommand(req.Name, req.Description, req.Website);
-            var commandResponse = await _mediatr.Send(command, ct);
+            CreateBrandCommand command = new(req.Name, req.Description, req.Website);
+            ErrorOr<BrandResponse> commandResponse = await _mediatr.Send(command, ct);
             await this.SendCreatedAtAsync<GetBrandEndpoint, ErrorOr<BrandResponse>>(routeValues: new { commandResponse.Value?.Id }, commandResponse, cancellation: ct);
         }
     }

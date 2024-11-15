@@ -13,21 +13,16 @@ namespace Catalog.Application.Features.Brands.GetPaginatedBrands
     /// <summary>
     /// Get paginated brands query handler.
     /// </summary>
-    internal sealed class GetPaginatedBrandsQueryHandler : IRequestHandler<GetPaginatedBrandsQuery, PagedList<BrandResponse>>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GetPaginatedBrandsQueryHandler"/> class.
+    /// </remarks>
+    /// <param name="brandRepository">The brand repository.</param>
+    internal sealed class GetPaginatedBrandsQueryHandler(IBrandRepository brandRepository) : IRequestHandler<GetPaginatedBrandsQuery, PagedList<BrandResponse>>
     {
         /// <summary>
         /// The brand repository.
         /// </summary>
-        private readonly IBrandRepository _brandRepository;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetPaginatedBrandsQueryHandler"/> class.
-        /// </summary>
-        /// <param name="brandRepository">The brand repository.</param>
-        public GetPaginatedBrandsQueryHandler(IBrandRepository brandRepository)
-        {
-            _brandRepository = brandRepository;
-        }
+        private readonly IBrandRepository _brandRepository = brandRepository;
 
         /// <summary>
         /// Handle and return a task of a pagedlist of brandresponses.

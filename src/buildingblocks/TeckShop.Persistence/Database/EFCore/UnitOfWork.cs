@@ -10,27 +10,22 @@ namespace TeckShop.Persistence.Database.EFCore
     /// The unit of work.
     /// </summary>
     /// <typeparam name="TContext"/>
-    public class UnitOfWork<TContext> : IUnitOfWork
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.
+    /// </remarks>
+    /// <param name="context">The context.</param>
+    public class UnitOfWork<TContext>(TContext context) : IUnitOfWork
         where TContext : BaseDbContext
     {
         /// <summary>
         /// The context.
         /// </summary>
-        private readonly TContext _context;
+        private readonly TContext _context = context;
 
         /// <summary>
         /// The transaction.
         /// </summary>
         private IDbContextTransaction? _transaction;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UnitOfWork{TContext}"/> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public UnitOfWork(TContext context)
-        {
-            _context = context;
-        }
 
         /// <summary>
         /// Begins the transaction asynchronously.
@@ -42,7 +37,10 @@ namespace TeckShop.Persistence.Database.EFCore
         public async Task<IDbTransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
         {
             if (_transaction is not null)
+            {
                 throw new InvalidTransactionException("A transaction has already been started.");
+            }
+
             _transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
             return _transaction.GetDbTransaction();
         }
@@ -56,7 +54,10 @@ namespace TeckShop.Persistence.Database.EFCore
         public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction is null)
+            {
                 throw new InvalidTransactionException("A transaction has not been started.");
+            }
+
             await _transaction.CommitAsync(cancellationToken);
         }
 
@@ -69,7 +70,10 @@ namespace TeckShop.Persistence.Database.EFCore
         public async Task CreateTransactionSavepoint(string savePoint, CancellationToken cancellationToken = default)
         {
             if (_transaction is null)
+            {
                 throw new InvalidTransactionException("A transaction has not been started.");
+            }
+
             await _transaction.CreateSavepointAsync(savePoint, cancellationToken);
         }
 
@@ -82,7 +86,10 @@ namespace TeckShop.Persistence.Database.EFCore
         public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction is null)
+            {
                 throw new InvalidTransactionException("A transaction has not been started.");
+            }
+
             await _context.Database.RollbackTransactionAsync(cancellationToken);
         }
 
@@ -95,7 +102,10 @@ namespace TeckShop.Persistence.Database.EFCore
         public async Task RollbackTransactionToSavepointAsync(string savePoint, CancellationToken cancellationToken = default)
         {
             if (_transaction is null)
+            {
                 throw new InvalidTransactionException("A transaction has not been started.");
+            }
+
             await _transaction.RollbackToSavepointAsync(savePoint, cancellationToken);
         }
 

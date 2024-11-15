@@ -10,21 +10,16 @@ namespace TeckShop.Persistence.Database.EFCore.Interceptors
     /// <summary>
     /// The soft delete interceptor.
     /// </summary>
-    public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="SoftDeleteInterceptor"/> class.
+    /// </remarks>
+    /// <param name="httpContextAccessor">The http context accessor.</param>
+    public sealed class SoftDeleteInterceptor(IHttpContextAccessor httpContextAccessor) : SaveChangesInterceptor
     {
         /// <summary>
         /// The http context accessor.
         /// </summary>
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SoftDeleteInterceptor"/> class.
-        /// </summary>
-        /// <param name="httpContextAccessor">The http context accessor.</param>
-        public SoftDeleteInterceptor(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         /// <summary>
         /// Saving the changes asynchronously.
@@ -38,7 +33,7 @@ namespace TeckShop.Persistence.Database.EFCore.Interceptors
             InterceptionResult<int> result,
             CancellationToken cancellationToken = default)
         {
-            var currentUserId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string? currentUserId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (eventData.Context is null)
             {

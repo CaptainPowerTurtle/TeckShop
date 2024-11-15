@@ -35,11 +35,20 @@ namespace Catalog.Domain.Entities.Suppliers
         string? website)
         {
             if (name is not null && Name?.Equals(name, StringComparison.Ordinal) is not true)
+            {
                 Name = name;
+            }
+
             if (Description?.Equals(description, StringComparison.Ordinal) is not true)
+            {
                 Description = description;
+            }
+
             if (Website?.Equals(website, StringComparison.Ordinal) is not true)
+            {
                 Website = website;
+            }
+
             return this;
         }
 

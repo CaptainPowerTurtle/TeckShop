@@ -71,16 +71,15 @@ namespace Catalog.Domain.Entities.Products
         /// Update a brand.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="description"></param>
-        /// <param name="website"></param>
         /// <returns></returns>
         public Product Update(
-        string? name,
-        string? description,
-        string? website)
+        string? name)
         {
             if (name is not null && !Name.Equals(name, StringComparison.Ordinal))
+            {
                 Name = name;
+            }
+
             return this;
         }
 
@@ -116,7 +115,7 @@ namespace Catalog.Domain.Entities.Products
                 BrandId = brand?.Id
             };
 
-            var @event = new ProductCreatedDomainEvent(product.Id, product.Name);
+            ProductCreatedDomainEvent @event = new(product.Id, product.Name);
             product.AddDomainEvent(@event);
 
             return product;

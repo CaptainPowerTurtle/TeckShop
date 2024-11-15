@@ -9,21 +9,16 @@ namespace TeckShop.Persistence.Database.EFCore.Interceptors
     /// <summary>
     /// The domain event interceptor.
     /// </summary>
-    public sealed class DomainEventInterceptor : SaveChangesInterceptor
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="DomainEventInterceptor"/> class.
+    /// </remarks>
+    /// <param name="publisher">The publisher.</param>
+    public sealed class DomainEventInterceptor(IMediator publisher) : SaveChangesInterceptor
     {
         /// <summary>
         /// The publisher.
         /// </summary>
-        private readonly IMediator _publisher;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DomainEventInterceptor"/> class.
-        /// </summary>
-        /// <param name="publisher">The publisher.</param>
-        public DomainEventInterceptor(IMediator publisher)
-        {
-            _publisher = publisher;
-        }
+        private readonly IMediator _publisher = publisher;
 
         /// <summary>
         /// Saved the changes asynchronously.
@@ -54,13 +49,13 @@ namespace TeckShop.Persistence.Database.EFCore.Interceptors
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "HLQ012:Consider using CollectionsMarshal.AsSpan()", Justification = "Add ref when .NET 9 comes out with support for it being async.")]
         private async Task PublishDomainEventsAsync(DbContext context)
         {
-            var domainEvents = context
+            List<IDomainEvent> domainEvents = context
                 .ChangeTracker
                 .Entries<BaseEntity>()
                 .Select(entry => entry.Entity)
                 .SelectMany(entity =>
                 {
-                    var domainEvents = entity.GetDomainEvents();
+                    IReadOnlyList<IDomainEvent> domainEvents = entity.GetDomainEvents();
                     entity.ClearDomainEvents();
                     return domainEvents;
                 }).ToList();

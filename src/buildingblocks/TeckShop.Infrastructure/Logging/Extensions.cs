@@ -22,15 +22,23 @@ namespace TeckShop.Infrastructure.Logging
         /// <param name="appName">The app name.</param>
         public static void ConfigureSerilog(this WebApplicationBuilder builder, string appName)
         {
-            var config = builder.Configuration;
-            var serilogOptions = builder.Services.BindValidateReturn<SerilogOptions>(config);
+            Microsoft.Extensions.Configuration.ConfigurationManager config = builder.Configuration;
+            SerilogOptions serilogOptions = builder.Services.BindValidateReturn<SerilogOptions>(config);
             _ = builder.Host.UseSerilog((_, _, serilogConfig) =>
             {
-                if (serilogOptions.EnableErichers) ConfigureEnrichers(serilogConfig, appName);
+                serilogConfig.WriteTo.OpenTelemetry();
+                if (serilogOptions.EnableErichers)
+                {
+                    ConfigureEnrichers(serilogConfig, appName);
+                }
+
                 ConfigureConsoleLogging(serilogConfig, serilogOptions.StructuredConsoleLogging);
                 ConfigureWriteToFile(serilogConfig, serilogOptions.WriteToFile, serilogOptions.RetentionFileCount, appName);
                 SetMinimumLogLevel(serilogConfig, serilogOptions.MinimumLogLevel);
-                if (serilogOptions.OverideMinimumLogLevel) OverideMinimumLogLevel(serilogConfig);
+                if (serilogOptions.OverideMinimumLogLevel)
+                {
+                    OverideMinimumLogLevel(serilogConfig);
+                }
             });
         }
 
@@ -44,7 +52,7 @@ namespace TeckShop.Infrastructure.Logging
             config
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("Application", appName)
-                .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+                .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers([new DbUpdateExceptionDestructurer()]))
                 .Enrich.WithMachineName()
                 .Enrich.WithProcessId()
                 .Enrich.WithThreadId();
@@ -94,7 +102,7 @@ namespace TeckShop.Infrastructure.Logging
         /// <param name="minLogLevel">The min log level.</param>
         private static void SetMinimumLogLevel(LoggerConfiguration serilogConfig, string minLogLevel)
         {
-            var loggingLevelSwitch = new LoggingLevelSwitch
+            LoggingLevelSwitch loggingLevelSwitch = new()
             {
                 MinimumLevel = minLogLevel.ToLowerInvariant() switch
                 {

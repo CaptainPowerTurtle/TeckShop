@@ -8,15 +8,12 @@ namespace Catalog.Infrastructure.Persistence.Repositories
     /// <summary>
     /// The category repository.
     /// </summary>
-    public class CategoryRepository : GenericRepository<Category, Guid>, ICategoryRepository
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="CategoryRepository"/> class.
+    /// </remarks>
+    /// <param name="context"></param>
+    /// <param name="httpContextAccessor"></param>
+    public class CategoryRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor) : GenericRepository<Category, Guid>(context, httpContextAccessor), ICategoryRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CategoryRepository"/> class.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="httpContextAccessor"></param>
-        public CategoryRepository(BaseDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
-        {
-        }
     }
 }

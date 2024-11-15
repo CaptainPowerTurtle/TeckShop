@@ -33,9 +33,15 @@ namespace Catalog.Domain.Entities.ProductPriceTypes
             string? name, int? priority)
         {
             if (name is not null && !Name.Equals(name))
+            {
                 Name = name;
+            }
+
             if (priority.HasValue && !Priority.Equals(priority))
+            {
                 Priority = priority.Value;
+            }
+
             return this;
         }
 

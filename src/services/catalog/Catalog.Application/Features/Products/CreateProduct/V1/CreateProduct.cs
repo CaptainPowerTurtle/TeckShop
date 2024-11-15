@@ -18,39 +18,31 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
     /// <summary>
     /// Create Brand command handler.
     /// </summary>
-    internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, ErrorOr<ProductResponse>>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="CreateProductCommandHandler"/> class.
+    /// </remarks>
+    /// <param name="unitOfWork">The unit of work.</param>
+    /// <param name="productRepository">The brand repository.</param>
+    /// <param name="brandRepository"></param>
+    /// <param name="categoryRepository"></param>
+    internal sealed class CreateProductCommandHandler(IUnitOfWork unitOfWork, IProductRepository productRepository, IBrandRepository brandRepository, ICategoryRepository categoryRepository) : ICommandHandler<CreateProductCommand, ErrorOr<ProductResponse>>
     {
         /// <summary>
         /// The unit of work.
         /// </summary>
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         /// <summary>
         /// The product repository.
         /// </summary>
-        private readonly IProductRepository _productRepository;
+        private readonly IProductRepository _productRepository = productRepository;
 
         /// <summary>
         /// The brand repository.
         /// </summary>
-        private readonly IBrandRepository _brandRepository;
+        private readonly IBrandRepository _brandRepository = brandRepository;
 
-        private readonly ICategoryRepository _categoryRepository;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreateProductCommandHandler"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <param name="productRepository">The brand repository.</param>
-        /// <param name="brandRepository"></param>
-        /// <param name="categoryRepository"></param>
-        public CreateProductCommandHandler(IUnitOfWork unitOfWork, IProductRepository productRepository, IBrandRepository brandRepository, ICategoryRepository categoryRepository)
-        {
-            _unitOfWork = unitOfWork;
-            _productRepository = productRepository;
-            _brandRepository = brandRepository;
-            _categoryRepository = categoryRepository;
-        }
+        private readonly ICategoryRepository _categoryRepository = categoryRepository;
 
         /// <summary>
         /// Handle and return a task of type erroror.
@@ -83,18 +75,13 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
                 }
             }
 
-            var productToAdd = Product.Create(request.Name, request.Description, request.ProductSku, request.GTIN, categories.ToList(), request.IsActive, exisitingBrand);
+            Product productToAdd = Product.Create(request.Name, request.Description, request.ProductSku, request.GTIN, [.. categories], request.IsActive, exisitingBrand);
 
             await _productRepository.AddAsync(productToAdd, cancellationToken);
 
-            var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
+            int result = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            if (result.Equals(0))
-            {
-                return Errors.Product.NotCreated;
-            }
-
-            return ProductMappings.ProductToProductResponse(productToAdd);
+            return result.Equals(0) ? (ErrorOr<ProductResponse>)Errors.Product.NotCreated : (ErrorOr<ProductResponse>)ProductMappings.ProductToProductResponse(productToAdd);
         }
     }
 }

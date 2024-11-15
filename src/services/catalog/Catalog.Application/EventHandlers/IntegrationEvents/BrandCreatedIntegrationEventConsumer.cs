@@ -7,21 +7,16 @@ namespace Catalog.Application.EventHandlers.IntegrationEvents
     /// <summary>
     /// The brand created domain event consumer.
     /// </summary>
-    public class BrandCreatedIntegrationEventConsumer : IConsumer<BrandCreatedIntegrationEvent>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="BrandCreatedIntegrationEventConsumer"/> class.
+    /// </remarks>
+    /// <param name="logger">The logger.</param>
+    public class BrandCreatedIntegrationEventConsumer(ILogger<BrandCreatedIntegrationEventConsumer> logger) : IConsumer<BrandCreatedIntegrationEvent>
     {
         /// <summary>
         /// The logger.
         /// </summary>
-        private readonly ILogger<BrandCreatedIntegrationEventConsumer> _logger;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BrandCreatedIntegrationEventConsumer"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public BrandCreatedIntegrationEventConsumer(ILogger<BrandCreatedIntegrationEventConsumer> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<BrandCreatedIntegrationEventConsumer> _logger = logger;
 
         /// <summary>
         /// Consume the integration event.

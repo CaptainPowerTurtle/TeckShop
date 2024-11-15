@@ -20,7 +20,7 @@ namespace TeckShop.Infrastructure.Options
         public static T LoadOptions<T>(this IConfiguration configuration, string sectionName)
             where T : IOptionsRoot
         {
-            var options = configuration.GetSection(sectionName).Get<T>() ?? throw new ConfigurationMissingException(sectionName);
+            T options = configuration.GetSection(sectionName).Get<T>() ?? throw new ConfigurationMissingException(sectionName);
             return options;
         }
 

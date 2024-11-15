@@ -1,8 +1,6 @@
 using FastEndpoints.Swagger;
 using Keycloak.AuthServices.Authentication;
-using Keycloak.AuthServices.Common;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -12,7 +10,7 @@ namespace TeckShop.Infrastructure.Swagger
 {
     internal static class Extensions
     {
-        public static void UseSwaggerExtension(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static void UseSwaggerExtension(this IApplicationBuilder app)
         {
             app.UseSwaggerGen(
                 config: config =>
@@ -20,7 +18,7 @@ namespace TeckShop.Infrastructure.Swagger
                     config.Path = "/docs/{documentName}/openapi.json";
                     config.PostProcess = (swagger, httpReq) =>
                     {
-                        OpenApiServer openApiServer = new OpenApiServer()
+                        OpenApiServer openApiServer = new()
                         {
                             Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{httpReq.PathBase.Value}"
                         };
@@ -37,12 +35,15 @@ namespace TeckShop.Infrastructure.Swagger
                 });
         }
 
-        internal static void AddSwaggerExtension(this IServiceCollection services, IConfiguration configuration, IList<Action<DocumentOptions>> options)
+        internal static void AddSwaggerExtension(
+            this IServiceCollection services,
+            IConfiguration configuration,
+            IList<Action<DocumentOptions>> options,
+            KeycloakAuthenticationOptions? keycloakAuthenticationOptions = null)
         {
-            var swaggerOptions = services.BindValidateReturn<SwaggerOptions>(configuration);
-            var keycloakOptions = configuration.GetKeycloakOptions<KeycloakAuthenticationOptions>()!;
+            SwaggerOptions swaggerOptions = services.BindValidateReturn<SwaggerOptions>(configuration);
 
-            Action<DocumentOptions> document = new Action<DocumentOptions>(options =>
+            Action<DocumentOptions> document = new(options =>
             {
                 options.EnableJWTBearerAuth = false;
                 options.MaxEndpointVersion = 0;
@@ -52,14 +53,19 @@ namespace TeckShop.Infrastructure.Swagger
                     setting.Title = swaggerOptions.Title;
                     setting.DocumentName = "Initial Release";
                     setting.Description = swaggerOptions.Description;
-                    setting.AddSecurity("oAuth2", SwaggerAuth.AddOAuthScheme(keycloakOptions.KeycloakTokenEndpoint, keycloakOptions.KeycloakUrlRealm + "protocol/openid-connect/auth", keycloakOptions.KeycloakTokenEndpoint));
+
+                    if (keycloakAuthenticationOptions != null)
+                    {
+                        setting.AddSecurity("oAuth2", SwaggerAuth.AddOAuthScheme(keycloakAuthenticationOptions.KeycloakTokenEndpoint, keycloakAuthenticationOptions.KeycloakUrlRealm + "protocol/openid-connect/auth", keycloakAuthenticationOptions.KeycloakTokenEndpoint));
+                    }
+
                     setting.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("oAuth2"));
                 };
             });
 
             options.Add(document);
 
-            foreach (var option in options)
+            foreach (Action<DocumentOptions> option in options)
             {
                 services.SwaggerDocument(option);
             }

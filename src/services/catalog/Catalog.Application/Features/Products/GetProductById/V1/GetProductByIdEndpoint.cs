@@ -1,4 +1,5 @@
 using Catalog.Application.Features.Products.Response;
+using ErrorOr;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
@@ -9,21 +10,16 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
     /// <summary>
     /// The get product by id endpoint.
     /// </summary>
-    public class GetProductByIdEndpoint : Endpoint<GetProductByIdRequest, ProductResponse>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="GetProductByIdEndpoint"/> class.
+    /// </remarks>
+    /// <param name="mediatr">The mediatr.</param>
+    public class GetProductByIdEndpoint(ISender mediatr) : Endpoint<GetProductByIdRequest, ProductResponse>
     {
         /// <summary>
         /// The mediatr.
         /// </summary>
-        private readonly ISender _mediatr;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GetProductByIdEndpoint"/> class.
-        /// </summary>
-        /// <param name="mediatr">The mediatr.</param>
-        public GetProductByIdEndpoint(ISender mediatr)
-        {
-            _mediatr = mediatr;
-        }
+        private readonly ISender _mediatr = mediatr;
 
         /// <summary>
         /// Configure the endpoint.
@@ -45,8 +41,8 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
         /// <returns></returns>
         public override async Task HandleAsync(GetProductByIdRequest req, CancellationToken ct)
         {
-            var query = new GetProductByIdQuery(req.ProductId);
-            var queryResponse = await _mediatr.Send(query, ct);
+            GetProductByIdQuery query = new(req.ProductId);
+            ErrorOr<ProductResponse> queryResponse = await _mediatr.Send(query, ct);
             await this.SendAsync(queryResponse, ct);
         }
     }

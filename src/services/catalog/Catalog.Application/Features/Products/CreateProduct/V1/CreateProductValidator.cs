@@ -19,7 +19,7 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
                 .WithName("ProductSku")
                 .MustAsync(async (sku, ct) =>
                 {
-                    var _brandRepository = Resolve<IProductRepository>();
+                    IProductRepository _brandRepository = Resolve<IProductRepository>();
                     return !await _brandRepository.ExistsAsync(brand => brand.ProductSKU.Equals(sku, StringComparison.InvariantCultureIgnoreCase), cancellationToken: ct);
                 })
                 .WithMessage((_, productSku) => $"Product with the SKU '{productSku}' already Exists.");

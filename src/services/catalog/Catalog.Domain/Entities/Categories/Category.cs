@@ -40,9 +40,15 @@ namespace Catalog.Domain.Entities.Categories
             string? description)
         {
             if (name is not null && Name?.Equals(name, StringComparison.Ordinal) is not true)
+            {
                 Name = name;
+            }
+
             if (Description?.Equals(description, StringComparison.Ordinal) is not true)
+            {
                 Description = description;
+            }
+
             return this;
         }
 

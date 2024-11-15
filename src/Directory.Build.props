@@ -5,6 +5,7 @@
 		<LangVersion>latest</LangVersion>
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>IDE00585</NoWarn>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<!-- https://endjin.com/blog/2022/01/raising-coding-standard-dotnet-analyzers -->

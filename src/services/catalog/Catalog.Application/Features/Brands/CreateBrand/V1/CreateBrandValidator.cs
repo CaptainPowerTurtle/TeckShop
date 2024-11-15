@@ -20,8 +20,8 @@ namespace Catalog.Application.Features.Brands.CreateBrand.V1
                 .WithName("Name")
                 .MustAsync(async (name, ct) =>
                 {
-                    var _brandRepository = Resolve<IBrandRepository>();
-                    return !await _brandRepository.ExistsAsync(brand => brand.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase), cancellationToken: ct);
+                    IBrandRepository _brandRepository = Resolve<IBrandRepository>();
+                    return !await _brandRepository.ExistsAsync(brand => brand.Name.Equals(name), cancellationToken: ct);
                 })
                 .WithMessage((_, productSku) => $"Brand with the name '{productSku}' already Exists.");
         }

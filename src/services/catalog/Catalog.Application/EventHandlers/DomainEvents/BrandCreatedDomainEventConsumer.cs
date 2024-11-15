@@ -8,28 +8,22 @@ namespace Catalog.Application.EventHandlers.DomainEvents
     /// <summary>
     /// The brand created domain event consumer.
     /// </summary>
-    public class BrandCreatedDomainEventConsumer : IConsumer<BrandCreatedDomainEvent>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="BrandCreatedDomainEventConsumer"/> class.
+    /// </remarks>
+    /// <param name="logger">The logger.</param>
+    /// <param name="publishEndpoint"></param>
+    public class BrandCreatedDomainEventConsumer(ILogger<BrandCreatedDomainEventConsumer> logger, IPublishEndpoint publishEndpoint) : IConsumer<BrandCreatedDomainEvent>
     {
         /// <summary>
         /// The logger.
         /// </summary>
-        private readonly ILogger<BrandCreatedDomainEventConsumer> _logger;
+        private readonly ILogger<BrandCreatedDomainEventConsumer> _logger = logger;
 
         /// <summary>
         /// Publish endpoint.
         /// </summary>
-        private readonly IPublishEndpoint _publishEndpoint;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BrandCreatedDomainEventConsumer"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="publishEndpoint"></param>
-        public BrandCreatedDomainEventConsumer(ILogger<BrandCreatedDomainEventConsumer> logger, IPublishEndpoint publishEndpoint)
-        {
-            _logger = logger;
-            _publishEndpoint = publishEndpoint;
-        }
+        private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
 
         /// <summary>
         /// Consume the domain event.
@@ -41,7 +35,7 @@ namespace Catalog.Application.EventHandlers.DomainEvents
         {
             _logger.LogInformation($"Message is {{message}}", context.Message);
 
-            var @event = new BrandCreatedIntegrationEvent(context.Message.BrandId);
+            BrandCreatedIntegrationEvent @event = new(context.Message.BrandId);
             await _publishEndpoint.Publish(@event, cancellationToken: context.CancellationToken);
         }
     }

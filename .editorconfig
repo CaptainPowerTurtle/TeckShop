@@ -779,6 +779,8 @@ dotnet_diagnostic.ex001.severity = Suggestion
 
 dotnet_diagnostic.av1755.severity  = Suggestion
 
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0058.severity = none
 
 [**/Migrations/**]
 generated_code = true

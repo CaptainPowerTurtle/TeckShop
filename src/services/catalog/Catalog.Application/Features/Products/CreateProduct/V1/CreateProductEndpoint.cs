@@ -11,21 +11,16 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
     /// <summary>
     /// The create product endpoint.
     /// </summary>
-    public class CreateProductEndpoint : Endpoint<CreateProductRequest, ProductResponse>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="CreateProductEndpoint"/> class.
+    /// </remarks>
+    /// <param name="mediatr">The mediatr.</param>
+    public class CreateProductEndpoint(ISender mediatr) : Endpoint<CreateProductRequest, ProductResponse>
     {
         /// <summary>
         /// The mediatr.
         /// </summary>
-        private readonly ISender _mediatr;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreateProductEndpoint"/> class.
-        /// </summary>
-        /// <param name="mediatr">The mediatr.</param>
-        public CreateProductEndpoint(ISender mediatr)
-        {
-            _mediatr = mediatr;
-        }
+        private readonly ISender _mediatr = mediatr;
 
         /// <summary>
         /// Configure the endpoint.
@@ -46,8 +41,8 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
         /// <returns></returns>
         public override async Task HandleAsync(CreateProductRequest req, CancellationToken ct)
         {
-            var command = new CreateProductCommand(req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds);
-            var commandResponse = await _mediatr.Send(command, ct);
+            CreateProductCommand command = new(req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds);
+            ErrorOr<ProductResponse> commandResponse = await _mediatr.Send(command, ct);
             await this.SendCreatedAtAsync<GetProductByIdEndpoint, ErrorOr<ProductResponse>>(routeValues: new { commandResponse.Value?.Id }, commandResponse, cancellation: ct);
         }
     }

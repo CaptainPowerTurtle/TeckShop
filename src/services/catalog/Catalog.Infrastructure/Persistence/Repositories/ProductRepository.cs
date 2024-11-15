@@ -9,22 +9,17 @@ namespace Catalog.Infrastructure.Persistence.Repositories
     /// <summary>
     /// The product repository.
     /// </summary>
-    public class ProductRepository : GenericRepository<Product, Guid>, IProductRepository
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="ProductRepository"/> class.
+    /// </remarks>
+    /// <param name="context">The context.</param>
+    /// <param name="httpContextAccessor">The http context accessor.</param>
+    public class ProductRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor) : GenericRepository<Product, Guid>(context, httpContextAccessor), IProductRepository
     {
         /// <summary>
         /// The context.
         /// </summary>
-        private readonly AppDbContext _context;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProductRepository"/> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="httpContextAccessor">The http context accessor.</param>
-        public ProductRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         /// <summary>
         /// Get paged products asynchronously.
@@ -37,7 +32,7 @@ namespace Catalog.Infrastructure.Persistence.Repositories
         /// <returns><![CDATA[Task<PagedList<ProductResponse>>]]></returns>
         public async Task<PagedList<TProductResponse>> GetPagedProductsAsync<TProductResponse>(int page, int size, string? keyword, CancellationToken cancellationToken = default)
         {
-            var queryable = _context.Products.AsQueryable();
+            IQueryable<Product> queryable = _context.Products.AsQueryable();
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = keyword.ToLowerInvariant();

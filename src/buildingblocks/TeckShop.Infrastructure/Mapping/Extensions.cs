@@ -17,9 +17,9 @@ namespace TeckShop.Infrastructure.Mapping
         /// <returns>An IServiceCollection.</returns>
         public static IServiceCollection AddMapsterExtension(this IServiceCollection services, Assembly coreAssembly)
         {
-            var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
+            TypeAdapterConfig typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
             typeAdapterConfig.Scan(coreAssembly);
-            var mapperConfig = new Mapper(typeAdapterConfig);
+            Mapper mapperConfig = new(typeAdapterConfig);
             services.AddSingleton<IMapper>(mapperConfig);
             return services;
         }

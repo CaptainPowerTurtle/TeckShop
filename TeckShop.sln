@@ -63,9 +63,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Arch.UnitTests", "t
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "aspire", "aspire", "{6323262A-BB2A-49F0-BB99-9C84D9B63710}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeckShop.AppHost", "src\aspire\TeckShop.AppHost\TeckShop.AppHost.csproj", "{4CEBB570-26F9-4336-8D2B-6A81B4C22BE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeckShop.AppHost", "src\aspire\TeckShop.AppHost\TeckShop.AppHost.csproj", "{4CEBB570-26F9-4336-8D2B-6A81B4C22BE9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeckShop.ServiceDefaults", "src\aspire\TeckShop.ServiceDefaults\TeckShop.ServiceDefaults.csproj", "{E1F84EFF-FF59-4026-8F75-2AA8A5BFCF92}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.MigrationService", "src\services\catalog\Catalog.MigrationService\Catalog.MigrationService.csproj", "{1BF1371C-9148-4CD6-8C5A-77DED2D719E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,10 @@ Global
 		{E1F84EFF-FF59-4026-8F75-2AA8A5BFCF92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1F84EFF-FF59-4026-8F75-2AA8A5BFCF92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1F84EFF-FF59-4026-8F75-2AA8A5BFCF92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BF1371C-9148-4CD6-8C5A-77DED2D719E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BF1371C-9148-4CD6-8C5A-77DED2D719E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BF1371C-9148-4CD6-8C5A-77DED2D719E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BF1371C-9148-4CD6-8C5A-77DED2D719E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +161,7 @@ Global
 		{6323262A-BB2A-49F0-BB99-9C84D9B63710} = {CFF195CB-EDE6-46FD-BE80-A3B4F70F3E5C}
 		{4CEBB570-26F9-4336-8D2B-6A81B4C22BE9} = {6323262A-BB2A-49F0-BB99-9C84D9B63710}
 		{E1F84EFF-FF59-4026-8F75-2AA8A5BFCF92} = {6323262A-BB2A-49F0-BB99-9C84D9B63710}
+		{1BF1371C-9148-4CD6-8C5A-77DED2D719E5} = {26C891A7-17A2-47AE-AFA1-D3647EC98F23}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B50D82E-D390-4C28-9421-AA48C3A37ACA}
