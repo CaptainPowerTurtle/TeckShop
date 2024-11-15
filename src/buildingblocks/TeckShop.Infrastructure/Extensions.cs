@@ -7,6 +7,7 @@ using IdempotentAPI.Extensions.DependencyInjection;
 using Keycloak.AuthServices.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using TeckShop.Core.Exceptions;
 using TeckShop.Infrastructure.Behaviors;
@@ -92,7 +93,11 @@ namespace TeckShop.Infrastructure
                 builder.Services.AddSwaggerExtension(builder.Configuration, swaggerDocumentOptions, keycloakOptions);
             }
 
-            builder.Services.AddHeaderPropagation();
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
         }
 
         /// <summary>
@@ -105,6 +110,7 @@ namespace TeckShop.Infrastructure
         {
             // Preserve Order
             app.UseCors(AllowAllOrigins);
+            app.UseForwardedHeaders();
             app.UseAuthentication();
             app.UseAuthorization();
             if (enableFastEndpoints)
@@ -135,8 +141,6 @@ namespace TeckShop.Infrastructure
             {
                 app.UseSwaggerExtension();
             }
-
-            app.UseHeaderPropagation();
         }
     }
 }
