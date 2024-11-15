@@ -33,5 +33,9 @@ spec:
             value: "{{ .Values.containers.env.ASPNETCORE_HTTP_PORTS }}"
           - name: ASPNETCORE_ENVIRONMENT
             value: "{{ .Values.containers.env.ASPNETCORE_ENVIRONMENT }}"
+          - name: ReverseProxy__Clusters__catalog__Destinations__catalog/destination1__Address
+            value: "{{ .Values.containers.env.Address }}"
+          - name: ReverseProxy__Clusters__catalog__Destinations__catalog/destination1__Health
+            value: "{{ .Values.containers.env.Health }}"
       imagePullSecrets:
         - name: ghcr-login-secret
