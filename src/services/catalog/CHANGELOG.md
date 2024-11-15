@@ -1,5 +1,21 @@
 # Changelog
 
+## catalog-v1.0.2 - 2024-11-15
+
+### What Changed 👀
+
+### 🐛 Bug Fixes
+
+- fix: docker build @CaptainPowerTurtle (#31)
+
+### 👷 CI
+
+- fix: docker build @CaptainPowerTurtle (#31)
+
+### 🧩 Dependency Updates
+
+- fix: docker build @CaptainPowerTurtle (#31)
+
 ## catalog-v1.0.1 - 2024-11-15
 
 ### What Changed 👀
