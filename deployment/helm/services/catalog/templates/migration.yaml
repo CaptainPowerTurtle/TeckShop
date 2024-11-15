@@ -11,9 +11,6 @@ metadata:
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
   replicas: {{ .Values.migration.replicas }}
-  selector:
-    matchLabels:
-      app: {{ .Values.migration.label.name }}
   template:
     metadata:
       labels:
