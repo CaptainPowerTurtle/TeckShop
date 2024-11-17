@@ -6,7 +6,7 @@ using ErrorOr;
 using MapsterMapper;
 using TeckShop.Core.CQRS;
 
-namespace Catalog.Application.Features.Brands.GetBrand
+namespace Catalog.Application.Features.Brands.GetBrand.V1
 {
     /// <summary>
     /// Get Brand query.

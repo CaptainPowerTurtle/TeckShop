@@ -10,9 +10,9 @@ using Catalog.Application.Features.Brands.DeleteBrand;
 using ErrorOr;
 using Soenneker.Utils.AutoBogus.Config;
 using Soenneker.Utils.AutoBogus;
-using Catalog.Application.Features.Brands.DeleteBrands;
 using FluentAssertions;
 using NSubstitute.ReturnsExtensions;
+using Catalog.Application.Features.Brands.BulkDeleteBrands.V1;
 
 namespace Catalog.Application.UnitTests.Brands
 {

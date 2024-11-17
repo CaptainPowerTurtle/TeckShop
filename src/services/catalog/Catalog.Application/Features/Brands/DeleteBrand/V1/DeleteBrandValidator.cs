@@ -1,7 +1,7 @@
 ﻿using FastEndpoints;
 using FluentValidation;
 
-namespace Catalog.Application.Features.Brands.DeleteBrand
+namespace Catalog.Application.Features.Brands.DeleteBrand.V1
 {
     /// <summary>
     /// The delete brand validator.

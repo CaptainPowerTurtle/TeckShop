@@ -75,20 +75,12 @@ namespace TeckShop.Core.Domain
         /// </summary>
         /// <param name="isDeleted">If true, is deleted.</param>
         /// <param name="deletedBy">The deleted by.</param>
-        public void SetDeletedProperties(bool isDeleted, string? deletedBy)
+        /// <param name="deletedOn"></param>
+        public void SetDeletedProperties(bool isDeleted, string? deletedBy, DateTimeOffset? deletedOn)
         {
-            if (isDeleted)
-            {
-                IsDeleted = isDeleted;
-                DeletedOn = DateTimeOffset.UtcNow;
-                DeletedBy = deletedBy;
-            }
-            else
-            {
-                IsDeleted = isDeleted;
-                DeletedOn = null;
-                DeletedBy = null;
-            }
+            IsDeleted = isDeleted;
+            DeletedOn = deletedOn;
+            DeletedBy = deletedBy;
         }
 
         /// <summary>

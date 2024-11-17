@@ -1,12 +1,11 @@
 using Catalog.Application.Features.Brands.Dtos;
-using Catalog.Application.Features.Brands.GetBrand;
 using ErrorOr;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
 using TeckShop.Infrastructure.Endpoints;
 
-namespace Catalog.Api.Endpoints.V1.Brands
+namespace Catalog.Application.Features.Brands.GetBrand.V1
 {
     /// <summary>
     /// The get brand endpoint.

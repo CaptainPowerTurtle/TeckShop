@@ -3,7 +3,7 @@ using Catalog.Application.Contracts.Repositories;
 using ErrorOr;
 using TeckShop.Core.CQRS;
 
-namespace Catalog.Application.Features.Brands.DeleteBrands
+namespace Catalog.Application.Features.Brands.BulkDeleteBrands.V1
 {
     /// <summary>
     /// Delete brands command.

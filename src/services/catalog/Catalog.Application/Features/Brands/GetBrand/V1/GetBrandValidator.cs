@@ -1,7 +1,7 @@
 ﻿using FastEndpoints;
 using FluentValidation;
 
-namespace Catalog.Application.Features.Brands.GetBrand
+namespace Catalog.Application.Features.Brands.GetBrand.V1
 {
     /// <summary>
     /// The get brand validator.

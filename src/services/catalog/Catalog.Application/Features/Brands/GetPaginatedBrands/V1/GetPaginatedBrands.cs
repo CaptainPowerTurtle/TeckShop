@@ -3,7 +3,7 @@ using Catalog.Application.Features.Brands.Dtos;
 using MediatR;
 using TeckShop.Core.Pagination;
 
-namespace Catalog.Application.Features.Brands.GetPaginatedBrands
+namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
 {
     /// <summary>
     /// Get paginated brands query.

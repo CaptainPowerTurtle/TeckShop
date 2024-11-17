@@ -11,11 +11,11 @@ using Catalog.Application.Features.Brands.GetBrand;
 using ErrorOr;
 using Soenneker.Utils.AutoBogus.Config;
 using Soenneker.Utils.AutoBogus;
-using Catalog.Application.Features.Brands.GetPaginatedBrands;
 using TeckShop.Core.Pagination;
 using FluentAssertions;
 using Catalog.Application.Contracts.Repositories;
 using NSubstitute;
+using Catalog.Application.Features.Brands.GetPaginatedBrands.V1;
 
 namespace Catalog.Application.UnitTests.Brands
 {

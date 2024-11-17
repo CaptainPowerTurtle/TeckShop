@@ -1,9 +1,9 @@
-﻿namespace Catalog.Application.Features.Brands.DeleteBrand
+﻿namespace Catalog.Application.Features.Brands.GetBrand.V1
 {
     /// <summary>
-    /// The delete brand request.
+    /// The get brand request.
     /// </summary>
-    public sealed record DeleteBrandRequest
+    public sealed record GetBrandRequest
     {
         /// <summary>
         /// Gets or sets the id.

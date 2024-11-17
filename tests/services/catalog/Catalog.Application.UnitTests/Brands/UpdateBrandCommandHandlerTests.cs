@@ -12,11 +12,11 @@ using ErrorOr;
 using Soenneker.Utils.AutoBogus.Config;
 using Soenneker.Utils.AutoBogus;
 using FluentAssertions;
-using Catalog.Application.Features.Brands.UpdateBrand;
 using Catalog.Application.Contracts.Caching;
 using Catalog.Application.Contracts.Repositories;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using Catalog.Application.Features.Brands.UpdateBrand.V1;
 
 namespace Catalog.Application.UnitTests.Brands
 {

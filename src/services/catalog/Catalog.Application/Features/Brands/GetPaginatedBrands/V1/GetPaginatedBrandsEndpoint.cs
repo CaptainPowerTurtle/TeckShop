@@ -1,11 +1,10 @@
 using Catalog.Application.Features.Brands.Dtos;
-using Catalog.Application.Features.Brands.GetPaginatedBrands;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
 using TeckShop.Core.Pagination;
 
-namespace Catalog.Api.Endpoints.V1.Brands
+namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
 {
     /// <summary>
     /// The get paginated brands endpoint.

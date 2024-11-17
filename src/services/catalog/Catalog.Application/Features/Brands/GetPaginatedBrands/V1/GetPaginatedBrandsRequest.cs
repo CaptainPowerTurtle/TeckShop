@@ -1,6 +1,6 @@
-﻿using TeckShop.Core.Pagination;
+using TeckShop.Core.Pagination;
 
-namespace Catalog.Application.Features.Brands.GetPaginatedBrands
+namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
 {
     /// <summary>
     /// The get paginated brands request.

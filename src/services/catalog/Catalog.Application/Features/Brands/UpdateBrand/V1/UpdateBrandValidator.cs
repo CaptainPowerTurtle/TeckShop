@@ -1,7 +1,7 @@
 ﻿using FastEndpoints;
 using FluentValidation;
 
-namespace Catalog.Application.Features.Brands.UpdateBrand
+namespace Catalog.Application.Features.Brands.UpdateBrand.V1
 {
     /// <summary>
     /// The update brand validator.

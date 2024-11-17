@@ -1,21 +1,21 @@
 using Catalog.Application.Features.Brands.Dtos;
-using Catalog.Application.Features.Brands.UpdateBrand;
+using Catalog.Application.Features.Brands.GetBrand.V1;
 using ErrorOr;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
 using TeckShop.Infrastructure.Endpoints;
 
-namespace Catalog.Api.Endpoints.V1.Brands
+namespace Catalog.Application.Features.Brands.CreateBrand.V1
 {
     /// <summary>
-    /// The update brand endpoint.
+    /// The create brand endpoint.
     /// </summary>
     /// <remarks>
-    /// Initializes a new instance of the <see cref="UpdateBrandEndpoint"/> class.
+    /// Initializes a new instance of the <see cref="CreateBrandEndpoint"/> class.
     /// </remarks>
     /// <param name="mediatr">The mediatr.</param>
-    public class UpdateBrandEndpoint(ISender mediatr) : Endpoint<UpdateBrandRequest, BrandResponse>
+    public class CreateBrandEndpoint(ISender mediatr) : Endpoint<CreateBrandRequest, BrandResponse>
     {
         /// <summary>
         /// The mediatr.
@@ -27,9 +27,10 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// </summary>
         public override void Configure()
         {
-            Put("/Brands");
-            Options(ep => ep.RequireProtectedResource("brands", "update"));
+            Post("/Brands");
+            Options(ep => ep.RequireProtectedResource("brands", "create")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
             Version(1);
+            Validator<CreateBrandValidator>();
         }
 
         /// <summary>
@@ -38,11 +39,11 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <param name="req"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public override async Task HandleAsync(UpdateBrandRequest req, CancellationToken ct)
+        public override async Task HandleAsync(CreateBrandRequest req, CancellationToken ct)
         {
-            UpdateBrandCommand command = new(req.Id, req.Name, req.Description, req.Website);
+            CreateBrandCommand command = new(req.Name, req.Description, req.Website);
             ErrorOr<BrandResponse> commandResponse = await _mediatr.Send(command, ct);
-            await this.SendNoContentResponseAsync(commandResponse, cancellation: ct);
+            await this.SendCreatedAtAsync<GetBrandEndpoint, ErrorOr<BrandResponse>>(routeValues: new { commandResponse.Value?.Id }, commandResponse, cancellation: ct);
         }
     }
 }

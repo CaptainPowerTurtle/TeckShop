@@ -1,4 +1,3 @@
-using Catalog.Application.Features.Brands.DeleteBrand;
 using ErrorOr;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
@@ -6,16 +5,16 @@ using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using TeckShop.Infrastructure.Endpoints;
 
-namespace Catalog.Api.Endpoints.V1.Brands
+namespace Catalog.Application.Features.Brands.BulkDeleteBrands.V1
 {
     /// <summary>
-    /// The delete brand endpoint.
+    /// The bulk delete brands endpoint.
     /// </summary>
     /// <remarks>
-    /// Initializes a new instance of the <see cref="DeleteBrandEndpoint"/> class.
+    /// Initializes a new instance of the <see cref="BulkDeleteBrandsEndpoint"/> class.
     /// </remarks>
     /// <param name="mediatr">The mediatr.</param>
-    public class DeleteBrandEndpoint(ISender mediatr) : Endpoint<DeleteBrandRequest, NoContent>
+    public class BulkDeleteBrandsEndpoint(ISender mediatr) : Endpoint<BulkDeleteBrandsRequest, NoContent>
     {
         /// <summary>
         /// The mediatr.
@@ -27,10 +26,13 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// </summary>
         public override void Configure()
         {
-            Delete("/Brands/{Id}");
-            Options(ep => ep.RequireProtectedResource("brands", "delete"));
+            Post("/Brands/bulk/delete");
+            Options(ep => ep.RequireProtectedResource("brands", "update"));
             Version(1);
-            Validator<DeleteBrandValidator>();
+            Summary(ep =>
+            {
+                ep.Summary = "Bulk delete brands";
+            });
         }
 
         /// <summary>
@@ -39,9 +41,9 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <param name="req"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public override async Task HandleAsync(DeleteBrandRequest req, CancellationToken ct)
+        public override async Task HandleAsync(BulkDeleteBrandsRequest req, CancellationToken ct)
         {
-            DeleteBrandCommand command = new(req.Id);
+            DeleteBrandsCommand command = new(req.Ids);
             ErrorOr<Deleted> commandResponse = await _mediatr.Send(command, ct);
             await this.SendNoContentResponseAsync(commandResponse, cancellation: ct);
         }

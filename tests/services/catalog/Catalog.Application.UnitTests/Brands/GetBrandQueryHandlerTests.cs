@@ -5,11 +5,11 @@ using ErrorOr;
 using Soenneker.Utils.AutoBogus.Config;
 using Soenneker.Utils.AutoBogus;
 using FluentAssertions;
-using Catalog.Application.Features.Brands.GetBrand;
 using NSubstitute;
 using Catalog.Application.Contracts.Caching;
 using NSubstitute.ReturnsExtensions;
 using Catalog.Domain.Entities.Brands;
+using Catalog.Application.Features.Brands.GetBrand.V1;
 
 namespace Catalog.Application.UnitTests.Brands
 {

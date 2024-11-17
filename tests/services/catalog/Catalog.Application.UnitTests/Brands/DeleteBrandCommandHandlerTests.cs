@@ -4,9 +4,9 @@ using ErrorOr;
 using Soenneker.Utils.AutoBogus.Config;
 using Soenneker.Utils.AutoBogus;
 using FluentAssertions;
-using Catalog.Application.Features.Brands.DeleteBrand;
 using Catalog.Application.Contracts.Repositories;
 using NSubstitute.ReturnsExtensions;
+using Catalog.Application.Features.Brands.DeleteBrand.V1;
 
 namespace Catalog.Application.UnitTests.Brands
 {

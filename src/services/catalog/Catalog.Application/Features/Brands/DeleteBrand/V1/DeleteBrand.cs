@@ -6,7 +6,7 @@ using ErrorOr;
 using TeckShop.Core.CQRS;
 using TeckShop.Core.Database;
 
-namespace Catalog.Application.Features.Brands.DeleteBrand
+namespace Catalog.Application.Features.Brands.DeleteBrand.V1
 {
     /// <summary>
     /// Delete brand command.

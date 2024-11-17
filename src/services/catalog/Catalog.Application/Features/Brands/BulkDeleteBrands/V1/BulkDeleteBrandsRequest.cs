@@ -1,9 +1,9 @@
-﻿namespace Catalog.Application.Features.Brands.DeleteBrands
+namespace Catalog.Application.Features.Brands.BulkDeleteBrands.V1
 {
     /// <summary>
     /// The delete brands request.
     /// </summary>
-    public sealed record DeleteBrandsRequest
+    public sealed record BulkDeleteBrandsRequest
     {
         /// <summary>
         /// Gets or sets the ids.

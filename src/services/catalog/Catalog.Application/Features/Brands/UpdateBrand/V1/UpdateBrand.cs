@@ -8,7 +8,7 @@ using MapsterMapper;
 using MediatR;
 using TeckShop.Core.Database;
 
-namespace Catalog.Application.Features.Brands.UpdateBrand
+namespace Catalog.Application.Features.Brands.UpdateBrand.V1
 {
     /// <summary>
     /// Update brand command.
