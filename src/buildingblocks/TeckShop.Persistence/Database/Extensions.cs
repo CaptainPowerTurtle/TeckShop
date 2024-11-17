@@ -42,7 +42,7 @@ namespace TeckShop.Persistence.Database
                 connectionString: connectionString,
                 tags: ["db", "sql", "postgres"]);
 
-            builder.Services.AddScoped(typeof(TContext));
+            builder.Services.AddScoped<TContext>();
             builder.Services.AddScoped<IBaseDbContext>(sp => sp.GetRequiredService<TContext>());
             builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         }

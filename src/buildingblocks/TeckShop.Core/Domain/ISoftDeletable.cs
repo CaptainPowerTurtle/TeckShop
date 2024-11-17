@@ -25,6 +25,7 @@ namespace TeckShop.Core.Domain
         /// </summary>
         /// <param name="isDeleted"></param>
         /// <param name="deletedBy"></param>
-        void SetDeletedProperties(bool isDeleted, string? deletedBy);
+        /// <param name="deletedOn"></param>
+        void SetDeletedProperties(bool isDeleted, string? deletedBy, DateTimeOffset? deletedOn);
     }
 }

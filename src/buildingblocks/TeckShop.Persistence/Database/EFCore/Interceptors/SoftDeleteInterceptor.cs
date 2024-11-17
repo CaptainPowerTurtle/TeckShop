@@ -51,7 +51,7 @@ namespace TeckShop.Persistence.Database.EFCore.Interceptors
             foreach (EntityEntry<ISoftDeletable> softDeletable in entries)
             {
                 softDeletable.State = EntityState.Modified;
-                softDeletable.Entity.SetDeletedProperties(true, currentUserId);
+                softDeletable.Entity.SetDeletedProperties(true, currentUserId, DateTimeOffset.UtcNow);
             }
 
             return base.SavingChangesAsync(eventData, result, cancellationToken);
