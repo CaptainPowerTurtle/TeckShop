@@ -51,6 +51,7 @@ namespace TeckShop.Infrastructure
             AppOptions appOptions = builder.Services.BindValidateReturn<AppOptions>(builder.Configuration);
 
             builder.Services.Configure<JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: AllowAllOrigins, builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

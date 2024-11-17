@@ -28,7 +28,7 @@ namespace Catalog.Api.Endpoints.V1.Brands
         {
             Get("/Brands");
             Options(ep => ep.RequireProtectedResource("brands", "read"));
-            Version(0);
+            Version(1);
         }
 
         /// <summary>

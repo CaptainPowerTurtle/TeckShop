@@ -46,12 +46,12 @@ namespace TeckShop.Infrastructure.Swagger
             Action<DocumentOptions> document = new(options =>
             {
                 options.EnableJWTBearerAuth = false;
-                options.MaxEndpointVersion = 0;
+                options.MaxEndpointVersion = 1;
                 options.DocumentSettings = setting =>
                 {
-                    setting.Version = "v0";
+                    setting.Version = "v1";
                     setting.Title = swaggerOptions.Title;
-                    setting.DocumentName = "Initial Release";
+                    setting.DocumentName = "v1";
                     setting.Description = swaggerOptions.Description;
 
                     if (keycloakAuthenticationOptions != null)
@@ -64,7 +64,6 @@ namespace TeckShop.Infrastructure.Swagger
             });
 
             options.Add(document);
-
             foreach (Action<DocumentOptions> option in options)
             {
                 services.SwaggerDocument(option);

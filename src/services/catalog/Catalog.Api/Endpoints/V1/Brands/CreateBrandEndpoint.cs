@@ -29,7 +29,7 @@ namespace Catalog.Api.Endpoints.V1.Brands
         {
             Post("/Brands");
             Options(ep => ep.RequireProtectedResource("brands", "create")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
-            Version(0);
+            Version(1);
             Validator<CreateBrandValidator>();
         }
 

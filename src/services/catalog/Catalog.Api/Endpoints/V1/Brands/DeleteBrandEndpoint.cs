@@ -29,7 +29,7 @@ namespace Catalog.Api.Endpoints.V1.Brands
         {
             Delete("/Brands/{Id}");
             Options(ep => ep.RequireProtectedResource("brands", "delete"));
-            Version(0);
+            Version(1);
             Validator<DeleteBrandValidator>();
         }
 

@@ -71,13 +71,69 @@ namespace Catalog.Domain.Entities.Products
         /// Update a brand.
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="description"></param>
+        /// <param name="isActive"></param>
+        /// <param name="productSku"></param>
+        /// <param name="gtin"></param>
+        /// <param name="brand"></param>
+        /// <param name="categories"></param>
+        /// <param name="productPrices"></param>
+        /// <param name="promotions"></param>
         /// <returns></returns>
         public Product Update(
-        string? name)
+        string? name,
+        string? description,
+        bool isActive,
+        string? productSku,
+        string? gtin,
+        Brand? brand,
+        ICollection<Category>? categories,
+        ICollection<ProductPrice>? productPrices,
+        ICollection<Promotion>? promotions)
         {
             if (name is not null && !Name.Equals(name, StringComparison.Ordinal))
             {
                 Name = name;
+            }
+
+            if (description is not null && Description?.Equals(description, StringComparison.Ordinal) is not true)
+            {
+                Description = description;
+            }
+
+            if (!isActive.Equals(IsActive))
+            {
+                IsActive = isActive;
+            }
+
+            if (productSku is not null && ProductSKU?.Equals(description, StringComparison.Ordinal) is not true)
+            {
+                ProductSKU = productSku;
+            }
+
+            if (gtin is not null && GTIN?.Equals(description, StringComparison.Ordinal) is not true)
+            {
+                GTIN = gtin;
+            }
+
+            if (brand is not null && Brand?.Id.Equals(brand.Id) is not true)
+            {
+                Brand = brand;
+            }
+
+            if (categories is not null)
+            {
+                Categories = categories;
+            }
+
+            if (productPrices is not null)
+            {
+                ProductPrices = productPrices;
+            }
+
+            if (promotions is not null)
+            {
+                Promotions = promotions;
             }
 
             return this;

@@ -6,16 +6,16 @@ using Keycloak.AuthServices.Authorization;
 using MediatR;
 using TeckShop.Infrastructure.Endpoints;
 
-namespace Catalog.Application.Features.Products.CreateProduct.V1
+namespace Catalog.Application.Features.Products.UpdateProduct.V1
 {
     /// <summary>
     /// The create product endpoint.
     /// </summary>
     /// <remarks>
-    /// Initializes a new instance of the <see cref="CreateProductEndpoint"/> class.
+    /// Initializes a new instance of the <see cref="UpdateProductEndpoint"/> class.
     /// </remarks>
     /// <param name="mediatr">The mediatr.</param>
-    public class CreateProductEndpoint(ISender mediatr) : Endpoint<CreateProductRequest, ProductResponse>
+    public class UpdateProductEndpoint(ISender mediatr) : Endpoint<UpdateProductRequest, ProductResponse>
     {
         /// <summary>
         /// The mediatr.
@@ -30,7 +30,7 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
             Post("/Products");
             Options(ep => ep.RequireProtectedResource("products", "create")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
             Version(1);
-            Validator<CreateProductValidator>();
+            Validator<UpdateProductValidator>();
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
         /// <param name="req"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public override async Task HandleAsync(CreateProductRequest req, CancellationToken ct)
+        public override async Task HandleAsync(UpdateProductRequest req, CancellationToken ct)
         {
-            CreateProductCommand command = new(req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds);
+            UpdateProductCommand command = new(req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds);
             ErrorOr<ProductResponse> commandResponse = await _mediatr.Send(command, ct);
             await this.SendCreatedAtAsync<GetProductByIdEndpoint, ErrorOr<ProductResponse>>(routeValues: new { commandResponse.Value?.Id }, commandResponse, cancellation: ct);
         }

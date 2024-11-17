@@ -1,37 +1,34 @@
 using System.Diagnostics;
-using System.ComponentModel;
-using System.Diagnostics;
+using Catalog.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
-using OpenTelemetry.Trace;
-using Catalog.Infrastructure.Persistence;
 
 namespace Catalog.MigrationService
 {
-    public class ApiDbInitializer(
+    internal class ApiDbInitializer(
         IServiceProvider serviceProvider,
         IHostEnvironment hostEnvironment,
         IHostApplicationLifetime hostApplicationLifetime) : BackgroundService
     {
         private readonly ActivitySource _activitySource = new(hostEnvironment.ApplicationName);
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        /// <inheritdoc/>
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using var activity = _activitySource.StartActivity(hostEnvironment.ApplicationName, ActivityKind.Client);
+            using Activity? activity = _activitySource.StartActivity(hostEnvironment.ApplicationName, ActivityKind.Client);
 
             try
             {
-                using var scope = serviceProvider.CreateScope();
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                using IServiceScope scope = serviceProvider.CreateScope();
+                AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-                await EnsureDatabaseAsync(dbContext, cancellationToken);
-                await RunMigrationAsync(dbContext, cancellationToken);
+                await EnsureDatabaseAsync(dbContext, stoppingToken);
+                await RunMigrationAsync(dbContext, stoppingToken);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                activity?.RecordException(ex);
+                activity?.AddException(exception);
                 throw;
             }
 
@@ -40,9 +37,9 @@ namespace Catalog.MigrationService
 
         private static async Task EnsureDatabaseAsync(AppDbContext dbContext, CancellationToken cancellationToken)
         {
-            var dbCreator = dbContext.GetService<IRelationalDatabaseCreator>();
+            IRelationalDatabaseCreator dbCreator = dbContext.GetService<IRelationalDatabaseCreator>();
 
-            var strategy = dbContext.Database.CreateExecutionStrategy();
+            IExecutionStrategy strategy = dbContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
             {
                 // Create the database if it does not exist.
@@ -56,7 +53,7 @@ namespace Catalog.MigrationService
 
         private static async Task RunMigrationAsync(AppDbContext dbContext, CancellationToken cancellationToken)
         {
-            var strategy = dbContext.Database.CreateExecutionStrategy();
+            IExecutionStrategy strategy = dbContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
             {
                 // Run migration in a transaction to avoid partial migration if it fails.

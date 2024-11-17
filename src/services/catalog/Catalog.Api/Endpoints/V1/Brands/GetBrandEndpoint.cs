@@ -30,7 +30,7 @@ namespace Catalog.Api.Endpoints.V1.Brands
             Get("/Brands/{Id}");
             AllowAnonymous();
             Options(ep => ep.RequireProtectedResource("brands", "read"));
-            Version(0);
+            Version(1);
             Validator<GetBrandValidator>();
         }
 

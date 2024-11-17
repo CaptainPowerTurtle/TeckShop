@@ -29,7 +29,7 @@ namespace Catalog.Api.Endpoints.V1.Brands.Bulk
         {
             Post("/Brands/bulk/delete");
             Options(ep => ep.RequireProtectedResource("brands", "update"));
-            Version(0);
+            Version(1);
             Summary(ep =>
             {
                 ep.Summary = "Bulk delete brands";

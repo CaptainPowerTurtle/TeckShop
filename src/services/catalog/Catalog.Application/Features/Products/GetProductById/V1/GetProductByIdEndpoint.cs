@@ -29,7 +29,7 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
             Get("/Products/{Id}");
             AllowAnonymous();
             Options(ep => ep.RequireProtectedResource("products", "read"));
-            Version(0);
+            Version(1);
             Validator<GetProductByIdValidator>();
         }
 

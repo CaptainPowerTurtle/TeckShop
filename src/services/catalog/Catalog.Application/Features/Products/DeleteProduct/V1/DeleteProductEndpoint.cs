@@ -1,21 +1,21 @@
-using Catalog.Application.Features.Brands.Dtos;
-using Catalog.Application.Features.Brands.UpdateBrand;
+﻿using Catalog.Application.Features.Products.CreateProduct.V1;
 using ErrorOr;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using TeckShop.Infrastructure.Endpoints;
 
-namespace Catalog.Api.Endpoints.V1.Brands
+namespace Catalog.Application.Features.Products.DeleteProduct.V1
 {
     /// <summary>
-    /// The update brand endpoint.
+    /// The delete product endpoint.
     /// </summary>
     /// <remarks>
-    /// Initializes a new instance of the <see cref="UpdateBrandEndpoint"/> class.
+    /// Initializes a new instance of the <see cref="CreateProductEndpoint"/> class.
     /// </remarks>
     /// <param name="mediatr">The mediatr.</param>
-    public class UpdateBrandEndpoint(ISender mediatr) : Endpoint<UpdateBrandRequest, BrandResponse>
+    public class DeleteProductEndpoint(ISender mediatr) : Endpoint<DeleteProductRequest, NoContent>
     {
         /// <summary>
         /// The mediatr.
@@ -27,9 +27,10 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// </summary>
         public override void Configure()
         {
-            Put("/Brands");
-            Options(ep => ep.RequireProtectedResource("brands", "update"));
+            Delete("/Products");
+            Options(ep => ep.RequireProtectedResource("products", "delete")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
             Version(1);
+            Validator<DeleteProductValidator>();
         }
 
         /// <summary>
@@ -38,10 +39,10 @@ namespace Catalog.Api.Endpoints.V1.Brands
         /// <param name="req"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public override async Task HandleAsync(UpdateBrandRequest req, CancellationToken ct)
+        public override async Task HandleAsync(DeleteProductRequest req, CancellationToken ct)
         {
-            UpdateBrandCommand command = new(req.Id, req.Name, req.Description, req.Website);
-            ErrorOr<BrandResponse> commandResponse = await _mediatr.Send(command, ct);
+            DeleteProductCommand command = new(req.ProductSKU);
+            ErrorOr<Deleted> commandResponse = await _mediatr.Send(command, ct);
             await this.SendNoContentResponseAsync(commandResponse, cancellation: ct);
         }
     }

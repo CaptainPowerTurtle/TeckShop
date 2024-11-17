@@ -8,7 +8,7 @@ using Yarp.Configs;
 using Yarp.ReverseProxy.Swagger;
 using Yarp.ReverseProxy.Swagger.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 bool enableSwagger = false;
@@ -22,7 +22,8 @@ builder.Services.AddKeycloak(builder.Configuration, builder.Environment, keycloa
 builder.AddInfrastructure(swaggerDocumentOptions: [], enableSwagger: enableSwagger, enableFastEndpoints: enableFastEndpoints, addCaching: enableCaching);
 
 // REVERSE PROXY
-var configuration = builder.Configuration.GetSection("ReverseProxy");
+IConfigurationSection configuration = builder.Configuration.GetSection("ReverseProxy");
+
 builder.Services.AddReverseProxy()
     .LoadFromConfig(configuration)
     .AddSwagger(configuration)
@@ -34,7 +35,7 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwa
 builder.Services.AddSwaggerGen();
 
 // APP
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.MapDefaultEndpoints();
 
@@ -46,7 +47,6 @@ app.UseInfrastructure(enableSwagger: enableSwagger, enableFastEndpoints: enableF
 // app.UseMiddleware<APIKeyMiddleware>();
 // app.UseMiddleware<CustomAuthenticationMiddleware>();
 // app.UseMiddleware<MembershipAndThrottlingMiddleware>();
-
 
 // REVERSE PROXY
 app.MapReverseProxy();
@@ -64,10 +64,10 @@ app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
     options.RoutePrefix = "docs";
-    var config = app.Services.GetRequiredService<IOptionsMonitor<ReverseProxyDocumentFilterConfig>>().CurrentValue;
-    foreach (var cluster in config.Clusters)
+    ReverseProxyDocumentFilterConfig config = app.Services.GetRequiredService<IOptionsMonitor<ReverseProxyDocumentFilterConfig>>().CurrentValue;
+    foreach (string? cluster in config.Clusters.Select(cluister => cluister.Key))
     {
-        options.SwaggerEndpoint($"/swagger/{cluster.Key}/swagger.json", cluster.Key);
+        options.SwaggerEndpoint($"/swagger/{cluster}/swagger.json", cluster);
     }
 });
 
