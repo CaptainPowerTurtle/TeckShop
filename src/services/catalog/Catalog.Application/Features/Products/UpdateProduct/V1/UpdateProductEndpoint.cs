@@ -1,4 +1,3 @@
-using Catalog.Application.Features.Products.GetProductById.V1;
 using Catalog.Application.Features.Products.Response;
 using ErrorOr;
 using FastEndpoints;
@@ -27,7 +26,7 @@ namespace Catalog.Application.Features.Products.UpdateProduct.V1
         /// </summary>
         public override void Configure()
         {
-            Post("/Products");
+            Put("/Products");
             Options(ep => ep.RequireProtectedResource("products", "create")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
             Version(1);
             Validator<UpdateProductValidator>();
@@ -41,9 +40,9 @@ namespace Catalog.Application.Features.Products.UpdateProduct.V1
         /// <returns></returns>
         public override async Task HandleAsync(UpdateProductRequest req, CancellationToken ct)
         {
-            UpdateProductCommand command = new(req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds);
+            UpdateProductCommand command = new(req.ProductId, req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds);
             ErrorOr<ProductResponse> commandResponse = await _mediatr.Send(command, ct);
-            await this.SendCreatedAtAsync<GetProductByIdEndpoint, ErrorOr<ProductResponse>>(routeValues: new { commandResponse.Value?.Id }, commandResponse, cancellation: ct);
+            await this.SendAsync(commandResponse, ct);
         }
     }
 }

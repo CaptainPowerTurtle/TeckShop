@@ -133,7 +133,7 @@ namespace TeckShop.Infrastructure
                 config.Endpoints.RoutePrefix = "api";
                 config.Versioning.Prefix = "v";
                 config.Versioning.PrependToRoute = true;
-                config.Versioning.DefaultVersion = 0;
+                config.Versioning.DefaultVersion = 1;
             });
             }
 

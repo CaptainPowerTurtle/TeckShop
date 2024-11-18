@@ -14,7 +14,7 @@ namespace Catalog.Application.Features.Products.UpdateProduct.V1
     /// <summary>
     /// The update product command.
     /// </summary>
-    public sealed record UpdateProductCommand(string Name, string? Description, string? ProductSku, string? GTIN, bool IsActive, Guid? BrandId, IReadOnlyCollection<Guid> Categories) : ICommand<ErrorOr<ProductResponse>>;
+    public sealed record UpdateProductCommand(Guid ProductId, string Name, string? Description, string? ProductSku, string? GTIN, bool IsActive, Guid? BrandId, IReadOnlyCollection<Guid> Categories) : ICommand<ErrorOr<ProductResponse>>;
 
     /// <summary>
     /// Create Brand command handler.
@@ -77,7 +77,7 @@ namespace Catalog.Application.Features.Products.UpdateProduct.V1
                 }
             }
 
-            Product? productToUpdate = await _productRepository.FindOneAsync(product => product.ProductSKU.Equals(request.ProductSku),  true, cancellationToken);
+            Product? productToUpdate = await _productRepository.FindOneAsync(product => product.Id.Equals(request.ProductId), true, cancellationToken);
 
             if (productToUpdate is null)
             {

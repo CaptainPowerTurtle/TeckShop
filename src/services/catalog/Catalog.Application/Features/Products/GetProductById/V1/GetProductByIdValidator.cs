@@ -13,7 +13,7 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
         /// </summary>
         public GetProductByIdValidator()
         {
-            RuleFor(product => product.ProductId)
+            RuleFor(product => product.Id)
                 .NotEmpty();
         }
     }

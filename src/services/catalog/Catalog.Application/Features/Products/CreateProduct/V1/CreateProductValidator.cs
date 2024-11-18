@@ -20,7 +20,7 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
                 .MustAsync(async (sku, ct) =>
                 {
                     IProductRepository _brandRepository = Resolve<IProductRepository>();
-                    return !await _brandRepository.ExistsAsync(brand => brand.ProductSKU.Equals(sku, StringComparison.InvariantCultureIgnoreCase), cancellationToken: ct);
+                    return !await _brandRepository.ExistsAsync(brand => brand.ProductSKU.Equals(sku), cancellationToken: ct);
                 })
                 .WithMessage((_, productSku) => $"Product with the SKU '{productSku}' already Exists.");
         }

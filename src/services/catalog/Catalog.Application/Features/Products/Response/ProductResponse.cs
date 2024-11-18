@@ -47,11 +47,6 @@ namespace Catalog.Application.Features.Products.Response
         public string? GTIN { get; set; }
 
         /// <summary>
-        /// Gets or sets the brand id.
-        /// </summary>
-        public Guid? BrandId { get; set; }
-
-        /// <summary>
         /// Gets or sets the brand.
         /// </summary>
         public BrandResponse? Brand { get; set; }

@@ -6,6 +6,11 @@ namespace Catalog.Application.Features.Products.UpdateProduct.V1
     public sealed record UpdateProductRequest
     {
         /// <summary>
+        /// Gets or sets the product id.
+        /// </summary>
+        public Guid ProductId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; } = string.Empty;

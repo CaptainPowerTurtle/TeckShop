@@ -43,7 +43,7 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
         {
             CreateProductCommand command = new(req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds);
             ErrorOr<ProductResponse> commandResponse = await _mediatr.Send(command, ct);
-            await this.SendCreatedAtAsync<GetProductByIdEndpoint, ErrorOr<ProductResponse>>(routeValues: new { commandResponse.Value?.Id }, commandResponse, cancellation: ct);
+            await this.SendCreatedAtAsync<GetProductByIdEndpoint, ErrorOr<ProductResponse>>(routeValues: new { commandResponse.Value?.ProductSKU }, commandResponse, cancellation: ct);
         }
     }
 }

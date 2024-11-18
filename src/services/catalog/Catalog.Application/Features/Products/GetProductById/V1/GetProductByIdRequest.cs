@@ -8,6 +8,6 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
         /// <summary>
         /// Gets or sets the product id.
         /// </summary>
-        public Guid ProductId { get; set; }
+        public Guid Id { get; set; }
     }
 }

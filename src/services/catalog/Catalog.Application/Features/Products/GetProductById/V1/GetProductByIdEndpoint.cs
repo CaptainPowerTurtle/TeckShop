@@ -41,7 +41,7 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
         /// <returns></returns>
         public override async Task HandleAsync(GetProductByIdRequest req, CancellationToken ct)
         {
-            GetProductByIdQuery query = new(req.ProductId);
+            GetProductByIdQuery query = new(req.Id);
             ErrorOr<ProductResponse> queryResponse = await _mediatr.Send(query, ct);
             await this.SendAsync(queryResponse, ct);
         }
