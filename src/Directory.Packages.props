@@ -78,7 +78,7 @@
     <PackageVersion Include="FastEndpoints.Swagger" Version="5.31.0" />
     <PackageVersion Include="FluentStorage" Version="5.6.0" />
     <PackageVersion Include="FluentStorage.AWS" Version="5.5.0" />
-    <PackageVersion Include="FluentValidation" Version="11.10.0" />
+    <PackageVersion Include="FluentValidation" Version="11.11.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     <PackageVersion Include="IdempotentAPI" Version="2.6.0" />
     <PackageVersion Include="IdempotentAPI.Cache.DistributedCache" Version="2.2.0" />
