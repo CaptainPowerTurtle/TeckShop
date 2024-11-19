@@ -172,5 +172,6 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.9.0" />
     <PackageVersion Include="Keycloak.AuthServices.OpenTelemetry" Version="1.0.0" />
+    <PackageVersion Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.0.0" />
   </ItemGroup>
 </Project>

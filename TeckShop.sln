@@ -69,6 +69,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeckShop.ServiceDefaults", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.MigrationService", "src\services\catalog\Catalog.MigrationService\Catalog.MigrationService.csproj", "{1BF1371C-9148-4CD6-8C5A-77DED2D719E5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web", "web", "{D5D10F6B-E6CB-4A6F-9654-56D5A5F0C805}"
+	ProjectSection(SolutionItems) = preProject
+		src\web\.editorconfig = src\web\.editorconfig
+		src\web\.eslintrc.js = src\web\.eslintrc.js
+		src\web\.gitignore = src\web\.gitignore
+		src\web\.npmrc = src\web\.npmrc
+		src\web\LICENSE = src\web\LICENSE
+		src\web\package.json = src\web\package.json
+		src\web\pnpm-lock.yaml = src\web\pnpm-lock.yaml
+		src\web\pnpm-workspace.yaml = src\web\pnpm-workspace.yaml
+		src\web\prettier.config.mjs = src\web\prettier.config.mjs
+		src\web\README.md = src\web\README.md
+		src\web\turbo.json = src\web\turbo.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{022C5E27-FFB3-4AEE-973A-1F51CB3FA036}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "packages", "packages", "{1368B031-15B2-4A92-A95B-1264FD36F6F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{4BCDE71F-CE5D-4CAB-B458-3CC9E9BBD79A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{37F51A5B-670A-49BB-9AB7-588567E5F1F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +185,11 @@ Global
 		{4CEBB570-26F9-4336-8D2B-6A81B4C22BE9} = {6323262A-BB2A-49F0-BB99-9C84D9B63710}
 		{E1F84EFF-FF59-4026-8F75-2AA8A5BFCF92} = {6323262A-BB2A-49F0-BB99-9C84D9B63710}
 		{1BF1371C-9148-4CD6-8C5A-77DED2D719E5} = {26C891A7-17A2-47AE-AFA1-D3647EC98F23}
+		{D5D10F6B-E6CB-4A6F-9654-56D5A5F0C805} = {CFF195CB-EDE6-46FD-BE80-A3B4F70F3E5C}
+		{022C5E27-FFB3-4AEE-973A-1F51CB3FA036} = {D5D10F6B-E6CB-4A6F-9654-56D5A5F0C805}
+		{1368B031-15B2-4A92-A95B-1264FD36F6F5} = {D5D10F6B-E6CB-4A6F-9654-56D5A5F0C805}
+		{4BCDE71F-CE5D-4CAB-B458-3CC9E9BBD79A} = {022C5E27-FFB3-4AEE-973A-1F51CB3FA036}
+		{37F51A5B-670A-49BB-9AB7-588567E5F1F8} = {022C5E27-FFB3-4AEE-973A-1F51CB3FA036}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B50D82E-D390-4C28-9421-AA48C3A37ACA}

@@ -27,7 +27,7 @@ namespace Catalog.Application.Features.Brands.BulkDeleteBrands.V1
         public override void Configure()
         {
             Post("/Brands/bulk/delete");
-            Options(ep => ep.RequireProtectedResource("brands", "update"));
+            Options(ep => ep.RequireProtectedResource("brands", "delete"));
             Version(1);
             Summary(ep =>
             {

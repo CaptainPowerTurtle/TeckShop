@@ -1,0 +1,20 @@
+{
+    "app": {
+      "name": "TeckNet Admin",
+      "description": "Det perfekte administrations panel"
+    },
+    "rootlayout": {
+      "signIn": "Log Ind",
+      "signOut": "Log Ud",
+      "profile": "Profil",
+      "account": "Bruger",
+      "dashboard": "Skrivebord",
+      "users": "Brugere",
+      "new": "Nyt",
+      "brand": {
+        "brands": "Brands",
+        "all-brands": "Alle Brands",
+        "new-brand": "Nyt Brand"
+      }
+    }
+} 

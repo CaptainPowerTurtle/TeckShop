@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\services\catalog\Catalog.Api\Catalog.Api.csproj" />
     <ProjectReference Include="..\..\services\catalog\Catalog.MigrationService\Catalog.MigrationService.csproj" />
     <ProjectReference Include="..\TeckShop.ServiceDefaults\TeckShop.ServiceDefaults.csproj" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" />
   </ItemGroup>
 
 </Project>

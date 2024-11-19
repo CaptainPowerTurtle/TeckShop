@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "TeckNet Admin",
+    "description": "The perfect administration panel"
+  },
+  "rootlayout": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "profile": "Profile",
+    "account": "Account",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "new": "New",
+    "brand": {
+      "brands": "Brands",
+      "all-brands": "All Brands",
+      "new-brand": "New Brand"
+    }
+  }
+} 

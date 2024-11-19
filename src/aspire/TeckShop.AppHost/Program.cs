@@ -1,3 +1,4 @@
+using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -31,8 +32,20 @@ var catalogapi = builder.AddProject<Projects.Catalog_Api>("catalog-api")
     .WaitFor(cache)
     .WaitFor(rabbitmq);
 
-builder.AddProject<Projects.Yarp_Gateway>("yarp-gateway")
+IResourceBuilder<ProjectResource> yarp = builder.AddProject<Projects.Yarp_Gateway>("yarp-gateway")
     .WaitFor(catalogapi)
     .WithReference(catalogapi);
+
+builder.AddPnpmApp("teckshop-admin", "../../web", "dev:admin")
+    .WithPnpmPackageInstallation()
+    .WithExternalHttpEndpoints()
+    .WaitFor(yarp)
+    .WithReference(yarp)
+    .WithReference(keycloak)
+    .WithReference(realm)
+    .WithEnvironment("TECKNET_BACKEND_API_URL", yarp.GetEndpoint("http"))
+    .WithEnvironment("KEYCLOAK_CLIENT_ID", "admin")
+    .WithEnvironment("KEYCLOAK_CLIENT_SECRET", "RZe7Hh5sDzcSZRoFHtXNhhPjNJBCP5Dx")
+    .WithEnvironment("KEYCLOAK_ISSUER", $"{keycloak.GetEndpoint($"http")}/realms/TeckShop");
 
 builder.Build().Run();
