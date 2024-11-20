@@ -1,0 +1,17 @@
+{
+  "extends": "@repo/typescript-config/react-library.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "module": "ES2020",
+    "baseUrl": ".",
+    "paths": {
+      "@repo/ui/*": ["./src/*"],
+      "@repo/components/*": ["./src/components/*"],
+      "@repo/lib/*": ["./src/lib/*"],
+      "@repo/types/*": ["./src/types/*"],
+      "@repo/hooks/*": ["./src/hooks/*"]
+    }
+  },
+  "include": ["src", "../../apps/admin/src/hooks/use-sidebar-toggle.ts"],
+  "exclude": ["node_modules"]
+}
