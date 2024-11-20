@@ -20,19 +20,37 @@ import { getColumns } from "./brands-table-columns"
 import { cn } from "@repo/ui/lib/utils"
 import { useBrandsTable } from "./brands-table-provider"
 import { BrandsTableToolbarActions } from "./brands-table-toolbar-actions"
-import { DataTableFilterField } from "@repo/ui/types/index"
+import { DataTableFilterField, DataTableRowAction } from "@repo/ui/types/index"
+import { UpdateBrandSheet } from "./update-brand-sheet"
+import { DeleteBrandsDialog } from "./delete-brands-dialog"
+
+// interface BrandsTableProps {
+//   brandsPromise: ReturnType<typeof getBrandsQuery>
+// }
+
 
 interface BrandsTableProps {
-  brandsPromise: ReturnType<typeof getBrandsQuery>
+  promises: Promise<
+    [
+      Awaited<ReturnType<typeof getBrandsQuery>>,
+    ]
+  >
 }
 
-export function BrandsTable({ brandsPromise }: BrandsTableProps) {
-  // Feature flags for showcasing some additional features. Feel free to remove them.
-  const { featureFlags } = useBrandsTable()
+export function BrandsTable({ promises }: BrandsTableProps) {
+  // const { featureFlags } = useFeatureFlags()
 
-  const {data, totalPages, totalItems} = React.use(brandsPromise)
-  // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo(() => getColumns(), [])
+  const [{ data, totalPages, totalItems }] =
+    React.use(promises)
+
+  const [rowAction, setRowAction] =
+    React.useState<DataTableRowAction<BrandSchema> | null>(null)
+
+    const columns = React.useMemo(() => getColumns(), [])
+  // const columns = React.useMemo(
+  //   () => getColumns({ setRowAction }),
+  //   [setRowAction]
+  // )
 
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.
@@ -47,33 +65,10 @@ export function BrandsTable({ brandsPromise }: BrandsTableProps) {
    */
   const filterFields: DataTableFilterField<BrandSchema>[] = [
     {
-        label: "Name",
-        value: "name"
+      id: "name",
+      label: "Name",
+      placeholder: "Filter names...",
     },
-    {
-        label: "Website",
-        value: "website"
-    }
-    // {
-    //   label: "Status",
-    //   value: "status",
-    //   options: tasks.status.enumValues.map((status) => ({
-    //     label: status[0]?.toUpperCase() + status.slice(1),
-    //     value: status,
-    //     icon: getStatusIcon(status),
-    //     withCount: true,
-    //   })),
-    // },
-    // {
-    //   label: "Priority",
-    //   value: "priority",
-    //   options: tasks.priority.enumValues.map((priority) => ({
-    //     label: priority[0]?.toUpperCase() + priority.slice(1),
-    //     value: priority,
-    //     icon: getPriorityIcon(priority),
-    //     withCount: true,
-    //   })),
-    // },
   ]
 
   const { table } = useDataTable({
@@ -81,36 +76,39 @@ export function BrandsTable({ brandsPromise }: BrandsTableProps) {
     columns,
     pageCount: totalPages,
     rowCount: totalItems,
-    /* optional props */
     filterFields,
-    enableAdvancedFilter: featureFlags.includes("advancedFilter"),
-    // initialState: {
-    //   sorting: [{ id: "id", desc: true }],
-    //   columnPinning: { right: ["actions"] },
-    // },
-    // For remembering the previous row selection on page change
+    enableAdvancedFilter: false,
+    initialState: {
+      sorting: [{ id: "name", desc: true }],
+      columnPinning: { right: ["actions"] },
+    },
     getRowId: (originalRow, index) => `${originalRow.id}-${index}`,
-    /* */
+    shallow: false,
+    clearOnDefault: true,
   })
 
   return (
-    <DataTable
-      table={table}
-      // floatingBar={
-      //   featureFlags.includes("floatingBar") ? (
-      //     <TasksTableFloatingBar table={table} />
-      //   ) : null
-      // }
-    >
-      {featureFlags.includes("advancedFilter") ? (
-        <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-          <BrandsTableToolbarActions table={table} />
-        </DataTableAdvancedToolbar>
-      ) : (
-        <DataTableToolbar  table={table} filterFields={filterFields}>
-          <BrandsTableToolbarActions table={table} />
-        </DataTableToolbar>
-      )}
-    </DataTable>
+    <>
+      <DataTable
+        table={table}
+        floatingBar={ null}
+      >
+          <DataTableToolbar table={table} filterFields={filterFields}>
+            <BrandsTableToolbarActions table={table} />
+          </DataTableToolbar>
+      </DataTable>
+      <UpdateBrandSheet
+        open={rowAction?.type === "update"}
+        onOpenChange={() => setRowAction(null)}
+        brand={rowAction?.row.original ?? null}
+      />
+      <DeleteBrandsDialog
+        open={rowAction?.type === "delete"}
+        onOpenChange={() => setRowAction(null)}
+        brands={rowAction?.row.original ? [rowAction?.row.original] : []}
+        showTrigger={false}
+        onSuccess={() => rowAction?.row.toggleSelected(false)}
+      />
+    </>
   )
 }

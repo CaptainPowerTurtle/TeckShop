@@ -55,7 +55,7 @@ export function getColumns(): ColumnDef<BrandSchema>[] {
     {
       accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Brand" />
+        <DataTableColumnHeader column={column} title="Name" />
       ),
       cell: ({ row }) => <div className="w-20">{row.getValue("name")}</div>,
       enableSorting: false,

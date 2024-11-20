@@ -25,7 +25,10 @@ export default async function BrandsPage({ searchParams }: IndexPageProps) {
   }
 
   const search = getBrands.parse(searchParams)
-  const brandsPromise = getBrandsQuery(search)
+
+  const promises = Promise.all([
+    getBrandsQuery(search)
+  ])
 //   type data = z.infer<typeof brandSchema>;
 //   const brandResponse: z.infer<typeof pagedBrandListSchema> = await fetch(`${env.TECKNET_BACKEND_API_URL}/catalog/api/brands?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
 //     method: 'GET',
@@ -65,7 +68,7 @@ export default async function BrandsPage({ searchParams }: IndexPageProps) {
           </CardContent>
         </Card>
       </div>
-      <BrandsTable brandsPromise={brandsPromise} />
+      <BrandsTable promises={promises} />
     </ContentLayout>
     );
   }

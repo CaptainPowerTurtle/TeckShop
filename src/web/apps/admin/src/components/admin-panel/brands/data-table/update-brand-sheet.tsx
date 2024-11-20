@@ -45,7 +45,7 @@ import { Input } from "@repo/ui/components/ui/input"
 
 interface UpdateBrandSheetProps
   extends React.ComponentPropsWithRef<typeof Sheet> {
-  brand: BrandSchema
+  brand: BrandSchema | null
 }
 
 export function UpdateBrandSheet({ brand, ...props }: UpdateBrandSheetProps) {
@@ -79,21 +79,23 @@ export function UpdateBrandSheet({ brand, ...props }: UpdateBrandSheetProps) {
   const form = useForm<UpdateBrandSchema>({
     resolver: zodResolver(updateBrandSchema),
     defaultValues: {
-        name: brand.name,
-        description: brand.description ?? "",
-        website: brand.website ?? ""
+        name: brand?.name,
+        description: brand?.description ?? "",
+        website: brand?.website ?? ""
     },
   })
 
   React.useEffect(() => {
     form.reset({
-        name: brand.name,
-        description: brand.description ?? "",
-        website: brand.website ?? "",
+        name: brand?.name,
+        description: brand?.description ?? "",
+        website: brand?.website ?? "",
     })
   }, [brand, form])
   function onSubmit() {
     
+    if(!brand) return;
+
     const result = executeAsync({...form.getValues(), id: brand.id});
 
     if (hasErrored) {
