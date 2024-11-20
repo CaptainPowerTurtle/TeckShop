@@ -38,7 +38,7 @@ namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
         /// <returns></returns>
         public override async Task HandleAsync(GetPaginatedBrandsRequest req, CancellationToken ct)
         {
-            GetPaginatedBrandsQuery query = new(req.Page, req.Size, req.Keyword);
+            GetPaginatedBrandsQuery query = new(req.Page, req.Size, req.NameFilter, req.SortDecending, req.SortValue);
             PagedList<BrandResponse> queryResponse = await _mediatr.Send(query, ct);
             await SendAsync(queryResponse, cancellation: ct);
         }

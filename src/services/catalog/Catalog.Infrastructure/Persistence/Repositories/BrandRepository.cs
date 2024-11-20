@@ -28,19 +28,40 @@ namespace Catalog.Infrastructure.Persistence.Repositories
         /// <typeparam name="TBrandResponse"/>
         /// <param name="page">The page.</param>
         /// <param name="size">The size.</param>
-        /// <param name="keyword">The keyword.</param>
+        /// <param name="nameFilter"></param>
+        /// <param name="sortDescending"></param>
+        /// <param name="sortValue"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns><![CDATA[Task<PagedList<BrandResponse>>]]></returns>
-        public async Task<PagedList<TBrandResponse>> GetPagedBrandsAsync<TBrandResponse>(int page, int size, string? keyword, CancellationToken cancellationToken = default)
+        public async Task<PagedList<TBrandResponse>> GetPagedBrandsAsync<TBrandResponse>(int page, int size, string? nameFilter, bool? sortDescending, string? sortValue, CancellationToken cancellationToken = default)
         {
             IQueryable<Brand> queryable = _context.Brands.AsQueryable();
-            if (!string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrEmpty(nameFilter))
             {
-                keyword = keyword.ToLowerInvariant();
-                queryable = queryable.Where(brand => brand.Name.Contains(keyword, StringComparison.InvariantCultureIgnoreCase));
+                nameFilter = nameFilter.ToLowerInvariant();
+                queryable = queryable.Where(brand => brand.Name.Contains(nameFilter));
             }
 
-            queryable = queryable.OrderBy(brand => brand.CreatedOn);
+            if (!string.IsNullOrEmpty(sortValue) && sortDescending is not null)
+            {
+                sortValue = sortValue.ToLower();
+                switch (sortValue)
+                {
+                    case "name":
+                        queryable = sortDescending.Value ? queryable.OrderByDescending(brand => brand.Name) : (IQueryable<Brand>)queryable.OrderBy(brand => brand.Name);
+                        break;
+                    case "createdOn":
+                        queryable = sortDescending.Value ? queryable.OrderByDescending(brand => brand.CreatedOn) : (IQueryable<Brand>)queryable.OrderBy(brand => brand.CreatedOn);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                queryable = queryable.OrderByDescending(brand => brand.CreatedOn);
+            }
+
             return await queryable.ApplyPagingAsync<Brand, TBrandResponse>(page, size, cancellationToken);
         }
 

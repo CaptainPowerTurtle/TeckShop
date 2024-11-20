@@ -5,7 +5,7 @@ import { ContentLayout } from "~/src/components/admin-panel/content-layout";
 import { env } from "~/src/env";
 import { Link } from "~/src/navigation";
 import { auth } from "~/src/server/auth";
-import { brandSchema, getBrands, pagedBrandListSchema } from "~/src/schemas/brand-schema";
+import { brandSchema, getBrands, pagedBrandListSchema, searchParamsCache } from "~/src/schemas/brand-schema";
 import { z } from "zod";
 import { BrandsTable } from "~/src/components/admin-panel/brands/data-table/brands-table";
 import { getBrandsQuery } from "~/src/lib/data/brand-queries";
@@ -13,18 +13,19 @@ import { SearchParams } from "@repo/ui/types/index";
 
 
 
-export interface IndexPageProps {
-  searchParams: SearchParams
+interface BrandsPageProps {
+  searchParams: Promise<SearchParams>
 }
 
-export default async function BrandsPage({ searchParams }: IndexPageProps) {
+export default async function BrandsPage(props: BrandsPageProps) {
 
   const session = await auth();
   if (session == null || session == undefined) {
       return;
   }
 
-  const search = getBrands.parse(searchParams)
+  const searchParams = await props.searchParams
+  const search = searchParamsCache.parse(searchParams)
 
   const promises = Promise.all([
     getBrandsQuery(search)

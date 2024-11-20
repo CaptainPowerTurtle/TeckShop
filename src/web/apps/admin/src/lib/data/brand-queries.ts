@@ -1,15 +1,26 @@
 import "server-only"
 import { z } from "zod";
-import {GetBrands, pagedBrandListSchema, PagedBrandListSchema} from "../../schemas/brand-schema"
+import {brandSchema, GetBrands, GetBrandsSchema, pagedBrandListSchema, PagedBrandListSchema} from "../../schemas/brand-schema"
 import { env } from "~/src/env";
 import { auth } from "~/src/server/auth";
 
-export async function getBrandsQuery(input: GetBrands) {
+export async function getBrandsQuery(input: GetBrandsSchema) {
 
     const session = await auth();
-    
+    var sortValue = "";
+    var sortDecending = true;
+
+    input.sort.length > 0
+      ? input.sort.map((item) =>
+      {
+        sortDecending = item.desc,
+        sortValue = item.id
+      }
+        )
+      : sortValue = "createdOn", sortDecending, sortDecending = true
+
     try {
-        const response = await fetch(`${env.TECKSHOP_BACKEND_CATALOG_ROUTE_V1}/brands?page=${input.page}&size=${input.size}`, {
+        const response = await fetch(`${env.TECKSHOP_BACKEND_CATALOG_ROUTE_V1}/brands?page=${input.page}&size=${input.size}&nameFilter=${input.name}&sortDecending=${sortDecending}&sortValue=${sortValue}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${session?.access_token}`

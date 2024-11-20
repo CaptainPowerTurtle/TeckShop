@@ -8,7 +8,7 @@ namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
     /// <summary>
     /// Get paginated brands query.
     /// </summary>
-    public sealed record GetPaginatedBrandsQuery(int Page, int Size, string? Keyword) : IRequest<PagedList<BrandResponse>>;
+    public sealed record GetPaginatedBrandsQuery(int Page, int Size, string? NameFilter, bool? SortDecending, string? SortValue) : IRequest<PagedList<BrandResponse>>;
 
     /// <summary>
     /// Get paginated brands query handler.
@@ -32,7 +32,7 @@ namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
         /// <returns><![CDATA[Task<PagedList<BrandResponse>>]]></returns>
         public async Task<PagedList<BrandResponse>> Handle(GetPaginatedBrandsQuery request, CancellationToken cancellationToken)
         {
-            return await _brandRepository.GetPagedBrandsAsync<BrandResponse>(request.Page, request.Size, request.Keyword, cancellationToken);
+            return await _brandRepository.GetPagedBrandsAsync<BrandResponse>(request.Page, request.Size, request.NameFilter, request.SortDecending, request.SortValue, cancellationToken);
         }
     }
 }

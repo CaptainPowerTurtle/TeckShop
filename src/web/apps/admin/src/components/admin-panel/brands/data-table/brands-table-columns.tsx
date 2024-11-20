@@ -58,7 +58,7 @@ export function getColumns(): ColumnDef<BrandSchema>[] {
         <DataTableColumnHeader column={column} title="Name" />
       ),
       cell: ({ row }) => <div className="w-20">{row.getValue("name")}</div>,
-      enableSorting: false,
+      enableSorting: true,
       enableHiding: false,
     },
     {
@@ -67,7 +67,7 @@ export function getColumns(): ColumnDef<BrandSchema>[] {
         <DataTableColumnHeader column={column} title="Website" />
       ),
       cell: ({ row }) => {
-
+        
         return (
           <div className="flex space-x-2">
             <span className="max-w-[31.25rem] truncate font-medium">
@@ -76,6 +76,8 @@ export function getColumns(): ColumnDef<BrandSchema>[] {
           </div>
         )
       },
+      enableSorting: false,
+      enableHiding: true,
     },
     {
       id: "actions",

@@ -1,4 +1,12 @@
 import { z } from 'zod';
+import {
+  createSearchParamsCache,
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsString,
+  parseAsStringEnum,
+} from "nuqs/server"
+import { getFiltersStateParser, getSortingStateParser } from '@repo/ui/lib/parsers';
 
 export const addBrandSchema = z.object({
   name: z.string().min(2).max(100),
@@ -29,6 +37,9 @@ export type PagedBrandListSchema = z.infer<typeof pagedBrandListSchema>
 export const getBrands = z.object({
   page: z.coerce.number().default(1),
   size: z.coerce.number().default(15),
+  nameFilter: z.string().default("").optional(),
+  sortDecending: z.boolean().optional(),
+  sortValue: z.string().default("").optional(),
 });
 export type GetBrands = z.infer<typeof getBrands>
 
@@ -49,3 +60,17 @@ export const deleteBrandsSchema = z.object({
   ids: z.array(z.string().uuid()),
 });
 export type DeleteBrandsSchema = z.infer<typeof deleteBrandsSchema>
+
+export const searchParamsCache = createSearchParamsCache({
+  page: parseAsInteger.withDefault(1),
+  size: parseAsInteger.withDefault(10),
+  sort: getSortingStateParser<BrandSchema>().withDefault([
+    { id: "name", desc: true },
+  ]),
+  name: parseAsString.withDefault(""),
+  from: parseAsString.withDefault(""),
+  to: parseAsString.withDefault(""),
+  // advanced filter
+  filters: getFiltersStateParser().withDefault([]),
+})
+export type GetBrandsSchema = Awaited<ReturnType<typeof searchParamsCache.parse>>

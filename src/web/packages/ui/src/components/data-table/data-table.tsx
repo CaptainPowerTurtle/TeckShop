@@ -44,7 +44,7 @@ export function DataTable<TData>({
       {...props}
     >
       {children}
-      <div className="overflow-hidden rounded-md border">
+      <div className={cn("bg-white dark:bg-slate-950 overflow-hidden rounded-md border")}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

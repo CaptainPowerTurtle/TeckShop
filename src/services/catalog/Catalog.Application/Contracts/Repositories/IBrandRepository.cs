@@ -15,10 +15,12 @@ namespace Catalog.Application.Contracts.Repositories
         /// <typeparam name="TBrandResponse"></typeparam>
         /// <param name="page"></param>
         /// <param name="size"></param>
-        /// <param name="keyword"></param>
+        /// <param name="nameFilter"></param>
+        /// <param name="sortDescending"></param>
+        /// <param name="sortValue"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-        Task<PagedList<TBrandResponse>> GetPagedBrandsAsync<TBrandResponse>(int page, int size, string? keyword, CancellationToken cancellationToken = default);
+        Task<PagedList<TBrandResponse>> GetPagedBrandsAsync<TBrandResponse>(int page, int size, string? nameFilter, bool? sortDescending, string? sortValue, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete brands async.
