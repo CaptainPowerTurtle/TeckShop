@@ -21,8 +21,8 @@ containers:
   env:
     ASPNETCORE_HTTP_PORTS: 8080
     ASPNETCORE_ENVIRONMENT: Production
-    Address: http://catalog-api-service.teckshop-prod::8080
-    Health: http://catalog-api-service.teckshop-prod::8080
+    Address: http://catalog-api-service.teckshop-prod:8080
+    Health: http://catalog-api-service.teckshop-prod:8080
 service:
   port: 8080
   targetPort: 8080

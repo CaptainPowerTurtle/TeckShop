@@ -1,5 +1,13 @@
 # Changelog
 
+## yarp-v1.0.2 - 2024-11-15
+
+### What Changed 👀
+
+### 🐛 Bug Fixes
+
+- fix: env name @CaptainPowerTurtle (#47)
+
 ## yarp-v1.0.1 - 2024-11-15
 
 ### What Changed 👀
