@@ -1,8 +1,10 @@
 import "server-only"
 import { z } from "zod";
-import {brandSchema, GetBrands, GetBrandsSchema, pagedBrandListSchema, PagedBrandListSchema} from "../../schemas/brand-schema"
+import {brandSchema, GetBrandsSchema, pagedBrandListSchema, PagedBrandListSchema} from "../../schemas/brand-schema"
 import { env } from "~/src/env";
 import { auth } from "~/src/server/auth";
+import { getLocale } from "next-intl/server";
+import { redirect } from "~/src/navigation";
 
 export async function getBrandsQuery(input: GetBrandsSchema) {
 
@@ -28,7 +30,9 @@ export async function getBrandsQuery(input: GetBrandsSchema) {
         });
 
         if (!response.ok) {
-
+            if (response.status == 401) {
+                redirect(`/api/signin?callbackUrl=${encodeURIComponent(`/${await getLocale()}/brands`)}`)
+            }
             throw new Error(response.statusText);
 
         }

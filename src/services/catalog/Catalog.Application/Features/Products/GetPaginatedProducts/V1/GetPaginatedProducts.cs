@@ -8,7 +8,7 @@ namespace Catalog.Application.Features.Products.GetPaginatedProducts.V1
     /// <summary>
     /// The get paginated products query.
     /// </summary>
-    public sealed record GetPaginatedProductsQuery(int Page, int Size, string? Keyword) : IQuery<PagedList<ProductResponse>>;
+    public sealed record GetPaginatedProductsQuery(int Page, int Size, string? NameFilter, bool? SortDecending, string? SortValue) : IQuery<PagedList<ProductResponse>>;
 
     /// <summary>
     /// The get paginated products query handler.
@@ -29,7 +29,7 @@ namespace Catalog.Application.Features.Products.GetPaginatedProducts.V1
         /// <returns><![CDATA[Task<PagedList<ProductResponse>>]]></returns>
         public async Task<PagedList<ProductResponse>> Handle(GetPaginatedProductsQuery request, CancellationToken cancellationToken)
         {
-            return await _productRepository.GetPagedProductsAsync<ProductResponse>(request.Page, request.Size, request.Keyword, cancellationToken);
+            return await _productRepository.GetPagedProductsAsync<ProductResponse>(request.Page, request.Size, request.NameFilter, request.SortDecending, request.SortValue, cancellationToken);
         }
     }
 }

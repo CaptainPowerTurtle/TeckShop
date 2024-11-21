@@ -23,15 +23,15 @@ const TasksTableContext = React.createContext<TasksTableContextProps>({
   setFeatureFlags: () => {},
 })
 
-export function useBrandsTable() {
+export function useProductsTable() {
   const context = React.useContext(TasksTableContext)
   if (!context) {
-    throw new Error("useBrandsTable must be used within a BrandsTableProvider")
+    throw new Error("useProductsTable must be used within a ProductsTableProvider")
   }
   return context
 }
 
-export function BrandsTableProvider({ children }: React.PropsWithChildren) {
+export function ProductsTableProvider({ children }: React.PropsWithChildren) {
   const [featureFlags, setFeatureFlags] = React.useState<FeatureFlagValue[]>([])
 
   return (

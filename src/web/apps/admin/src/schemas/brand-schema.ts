@@ -34,14 +34,14 @@ export const pagedBrandListSchema = z.object({
 });
 export type PagedBrandListSchema = z.infer<typeof pagedBrandListSchema>
 
-export const getBrands = z.object({
-  page: z.coerce.number().default(1),
-  size: z.coerce.number().default(15),
-  nameFilter: z.string().default("").optional(),
-  sortDecending: z.boolean().optional(),
-  sortValue: z.string().default("").optional(),
-});
-export type GetBrands = z.infer<typeof getBrands>
+// export const getBrands = z.object({
+//   page: z.coerce.number().default(1),
+//   size: z.coerce.number().default(15),
+//   nameFilter: z.string().default("").optional(),
+//   sortDecending: z.boolean().optional(),
+//   sortValue: z.string().default("").optional(),
+// });
+// export type GetBrands = z.infer<typeof getBrands>
 
 export const updateBrandSchema = z.object({
   // id: z.string().uuid(),
@@ -61,7 +61,7 @@ export const deleteBrandsSchema = z.object({
 });
 export type DeleteBrandsSchema = z.infer<typeof deleteBrandsSchema>
 
-export const searchParamsCache = createSearchParamsCache({
+export const brandSearchParamsCache = createSearchParamsCache({
   page: parseAsInteger.withDefault(1),
   size: parseAsInteger.withDefault(10),
   sort: getSortingStateParser<BrandSchema>().withDefault([
@@ -73,4 +73,4 @@ export const searchParamsCache = createSearchParamsCache({
   // advanced filter
   filters: getFiltersStateParser().withDefault([]),
 })
-export type GetBrandsSchema = Awaited<ReturnType<typeof searchParamsCache.parse>>
+export type GetBrandsSchema = Awaited<ReturnType<typeof brandSearchParamsCache.parse>>

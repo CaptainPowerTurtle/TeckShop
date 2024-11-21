@@ -30,7 +30,7 @@ namespace Catalog.Application.Features.Products.GetPaginatedProducts.V1
         /// <inheritdoc/>
         public override async Task HandleAsync(GetPaginatedProductsRequest req, CancellationToken ct)
         {
-            GetPaginatedProductsQuery query = new(req.Page, req.Size, req.Keyword);
+            GetPaginatedProductsQuery query = new(req.Page, req.Size, req.NameFilter, req.SortDecending, req.SortValue);
             PagedList<ProductResponse> queryResponse = await _mediatr.Send(query, ct);
             await this.SendAsync(queryResponse, cancellation: ct);
         }

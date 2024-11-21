@@ -66,6 +66,24 @@ import {
             ]
           },
           {
+            href: "",
+            label: t('product.products'),
+            active: pathname.includes("/products"),
+            icon: SquarePen,
+            submenus: [
+              {
+                href: "/products",
+                label: t('product.all-products'),
+                active: pathname === "/products"
+              },
+              {
+                href: "/products/new",
+                label: t('product.new-product'),
+                active: pathname === "/products/new"
+              }
+            ]
+          },
+          {
             href: "/categories",
             label: "Categories",
             active: pathname.includes("/categories"),

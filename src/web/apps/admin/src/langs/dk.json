@@ -15,6 +15,11 @@
         "brands": "Brands",
         "all-brands": "Alle Brands",
         "new-brand": "Nyt Brand"
+      },
+      "product": {
+        "products": "Produkter",
+        "all-products": "Alle Produkter",
+        "new-product": "Nyt Produkt"
       }
     }
 } 

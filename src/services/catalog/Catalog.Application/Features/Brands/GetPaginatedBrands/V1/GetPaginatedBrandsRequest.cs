@@ -8,7 +8,7 @@ namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
     public class GetPaginatedBrandsRequest : PaginationParameters
     {
         /// <summary>
-        /// Gets or sets the keyword.
+        /// Gets or sets the name filter.
         /// </summary>
         public string? NameFilter { get; set; }
 

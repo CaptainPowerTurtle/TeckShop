@@ -15,6 +15,11 @@
       "brands": "Brands",
       "all-brands": "All Brands",
       "new-brand": "New Brand"
+    },
+    "product": {
+      "products": "Products",
+      "all-products": "All Products",
+      "new-product": "New Product"
     }
   }
 } 

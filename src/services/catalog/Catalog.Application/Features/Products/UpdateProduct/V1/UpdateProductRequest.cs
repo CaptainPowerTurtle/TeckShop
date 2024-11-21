@@ -8,7 +8,7 @@ namespace Catalog.Application.Features.Products.UpdateProduct.V1
         /// <summary>
         /// Gets or sets the product id.
         /// </summary>
-        public Guid ProductId { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
