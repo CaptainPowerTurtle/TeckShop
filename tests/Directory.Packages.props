@@ -24,9 +24,9 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.0-pre.42" />
     <PackageVersion Include="Microsoft.VisualStudio.TestPlatform" Version="14.0.0" />
-    <PackageVersion Include="Soenneker.Utils.AutoBogus" Version="2.1.388" />
+    <PackageVersion Include="Soenneker.Utils.AutoBogus" Version="3.0.424" />
     <PackageVersion Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
-    <PackageVersion Include="Soenneker.Utils.AutoBogus.NSubstitute" Version="2.1.96" />
+    <PackageVersion Include="Soenneker.Utils.AutoBogus.NSubstitute" Version="3.0.159" />
     <PackageVersion Include="System.Text.Encodings.Web" Version="9.0.0" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
     <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
