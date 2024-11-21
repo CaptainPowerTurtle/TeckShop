@@ -103,7 +103,7 @@
     <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="1.4.1" />
     <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.SystemTextJson" Version="1.4.1" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
-    <PackageVersion Include="Riok.Mapperly" Version="4.1.0" />
+    <PackageVersion Include="Riok.Mapperly" Version="4.1.1" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
