@@ -1,6 +1,6 @@
 
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@repo/ui/components/ui/breadcrumb";
-import { Card, CardContent } from "@repo/ui/components/ui/card";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@teckshop/ui/components/ui/breadcrumb";
+import { Card, CardContent } from "@teckshop/ui/components/ui/card";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import React from "react";

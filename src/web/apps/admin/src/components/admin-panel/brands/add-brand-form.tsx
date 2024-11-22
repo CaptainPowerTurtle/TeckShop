@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@teckshop/ui/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,12 +12,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/ui/form";
-import { Input } from "@repo/ui/components/ui/input";
-import { Textarea } from "@repo/ui/components/ui/textarea";
-import { Card, CardContent } from "@repo/ui/components/ui/card";
-import { Spinner } from "@repo/ui/components/ui/spinner";
-import { cn } from "@repo/ui/lib/utils";
+} from "@teckshop/ui/components/ui/form";
+import { Input } from "@teckshop/ui/components/ui/input";
+import { Textarea } from "@teckshop/ui/components/ui/textarea";
+import { Card, CardContent } from "@teckshop/ui/components/ui/card";
+import { Spinner } from "@teckshop/ui/components/ui/spinner";
+import { cn } from "@teckshop/ui/lib/utils";
 import { useAction } from "next-safe-action/hooks";
 import { addBrandAction } from "~/src/app/actions/brand-actions";
 import { toast } from "sonner";

@@ -1,10 +1,10 @@
-import type { Option } from "@repo/ui/types"
+import type { Option } from "@teckshop/ui/types"
 import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons"
 import type { Column } from "@tanstack/react-table"
 
 
-import { Badge } from "@repo/ui/components/ui/badge"
-import { Button } from "@repo/ui/components/ui/button"
+import { Badge } from "@teckshop/ui/components/ui/badge"
+import { Button } from "@teckshop/ui/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -13,14 +13,14 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/components/ui/command"
+} from "@teckshop/ui/components/ui/command"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/ui/popover"
-import { Separator } from "@repo/ui/components/ui/separator"
-import { cn } from "@repo/ui/lib/utils"
+} from "@teckshop/ui/components/ui/popover"
+import { Separator } from "@teckshop/ui/components/ui/separator"
+import { cn } from "@teckshop/ui/lib/utils"
 import { Check, PlusCircle } from "lucide-react"
 
 interface DataTableFacetedFilterProps<TData, TValue> {

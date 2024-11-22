@@ -1,19 +1,19 @@
 import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import type { DataTableFilterOption } from "@repo/ui/types/index"
+import type { DataTableFilterOption } from "@teckshop/ui/types/index"
 import { TrashIcon } from "@radix-ui/react-icons"
 import type { Table } from "@tanstack/react-table"
 
-import { dataTableConfig } from "@repo/ui/components/config/data-table"
-import { cn } from "@repo/ui/lib/utils"
-import { useDebounce } from "@repo/ui/hooks/use-debounce"
-import { Button } from "@repo/ui/components/ui/button"
-import { Input } from "@repo/ui/components/ui/input"
+import { dataTableConfig } from "@teckshop/ui/components/config/data-table"
+import { cn } from "@teckshop/ui/lib/utils"
+import { useDebounce } from "@teckshop/ui/hooks/use-debounce"
+import { Button } from "@teckshop/ui/components/ui/button"
+import { Input } from "@teckshop/ui/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/ui/popover"
+} from "@teckshop/ui/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -21,7 +21,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/ui/select"
+} from "@teckshop/ui/components/ui/select"
 
 import { DataTableAdvancedFacetedFilter } from "./data-table-advanced-faceted-filter"
 

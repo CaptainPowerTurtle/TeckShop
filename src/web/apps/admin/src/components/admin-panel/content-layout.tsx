@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar } from "./navbar";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@teckshop/ui/lib/utils";
 
 interface ContentLayoutProps {
   title: string;

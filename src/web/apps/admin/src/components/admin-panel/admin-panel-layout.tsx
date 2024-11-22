@@ -1,13 +1,13 @@
 "use client";
 
 
-import { useStore } from "@repo/ui/hooks/use-store"
+import { useStore } from "@teckshop/ui/hooks/use-store"
 import { Footer } from "./footer";
 import { Sidebar } from "./sidebar";
 import React, { useEffect } from "react";
 import { Navbar } from "./navbar";
 import { useSidebarToggle } from "~/src/hooks/use-sidebar-toggle";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@teckshop/ui/lib/utils";
 import { Session } from "next-auth";
 import { signIn } from "~/src/server/auth";
 import { usePathname } from "~/src/navigation";

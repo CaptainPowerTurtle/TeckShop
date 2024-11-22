@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@teckshop/ui/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu";
+} from "@teckshop/ui/components/ui/dropdown-menu";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useParams, useSearchParams } from "next/navigation";

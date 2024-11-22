@@ -5,8 +5,8 @@ import { TrashIcon } from "@radix-ui/react-icons"
 import { type Row } from "@tanstack/react-table"
 import { toast } from "sonner"
 
-import { useMediaQuery } from "@repo/ui/hooks/use-media-query"
-import { Button } from "@repo/ui/components/ui/button"
+import { useMediaQuery } from "@teckshop/ui/hooks/use-media-query"
+import { Button } from "@teckshop/ui/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@repo/ui/components/ui/dialog"
+} from "@teckshop/ui/components/ui/dialog"
 import {
   Drawer,
   DrawerClose,
@@ -26,10 +26,10 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@repo/ui/components/ui/drawer"
+} from "@teckshop/ui/components/ui/drawer"
 
 import { BrandSchema, DeleteBrandsSchema, deleteBrandsSchema } from "~/src/schemas/brand-schema"
-import { Spinner } from "@repo/ui/components/ui/spinner"
+import { Spinner } from "@teckshop/ui/components/ui/spinner"
 import { useAction } from "next-safe-action/hooks"
 import { z } from "zod"
 import { deleteBrandsAction } from "~/src/app/actions/brand-actions"

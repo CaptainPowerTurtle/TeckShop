@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import type { DataTableFilterField, ExtendedSortingState } from "@repo/ui/types"
+import type { DataTableFilterField, ExtendedSortingState } from "@teckshop/ui/types"
 import {
   getCoreRowModel,
   getFacetedRowModel,

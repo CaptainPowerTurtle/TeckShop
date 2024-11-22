@@ -8,7 +8,7 @@ await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@repo/ui"],
+  transpilePackages: ["@teckshop/ui"],
   // experimental: {
   //   ppr:  true,
   //   reactCompiler: {

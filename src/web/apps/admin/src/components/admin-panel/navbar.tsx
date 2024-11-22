@@ -1,7 +1,7 @@
 import { UserNav } from "./user-nav";
 import { SheetMenu } from "./sheet-menu";
-import { ModeToggle } from "@repo/ui/components/mode-toggle";
-import { Button } from "@repo/ui/components/ui/button";
+import { ModeToggle } from "@teckshop/ui/components/mode-toggle";
+import { Button } from "@teckshop/ui/components/ui/button";
 import { getTranslations } from "next-intl/server";
 import { auth, signIn } from "~/src/server/auth";
 import { LanguageSelect } from "./language-select";

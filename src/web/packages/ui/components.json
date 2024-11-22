@@ -11,8 +11,8 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "@repo/ui/components",
-    "utils": "@repo/ui/lib/utils",
-    "hooks": "@repo/ui/hooks"
+    "components": "@teckshop/ui/components",
+    "utils": "@teckshop/ui/lib/utils",
+    "hooks": "@teckshop/ui/hooks"
   }
 }

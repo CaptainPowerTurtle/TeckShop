@@ -3,7 +3,7 @@
 import { MixerHorizontalIcon } from "@radix-ui/react-icons"
 import type { Table } from "@tanstack/react-table"
 
-import { Button } from "@repo/ui/components/ui/button"
+import { Button } from "@teckshop/ui/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -11,11 +11,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu"
+} from "@teckshop/ui/components/ui/dropdown-menu"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Check, ChevronsUpDown, Settings2 } from "lucide-react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command"
-import { cn, toSentenceCase } from "@repo/ui/lib/utils"
+import { cn, toSentenceCase } from "@teckshop/ui/lib/utils"
 import React from "react"
 
 interface DataTableViewOptionsProps<TData> {

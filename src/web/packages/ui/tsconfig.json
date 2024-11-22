@@ -1,15 +1,15 @@
 {
-  "extends": "@repo/typescript-config/react-library.json",
+  "extends": "@teckshop/typescript-config/react-library.json",
   "compilerOptions": {
     "moduleResolution": "bundler",
     "module": "ES2020",
     "baseUrl": ".",
     "paths": {
-      "@repo/ui/*": ["./src/*"],
-      "@repo/components/*": ["./src/components/*"],
-      "@repo/lib/*": ["./src/lib/*"],
-      "@repo/types/*": ["./src/types/*"],
-      "@repo/hooks/*": ["./src/hooks/*"]
+      "@teckshop/ui/*": ["./src/*"],
+      "@teckshop/components/*": ["./src/components/*"],
+      "@teckshop/lib/*": ["./src/lib/*"],
+      "@teckshop/types/*": ["./src/types/*"],
+      "@teckshop/hooks/*": ["./src/hooks/*"]
     }
   },
   "include": ["src", "../../apps/admin/src/hooks/use-sidebar-toggle.ts"],

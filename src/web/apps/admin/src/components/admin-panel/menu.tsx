@@ -5,10 +5,10 @@ import { Ellipsis, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { CollapseMenuButton } from "./collapse-menu-button";
-import { Button } from "@repo/ui/components/ui/button";
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@repo/ui/components/ui/tooltip";
-import { cn } from "@repo/ui/lib/utils";
+import { Button } from "@teckshop/ui/components/ui/button";
+import { ScrollArea } from "@teckshop/ui/components/ui/scroll-area";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@teckshop/ui/components/ui/tooltip";
+import { cn } from "@teckshop/ui/lib/utils";
 import { getMenuList } from "~/src/lib/menu-list";
 import { Link } from "~/src/navigation";
 

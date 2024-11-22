@@ -7,10 +7,10 @@ import { LayoutGrid, LogOut, User } from "lucide-react";
 import React from "react";
 
 
-import { Avatar, AvatarImage, AvatarFallback } from "@repo/ui/components/ui/avatar";
-import { Button } from "@repo/ui/components/ui/button";
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@repo/ui/components/ui/tooltip";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@repo/ui/components/ui/dropdown-menu";
+import { Avatar, AvatarImage, AvatarFallback } from "@teckshop/ui/components/ui/avatar";
+import { Button } from "@teckshop/ui/components/ui/button";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@teckshop/ui/components/ui/tooltip";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@teckshop/ui/components/ui/dropdown-menu";
 import { signOut } from "next-auth/react";
 import { User as AuthUser } from "next-auth";
 import { Link } from "~/src/navigation";

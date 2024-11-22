@@ -5,8 +5,8 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
   BreadcrumbPage,
-} from "@repo/ui/components/ui/breadcrumb";
-import { Card, CardContent } from "@repo/ui/components/ui/card";
+} from "@teckshop/ui/components/ui/breadcrumb";
+import { Card, CardContent } from "@teckshop/ui/components/ui/card";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import AddBrandForm  from "~/src/components/admin-panel/brands/add-brand-form";

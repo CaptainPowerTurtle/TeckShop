@@ -6,14 +6,14 @@ import {
   } from "@radix-ui/react-icons"
   import { type Table } from "@tanstack/react-table"
   
-  import { Button } from "@repo/ui/components/ui/button"
+  import { Button } from "@teckshop/ui/components/ui/button"
   import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-  } from "@repo/ui/components/ui/select"
+  } from "@teckshop/ui/components/ui/select"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
   
   interface DataTablePaginationProps<TData> {

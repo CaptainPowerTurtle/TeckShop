@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import type { DataTableFilterOption } from "@repo/ui/types/index"
+import type { DataTableFilterOption } from "@teckshop/ui/types/index"
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -9,7 +9,7 @@ import {
   TextIcon,
 } from "@radix-ui/react-icons"
 
-import { Button } from "@repo/ui/components/ui/button"
+import { Button } from "@teckshop/ui/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -18,12 +18,12 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/components/ui/command"
+} from "@teckshop/ui/components/ui/command"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@repo/ui/components/ui/popover"
+} from "@teckshop/ui/components/ui/popover"
 
 interface DataTableFilterComboboxProps<TData> {
   options: DataTableFilterOption<TData>[]

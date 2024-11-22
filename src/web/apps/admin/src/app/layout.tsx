@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import { getMessages, getTranslations } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Inter as FontSans } from "next/font/google";
-import { cn } from "@repo/ui/lib/utils";
-import "@repo/ui/globals.css";
+import { cn } from "@teckshop/ui/lib/utils";
+import "@teckshop/ui/globals.css";
 
 export const metadata: Metadata = {
   title: "Home",

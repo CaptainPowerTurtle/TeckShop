@@ -8,18 +8,18 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger
-} from "@repo/ui/components/ui/collapsible";
+} from "@teckshop/ui/components/ui/collapsible";
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
   TooltipProvider
-} from "@repo/ui/components/ui/tooltip";
+} from "@teckshop/ui/components/ui/tooltip";
 import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 import React from "react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@repo/ui/components/ui/dropdown-menu";
-import { Button } from "@repo/ui/components/ui/button";
-import { cn } from "@repo/ui/lib/utils";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@teckshop/ui/components/ui/dropdown-menu";
+import { Button } from "@teckshop/ui/components/ui/button";
+import { cn } from "@teckshop/ui/lib/utils";
 import { Link } from "~/src/navigation";
 
 type Submenu = {

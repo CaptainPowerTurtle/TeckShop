@@ -3,9 +3,9 @@ import { MenuIcon, PanelsTopLeft } from "lucide-react";
 
 
 import { Menu } from "./menu";
-import { Button } from "@repo/ui/components/ui/button";
+import { Button } from "@teckshop/ui/components/ui/button";
 import { Link } from "~/src/navigation";
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@repo/ui/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@teckshop/ui/components/ui/sheet";
 
 
 export function SheetMenu() {

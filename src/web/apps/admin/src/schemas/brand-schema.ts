@@ -6,7 +6,7 @@ import {
   parseAsString,
   parseAsStringEnum,
 } from "nuqs/server"
-import { getFiltersStateParser, getSortingStateParser } from '@repo/ui/lib/parsers';
+import { getFiltersStateParser, getSortingStateParser } from '@teckshop/ui/lib/parsers';
 
 export const addBrandSchema = z.object({
   name: z.string().min(2).max(100),

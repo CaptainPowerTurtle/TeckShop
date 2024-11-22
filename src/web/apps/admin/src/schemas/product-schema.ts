@@ -6,7 +6,7 @@ import {
   parseAsString,
   parseAsStringEnum,
 } from "nuqs/server"
-import { getFiltersStateParser, getSortingStateParser } from '@repo/ui/lib/parsers';
+import { getFiltersStateParser, getSortingStateParser } from '@teckshop/ui/lib/parsers';
 import { brandSchema } from './brand-schema';
 
 export const addProductSchema = z.object({

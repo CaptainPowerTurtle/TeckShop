@@ -1,4 +1,4 @@
-import type { DataTableFilterOption, Option } from "@repo/ui/types/index"
+import type { DataTableFilterOption, Option } from "@teckshop/ui/types/index"
 import { CheckIcon } from "@radix-ui/react-icons"
 import type { Column } from "@tanstack/react-table"
 
@@ -11,9 +11,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui/components/ui/command"
+} from "@teckshop/ui/components/ui/command"
 import React from "react"
-import { cn } from "@repo/ui/lib/utils"
+import { cn } from "@teckshop/ui/lib/utils"
 
 interface DataTableAdvancedFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>

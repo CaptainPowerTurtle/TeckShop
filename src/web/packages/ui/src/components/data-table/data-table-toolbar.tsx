@@ -1,15 +1,15 @@
 "use client";
 
 import * as React from "react";
-import type { DataTableFilterField } from "@repo/ui/types";
+import type { DataTableFilterField } from "@teckshop/ui/types";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import type { Table } from "@tanstack/react-table";
 
-import { Button } from "@repo/ui/components/ui/button";
-import { Input } from "@repo/ui/components/ui/input";
+import { Button } from "@teckshop/ui/components/ui/button";
+import { Input } from "@teckshop/ui/components/ui/input";
 import { DataTableFacetedFilter } from "../data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "..//data-table/data-table-view-options";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@teckshop/ui/lib/utils";
 import { Card, CardContent } from "../ui/card";
 import { X } from "lucide-react";
 

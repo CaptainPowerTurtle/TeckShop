@@ -1,7 +1,7 @@
 import * as React from "react";
 import { flexRender, type Table as TanstackTable } from "@tanstack/react-table";
 
-import { getCommonPinningStyles } from "@repo/ui/lib/data-table";
+import { getCommonPinningStyles } from "@teckshop/ui/lib/data-table";
 
 import {
   Table,
@@ -10,9 +10,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/components/ui/table";
+} from "@teckshop/ui/components/ui/table";
 import { DataTablePagination } from "..//data-table/data-table-pagination";
-import { cn } from "@repo/ui/lib/utils";
+import { cn } from "@teckshop/ui/lib/utils";
 import { Card, CardContent } from "../ui/card";
 
 interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,5 +1,5 @@
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@repo/ui/components/ui/breadcrumb";
-import { Card, CardContent } from "@repo/ui/components/ui/card";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@teckshop/ui/components/ui/breadcrumb";
+import { Card, CardContent } from "@teckshop/ui/components/ui/card";
 import { getTranslations } from "next-intl/server";
 import { ContentLayout } from "~/src/components/admin-panel/content-layout";
 import { env } from "~/src/env";
@@ -9,9 +9,9 @@ import { brandSearchParamsCache } from "~/src/schemas/brand-schema";
 import { z } from "zod";
 import { BrandsTable } from "~/src/components/admin-panel/brands/data-table/brands-table";
 import { getBrandsQuery } from "~/src/lib/data/brand-queries";
-import { SearchParams } from "@repo/ui/types/index";
+import { SearchParams } from "@teckshop/ui/types/index";
 import React from "react";
-import { DataTableSkeleton } from "@repo/ui/components/data-table/data-table-skeleton"
+import { DataTableSkeleton } from "@teckshop/ui/components/data-table/data-table-skeleton"
 import { getPagedProductsQuery } from "~/src/lib/data/product-queries";
 import { productsSearchParamsCache } from "~/src/schemas/product-schema";
 import { ProductsTable } from "~/src/components/admin-panel/products/data-table/products-table";

@@ -9,11 +9,11 @@
     "dev:admin": "turbo run dev --filter @teckshop/admin",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "ui:add": "pnpm --filter @repo/ui ui:add"
+    "ui:add": "pnpm --filter @teckshop/ui ui:add"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@teckshop/eslint-config": "workspace:*",
+    "@teckshop/typescript-config": "workspace:*",
     "prettier": "^3.3.2",
     "turbo": "2.0.14"
   },

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { toast } from "sonner"
 
-import { Button } from "@repo/ui/components/ui/button"
+import { Button } from "@teckshop/ui/components/ui/button"
 import {
   Form,
   FormControl,
@@ -14,7 +14,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/components/ui/form"
+} from "@teckshop/ui/components/ui/form"
 import {
   Select,
   SelectContent,
@@ -22,7 +22,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@repo/ui/components/ui/select"
+} from "@teckshop/ui/components/ui/select"
 import {
   Sheet,
   SheetClose,
@@ -31,16 +31,16 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@repo/ui/components/ui/sheet"
-import { Textarea } from "@repo/ui/components/ui/textarea"
+} from "@teckshop/ui/components/ui/sheet"
+import { Textarea } from "@teckshop/ui/components/ui/textarea"
 
 
 import { BrandSchema, updateBrandSchema, type UpdateBrandSchema } from "~/src/schemas/brand-schema"
 import { useAction } from "next-safe-action/hooks"
 import { updateBrandAction } from "~/src/app/actions/brand-actions"
-import { Spinner } from "@repo/ui/components/ui/spinner"
+import { Spinner } from "@teckshop/ui/components/ui/spinner"
 import { useForm } from "react-hook-form"
-import { Input } from "@repo/ui/components/ui/input"
+import { Input } from "@teckshop/ui/components/ui/input"
 
 
 interface UpdateBrandSheetProps

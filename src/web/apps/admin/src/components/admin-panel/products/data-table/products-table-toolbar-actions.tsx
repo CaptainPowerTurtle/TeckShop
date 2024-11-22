@@ -2,8 +2,8 @@
 import { DownloadIcon } from "@radix-ui/react-icons"
 
 
-import { exportTableToCSV } from "@repo/ui/lib/export"
-import { Button } from "@repo/ui/components/ui/button"
+import { exportTableToCSV } from "@teckshop/ui/lib/export"
+import { Button } from "@teckshop/ui/components/ui/button"
 
 //import { CreateTaskDialog } from "./create-task-dialog"
 

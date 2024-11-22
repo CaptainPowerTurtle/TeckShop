@@ -2,17 +2,17 @@
 
 import * as React from "react"
 import { useSearchParams } from "next/navigation"
-import type { DataTableFilterField, DataTableFilterOption } from "@repo/ui/types/index"
+import type { DataTableFilterField, DataTableFilterOption } from "@teckshop/ui/types/index"
 import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons"
 import type { Table } from "@tanstack/react-table"
 
-import { cn } from "@repo/ui/lib/utils"
-import { Button } from "@repo/ui/components/ui/button"
-import { DataTableFilterCombobox } from "@repo/ui/components/data-table/advanced/data-table-filter-combobox"
-import { DataTableViewOptions } from "@repo/ui/components/data-table/data-table-view-options"
+import { cn } from "@teckshop/ui/lib/utils"
+import { Button } from "@teckshop/ui/components/ui/button"
+import { DataTableFilterCombobox } from "@teckshop/ui/components/data-table/advanced/data-table-filter-combobox"
+import { DataTableViewOptions } from "@teckshop/ui/components/data-table/data-table-view-options"
 
-import { DataTableFilterItem } from "@repo/ui/components/data-table/advanced/data-table-filter-item"
-import { DataTableMultiFilter } from "@repo/ui/components/data-table/advanced/data-table-multi-filter"
+import { DataTableFilterItem } from "@teckshop/ui/components/data-table/advanced/data-table-filter-item"
+import { DataTableMultiFilter } from "@teckshop/ui/components/data-table/advanced/data-table-multi-filter"
 
 interface DataTableAdvancedToolbarProps<TData>
   extends React.HTMLAttributes<HTMLDivElement> {

@@ -4,8 +4,8 @@ import * as React from "react"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { ColumnDef} from "@tanstack/react-table"
 
-import { Button } from "@repo/ui/components/ui/button"
-import { Checkbox } from "@repo/ui/components/ui/checkbox"
+import { Button } from "@teckshop/ui/components/ui/button"
+import { Checkbox } from "@teckshop/ui/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,8 +18,8 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@repo/ui/components/ui/dropdown-menu"
-import { DataTableColumnHeader } from "@repo/ui/components/data-table/data-table-column-header"
+} from "@teckshop/ui/components/ui/dropdown-menu"
+import { DataTableColumnHeader } from "@teckshop/ui/components/data-table/data-table-column-header"
 
 //import { getPriorityIcon, getStatusIcon } from "../_lib/utils"
 import { DeleteBrandsDialog } from "./delete-brands-dialog"

@@ -1,5 +1,5 @@
-import { Button } from "@repo/ui/components/ui/button";
-import { cn } from "@repo/ui/lib/utils";
+import { Button } from "@teckshop/ui/components/ui/button";
+import { cn } from "@teckshop/ui/lib/utils";
 import { ChevronLeft } from "lucide-react";
 
 

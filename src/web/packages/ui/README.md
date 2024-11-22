@@ -1,1 +1,1 @@
-# `@repo/ui`
+# `@teckshop/ui`

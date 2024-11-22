@@ -3,13 +3,13 @@
 import * as React from "react"
 
 
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/ui/toggle-group"
+import { ToggleGroup, ToggleGroupItem } from "@teckshop/ui/components/ui/toggle-group"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@repo/ui/components/ui/tooltip"
-import { dataTableConfig, type DataTableConfig } from "@repo/ui/components/config/data-table"
+} from "@teckshop/ui/components/ui/tooltip"
+import { dataTableConfig, type DataTableConfig } from "@teckshop/ui/components/config/data-table"
 
 type FeatureFlagValue = DataTableConfig["featureFlags"][number]["value"]
 

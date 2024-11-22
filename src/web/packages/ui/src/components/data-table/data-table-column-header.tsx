@@ -1,15 +1,15 @@
 
   import { type Column } from "@tanstack/react-table"
   
-  import { Button } from "@repo/ui/components/ui/button"
+  import { Button } from "@teckshop/ui/components/ui/button"
   import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-  } from "@repo/ui/components/ui/dropdown-menu"
-import { cn } from "@repo/ui/lib/utils"
+  } from "@teckshop/ui/components/ui/dropdown-menu"
+import { cn } from "@teckshop/ui/lib/utils"
 import React from "react"
 import {
     ArrowDownIcon,

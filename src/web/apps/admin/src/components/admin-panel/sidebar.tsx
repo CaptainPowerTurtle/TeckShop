@@ -2,9 +2,9 @@
 import { PanelsTopLeft } from "lucide-react";
 import { Menu } from "./menu";
 import React from "react";
-import { useStore } from "@repo/ui/hooks/use-store";
-import { Button } from "@repo/ui/components/ui/button";
-import { cn } from "@repo/ui/lib/utils";
+import { useStore } from "@teckshop/ui/hooks/use-store";
+import { Button } from "@teckshop/ui/components/ui/button";
+import { cn } from "@teckshop/ui/lib/utils";
 import { useSidebarToggle } from "~/src/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "./sidebar-toggle";
 import { Link } from "~/src/navigation";
