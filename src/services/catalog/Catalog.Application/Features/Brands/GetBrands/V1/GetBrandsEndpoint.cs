@@ -2,19 +2,18 @@ using Catalog.Application.Features.Brands.Dtos;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
-using TeckShop.Core.Pagination;
 using TeckShop.Infrastructure.Endpoints;
 
-namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
+namespace Catalog.Application.Features.Brands.GetBrands.V1
 {
     /// <summary>
     /// The get paginated brands endpoint.
     /// </summary>
     /// <remarks>
-    /// Initializes a new instance of the <see cref="GetPaginatedBrandsEndpoint"/> class.
+    /// Initializes a new instance of the <see cref="GetBrandsEndpoint"/> class.
     /// </remarks>
     /// <param name="mediatr">The mediatr.</param>
-    public class GetPaginatedBrandsEndpoint(ISender mediatr) : Endpoint<GetPaginatedBrandsRequest, PagedList<BrandResponse>>
+    public class GetBrandsEndpoint(ISender mediatr) : Endpoint<GetBrandsRequest, IReadOnlyList<BrandResponse>>
     {
         /// <summary>
         /// The mediatr.
@@ -26,10 +25,10 @@ namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
         /// </summary>
         public override void Configure()
         {
-            Get("/Brands");
+            Get("/Brands/All");
             Options(ep => ep.RequireProtectedResource("brands", "read"));
-            PreProcessor<TenantChecker<GetPaginatedBrandsRequest>>();
             Version(1);
+            PreProcessor<TenantChecker<GetBrandsRequest>>();
         }
 
         /// <summary>
@@ -38,10 +37,10 @@ namespace Catalog.Application.Features.Brands.GetPaginatedBrands.V1
         /// <param name="req"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public override async Task HandleAsync(GetPaginatedBrandsRequest req, CancellationToken ct)
+        public override async Task HandleAsync(GetBrandsRequest req, CancellationToken ct)
         {
-            GetPaginatedBrandsQuery query = new(req.Page, req.Size, req.NameFilter, req.SortDecending, req.SortValue);
-            PagedList<BrandResponse> queryResponse = await _mediatr.Send(query, ct);
+            GetBrandsQuery query = new();
+            IReadOnlyList<BrandResponse> queryResponse = await _mediatr.Send(query, ct);
             await SendAsync(queryResponse, cancellation: ct);
         }
     }

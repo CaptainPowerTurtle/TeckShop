@@ -56,10 +56,14 @@ namespace TeckShop.Infrastructure.Swagger
 
                     if (keycloakAuthenticationOptions != null)
                     {
-                        setting.AddSecurity("oAuth2", SwaggerAuth.AddOAuthScheme(keycloakAuthenticationOptions.KeycloakTokenEndpoint, keycloakAuthenticationOptions.KeycloakUrlRealm + "protocol/openid-connect/auth", keycloakAuthenticationOptions.KeycloakTokenEndpoint));
+                        setting.AddSecurity("oAuth2", SwaggerAuth.AddOAuthScheme(
+                            keycloakAuthenticationOptions.KeycloakTokenEndpoint,
+                            keycloakAuthenticationOptions.KeycloakUrlRealm + "protocol/openid-connect/auth",
+                            keycloakAuthenticationOptions.KeycloakTokenEndpoint));
                     }
 
                     setting.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("oAuth2"));
+                    setting.OperationProcessors.Add(new SwaggerTenantHeader());
                 };
             });
 

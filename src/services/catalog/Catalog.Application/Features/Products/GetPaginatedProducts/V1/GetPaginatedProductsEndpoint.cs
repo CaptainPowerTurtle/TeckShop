@@ -3,6 +3,7 @@ using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
 using TeckShop.Core.Pagination;
+using TeckShop.Infrastructure.Endpoints;
 
 namespace Catalog.Application.Features.Products.GetPaginatedProducts.V1
 {
@@ -24,6 +25,7 @@ namespace Catalog.Application.Features.Products.GetPaginatedProducts.V1
             AllowAnonymous();
             Options(ep => ep.RequireProtectedResource("products", "read"));
             Version(1);
+            PreProcessor<TenantChecker<GetPaginatedProductsRequest>>();
             Validator<GetPaginatedProductsValidator>();
         }
 

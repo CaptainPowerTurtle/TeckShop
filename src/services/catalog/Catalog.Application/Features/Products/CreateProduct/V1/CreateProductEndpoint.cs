@@ -30,6 +30,7 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
             Post("/Products");
             Options(ep => ep.RequireProtectedResource("products", "create")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
             Version(1);
+            PreProcessor<TenantChecker<CreateProductRequest>>();
             Validator<CreateProductValidator>();
         }
 
@@ -41,7 +42,7 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
         /// <returns></returns>
         public override async Task HandleAsync(CreateProductRequest req, CancellationToken ct)
         {
-            CreateProductCommand command = new(req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds);
+            CreateProductCommand command = new(req.Name, req.Description, req.ProductSku, req.GTIN, req.IsActive, req.BrandId, req.CategoryIds, req.ProductPrices);
             ErrorOr<ProductResponse> commandResponse = await _mediatr.Send(command, ct);
             await this.SendCreatedAtAsync<GetProductByIdEndpoint, ErrorOr<ProductResponse>>(routeValues: new { commandResponse.Value?.ProductSKU }, commandResponse, cancellation: ct);
         }

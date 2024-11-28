@@ -2,6 +2,7 @@ using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Common;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using TeckShop.Core.Exceptions;
 using TeckShop.Infrastructure;
 using TeckShop.Infrastructure.Auth;
 using Yarp.Configs;
@@ -16,7 +17,7 @@ bool enableFastEndpoints = false;
 bool enableCaching = false;
 
 // Add keycloak Authentication.
-KeycloakAuthenticationOptions keycloakOptions = builder.Configuration.GetKeycloakOptions<KeycloakAuthenticationOptions>()!;
+KeycloakAuthenticationOptions keycloakOptions = builder.Configuration.GetKeycloakOptions<KeycloakAuthenticationOptions>() ?? throw new ConfigurationMissingException("Keycloak");
 builder.Services.AddKeycloak(builder.Configuration, builder.Environment, keycloakOptions);
 
 builder.AddInfrastructure(swaggerDocumentOptions: [], enableSwagger: enableSwagger, enableFastEndpoints: enableFastEndpoints, addCaching: enableCaching);

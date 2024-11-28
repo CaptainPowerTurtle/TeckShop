@@ -16,6 +16,7 @@ using TeckShop.Core.Events;
 using TeckShop.Core.Exceptions;
 using TeckShop.Infrastructure;
 using TeckShop.Infrastructure.Auth;
+using TeckShop.Infrastructure.Multitenant;
 using TeckShop.Persistence.Database;
 using TeckShop.Persistence.Database.EFCore;
 namespace Catalog.Infrastructure
@@ -74,6 +75,8 @@ namespace Catalog.Infrastructure
             });
             builder.Services.AddHealthChecks().AddRabbitMQ(rabbitConnectionString: rabbitmqConnectionString, tags: ["messagebus", "rabbitmq"]);
 
+            builder.Services.AddMultitenantExtension(keycloakOptions);
+
             // Automatically register services.
             builder.Services.Scan(selector => selector
             .FromAssemblies(
@@ -97,6 +100,7 @@ namespace Catalog.Infrastructure
         /// <param name="enableFastEndpoints">If true, enable fast endpoints.</param>
         public static void UseCatalogInfrastructure(this WebApplication app, bool enableSwagger = true, bool enableFastEndpoints = true)
         {
+            app.UseMultitenantExtension();
             app.UseInfrastructure(enableSwagger, enableFastEndpoints);
         }
     }

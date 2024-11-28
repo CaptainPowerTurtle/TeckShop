@@ -30,7 +30,8 @@ namespace TeckShop.Infrastructure.Swagger
                         Scopes = new Dictionary<string, string>
                         {
                                 { "openid", "openid" },
-                                { "profile", "profile" }
+                                { "profile", "profile" },
+                                { "organization", "organization" }
                         }
                     }
                 }

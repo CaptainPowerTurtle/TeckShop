@@ -3,6 +3,7 @@ using Catalog.Application.Features.Products.Response;
 using Catalog.Domain.Common.Errors;
 using Catalog.Domain.Entities.Brands;
 using Catalog.Domain.Entities.Categories;
+using Catalog.Domain.Entities.ProductPrices;
 using Catalog.Domain.Entities.Products;
 using ErrorOr;
 using TeckShop.Core.CQRS;
@@ -11,9 +12,9 @@ using TeckShop.Core.Database;
 namespace Catalog.Application.Features.Products.CreateProduct.V1
 {
     /// <summary>
-    /// Create brand command.
+    /// Create product command.
     /// </summary>
-    public sealed record CreateProductCommand(string Name, string? Description, string? ProductSku, string? GTIN, bool IsActive, Guid? BrandId, IReadOnlyCollection<Guid> Categories) : ICommand<ErrorOr<ProductResponse>>;
+    public sealed record CreateProductCommand(string Name, string? Description, string? ProductSku, string? GTIN, bool IsActive, Guid? BrandId, IReadOnlyCollection<Guid> Categories, IReadOnlyCollection<CreateProductPriceRequest> ProductPrices) : ICommand<ErrorOr<ProductResponse>>;
 
     /// <summary>
     /// Create Brand command handler.
@@ -47,17 +48,18 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
         /// <summary>
         /// Handle and return a task of type erroror.
         /// </summary>
-        /// <param name="request">The request.</param>
+        /// <param name="command">The command.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns><![CDATA[Task<ErrorOr<Created>>]]></returns>
-        public async Task<ErrorOr<ProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<ProductResponse>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
             Brand? exisitingBrand = null;
             IReadOnlyList<Category> categories = [];
+            ICollection<ProductPrice> productPrices = [];
 
-            if (request.BrandId.HasValue)
+            if (command.BrandId.HasValue)
             {
-                exisitingBrand = await _brandRepository.FindByIdAsync(request.BrandId.Value, true, cancellationToken);
+                exisitingBrand = await _brandRepository.FindByIdAsync(command.BrandId.Value, true, cancellationToken);
 
                 if (exisitingBrand is null)
                 {
@@ -65,9 +67,9 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
                 }
             }
 
-            if (request.Categories.Count > 0)
+            if (command.Categories.Count > 0)
             {
-                categories = await _categoryRepository.FindAsync(category => request.Categories.Contains(category.Id), cancellationToken: cancellationToken);
+                categories = await _categoryRepository.FindAsync(category => command.Categories.Contains(category.Id), cancellationToken: cancellationToken);
 
                 if (categories.Count.Equals(0))
                 {
@@ -75,7 +77,7 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
                 }
             }
 
-            Product productToAdd = Product.Create(request.Name, request.Description, request.ProductSku, request.GTIN, [.. categories], request.IsActive, exisitingBrand);
+            Product productToAdd = Product.Create(command.Name, command.Description, command.ProductSku, command.GTIN, [.. categories], productPrices, command.IsActive, exisitingBrand);
 
             await _productRepository.AddAsync(productToAdd, cancellationToken);
 

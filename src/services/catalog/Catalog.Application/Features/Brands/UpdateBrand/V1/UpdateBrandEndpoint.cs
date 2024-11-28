@@ -28,6 +28,7 @@ namespace Catalog.Application.Features.Brands.UpdateBrand.V1
         {
             Put("/Brands");
             Options(ep => ep.RequireProtectedResource("brands", "update"));
+            PreProcessor<TenantChecker<UpdateBrandRequest>>();
             Version(1);
         }
 

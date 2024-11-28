@@ -29,6 +29,7 @@ namespace Catalog.Application.Features.Products.UpdateProduct.V1
             Put("/Products");
             Options(ep => ep.RequireProtectedResource("products", "create")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
             Version(1);
+            PreProcessor<TenantChecker<UpdateProductRequest>>();
             Validator<UpdateProductValidator>();
         }
 

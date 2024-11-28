@@ -29,6 +29,7 @@ namespace Catalog.Application.Features.Brands.BulkDeleteBrands.V1
             Post("/Brands/bulk/delete");
             Options(ep => ep.RequireProtectedResource("brands", "delete"));
             Version(1);
+            PreProcessor<TenantChecker<BulkDeleteBrandsRequest>>();
             Summary(ep =>
             {
                 ep.Summary = "Bulk delete brands";

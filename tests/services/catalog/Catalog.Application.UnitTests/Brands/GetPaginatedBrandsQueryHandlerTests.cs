@@ -36,7 +36,7 @@ namespace Catalog.Application.UnitTests.Brands
             var expected = new PagedList<BrandResponse>([], 0, 1, 10);
             var request = autoFaker.Generate<GetPaginatedBrandsQuery>();
 
-            fixture.Freeze<IBrandRepository>().GetPagedBrandsAsync<BrandResponse>(request.Page, request.Size, request.Keyword, default).Returns(expected);
+            fixture.Freeze<IBrandRepository>().GetPagedBrandsAsync<BrandResponse>(request.Page, request.Size, request.NameFilter, request.SortDecending, request.SortValue, default).Returns(expected);
 
             GetPaginatedBrandsQueryHandler sut = fixture.Create<GetPaginatedBrandsQueryHandler>();
 

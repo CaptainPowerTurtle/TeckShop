@@ -12,9 +12,12 @@ var catalogdb = postgres.AddDatabase("catalogdb");
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq").WithManagementPlugin();
 
-var keycloak = builder.AddKeycloakContainer("keycloak", "25.0.6")
-    .WithDataVolume()
-    .WithImport("./KeycloakConfiguration/teckshop-realm.json");
+var keycloak = builder.AddKeycloakContainer("keycloak", "26.0.6")
+    //.WithImage("phasetwo-keycloak")
+    //.WithImageRegistry("quay.io/phasetwo")
+    //.WithImageTag("25.0.6")
+    .WithDataVolume("org-test");
+    //.WithImport("./KeycloakConfiguration/teckshop-realm.json");
 
 var realm = keycloak.AddRealm("TeckShop");
 
@@ -34,7 +37,9 @@ var catalogapi = builder.AddProject<Projects.Catalog_Api>("catalog-api")
 
 IResourceBuilder<ProjectResource> yarp = builder.AddProject<Projects.Yarp_Gateway>("yarp-gateway")
     .WaitFor(catalogapi)
-    .WithReference(catalogapi);
+    .WithReference(catalogapi)
+    .WithReference(keycloak)
+    .WithReference(realm);
 
 builder.AddPnpmApp("teckshop-admin", "../../web", "dev:admin")
     .WithPnpmPackageInstallation()

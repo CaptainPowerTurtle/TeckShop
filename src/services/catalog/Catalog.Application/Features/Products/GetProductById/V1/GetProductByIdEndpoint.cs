@@ -30,6 +30,7 @@ namespace Catalog.Application.Features.Products.GetProductById.V1
             AllowAnonymous();
             Options(ep => ep.RequireProtectedResource("products", "read"));
             Version(1);
+            PreProcessor<TenantChecker<GetProductByIdRequest>>();
             Validator<GetProductByIdValidator>();
         }
 

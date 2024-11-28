@@ -1,6 +1,10 @@
 using EntityFramework.Exceptions.PostgreSQL;
+using Finbuckle.MultiTenant;
+using Finbuckle.MultiTenant.Abstractions;
+using Finbuckle.MultiTenant.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TeckShop.Core.Domain;
+using TeckShop.Infrastructure.Multitenant;
 
 namespace TeckShop.Persistence.Database.EFCore
 {
@@ -11,7 +15,8 @@ namespace TeckShop.Persistence.Database.EFCore
     /// Initializes a new instance of the <see cref="BaseDbContext"/> class.
     /// </remarks>
     /// <param name="options">The options.</param>
-    public abstract class BaseDbContext(DbContextOptions options) : DbContext(options), IBaseDbContext
+    /// <param name="multiTenantContextAccessor"></param>
+    public class BaseDbContext(DbContextOptions options, IMultiTenantContextAccessor<TeckShopTenant> multiTenantContextAccessor) : MultiTenantDbContext(multiTenantContextAccessor, options)
     {
         /// <summary>
         /// On model creating.
@@ -20,6 +25,8 @@ namespace TeckShop.Persistence.Database.EFCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.AppendGlobalQueryFilter<ISoftDeletable>(entity => !entity.IsDeleted);
+            modelBuilder.ConfigureMultiTenant();
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -30,6 +37,11 @@ namespace TeckShop.Persistence.Database.EFCore
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseExceptionProcessor();
+
+            if (!string.IsNullOrWhiteSpace(multiTenantContextAccessor?.MultiTenantContext.TenantInfo?.ConnectionString))
+            {
+                optionsBuilder.UseNpgsql(multiTenantContextAccessor.MultiTenantContext.TenantInfo.ConnectionString!);
+            }
         }
     }
 }

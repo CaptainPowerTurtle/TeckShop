@@ -23,6 +23,10 @@ namespace Catalog.Application.Features.Products.CreateProduct.V1
                     return !await _brandRepository.ExistsAsync(brand => brand.ProductSKU.Equals(sku), cancellationToken: ct);
                 })
                 .WithMessage((_, productSku) => $"Product with the SKU '{productSku}' already Exists.");
+            RuleFor(product => product.Name)
+                .NotEmpty()
+                .MinimumLength(1)
+                .MaximumLength(255);
         }
     }
 }

@@ -30,6 +30,7 @@ namespace Catalog.Application.Features.Brands.CreateBrand.V1
             Post("/Brands");
             Options(ep => ep.RequireProtectedResource("brands", "create")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
             Version(1);
+            PreProcessor<TenantChecker<CreateBrandRequest>>();
             Validator<CreateBrandValidator>();
         }
 

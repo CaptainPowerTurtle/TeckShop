@@ -36,14 +36,17 @@ namespace TeckShop.Persistence.Database
                     sp.GetRequiredService<DomainEventInterceptor>());
             });
 
-            builder.EnrichNpgsqlDbContext<TContext>();
+            builder.EnrichNpgsqlDbContext<TContext>(config =>
+            {
+                config.ConnectionString = connectionString;
+                config.DisableTracing = true;
+            });
 
             builder.Services.AddHealthChecks().AddNpgSql(
                 connectionString: connectionString,
                 tags: ["db", "sql", "postgres"]);
 
             builder.Services.AddScoped<TContext>();
-            builder.Services.AddScoped<IBaseDbContext>(sp => sp.GetRequiredService<TContext>());
             builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         }
     }

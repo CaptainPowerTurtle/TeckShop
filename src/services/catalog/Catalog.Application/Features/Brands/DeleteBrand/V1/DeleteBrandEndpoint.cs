@@ -29,6 +29,7 @@ namespace Catalog.Application.Features.Brands.DeleteBrand.V1
             Delete("/Brands/{Id}");
             Options(ep => ep.RequireProtectedResource("brands", "delete"));
             Version(1);
+            PreProcessor<TenantChecker<DeleteBrandRequest>>();
             Validator<DeleteBrandValidator>();
         }
 

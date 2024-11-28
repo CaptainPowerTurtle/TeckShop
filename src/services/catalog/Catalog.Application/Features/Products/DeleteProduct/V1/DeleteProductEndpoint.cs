@@ -1,4 +1,4 @@
-﻿using Catalog.Application.Features.Products.CreateProduct.V1;
+using Catalog.Application.Features.Products.CreateProduct.V1;
 using ErrorOr;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
@@ -30,6 +30,7 @@ namespace Catalog.Application.Features.Products.DeleteProduct.V1
             Delete("/Products");
             Options(ep => ep.RequireProtectedResource("products", "delete")/*.AddEndpointFilter<IdempotentAPIEndpointFilter>()*/);
             Version(1);
+            PreProcessor<TenantChecker<DeleteProductRequest>>();
             Validator<DeleteProductValidator>();
         }
 

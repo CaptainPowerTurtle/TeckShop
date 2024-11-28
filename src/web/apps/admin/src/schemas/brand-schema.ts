@@ -18,10 +18,14 @@ export type AddBrandSchema = z.infer<typeof addBrandSchema>
 export const brandSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
-  description: z.string().default("").optional(),
-  website: z.string().url().or(z.literal(''))
+  description: z.string().nullable(),
+  website: z.string().nullable()
 });
 export type BrandSchema = z.infer<typeof brandSchema>
+
+export const brandsList = z.array(brandSchema);
+
+export type BrandsList = z.infer<typeof brandsList>
 
 export const pagedBrandListSchema = z.object({
   data: z.array(brandSchema),

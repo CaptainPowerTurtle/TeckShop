@@ -147,6 +147,7 @@ namespace Catalog.Domain.Entities.Products
         /// <param name="productSku"></param>
         /// <param name="gtin"></param>
         /// <param name="categories"></param>
+        /// <param name="productPrices"></param>
         /// <param name="isActive"></param>
         /// <param name="brand"></param>
         public static Product Create(
@@ -155,7 +156,8 @@ namespace Catalog.Domain.Entities.Products
             string? productSku,
             string? gtin,
             ICollection<Category> categories,
-            bool? isActive = false,
+            ICollection<ProductPrice> productPrices,
+            bool isActive = false,
             Brand? brand = null)
         {
             Product product = new()
@@ -163,10 +165,11 @@ namespace Catalog.Domain.Entities.Products
                 Name = name!,
                 Description = description,
                 Slug = GetProductSlug(name!),
-                IsActive = isActive ?? false,
+                IsActive = isActive,
                 ProductSKU = productSku!,
                 GTIN = gtin,
                 Categories = categories,
+                ProductPrices = productPrices,
                 Brand = brand,
                 BrandId = brand?.Id
             };

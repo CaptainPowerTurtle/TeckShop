@@ -64,20 +64,17 @@ namespace Catalog.Domain.Entities.ProductPrices
         /// <summary>
         /// Create product price.
         /// </summary>
-        /// <param name="productId"></param>
         /// <param name="salePrice"></param>
         /// <param name="currencyCode"></param>
         /// <param name="productPriceTypeId"></param>
         /// <returns></returns>
         public static ProductPrice Create(
-            Guid productId,
             decimal salePrice,
             string currencyCode,
             Guid productPriceTypeId)
         {
             ProductPrice ProductPrice = new()
             {
-                ProductId = productId,
                 SalePrice = salePrice,
                 CurrencyCode = currencyCode,
                 ProductPriceTypeId = productPriceTypeId,

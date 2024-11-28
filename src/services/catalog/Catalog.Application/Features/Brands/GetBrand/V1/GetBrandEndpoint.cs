@@ -30,6 +30,7 @@ namespace Catalog.Application.Features.Brands.GetBrand.V1
             AllowAnonymous();
             Options(ep => ep.RequireProtectedResource("brands", "read"));
             Version(1);
+            PreProcessor<TenantChecker<GetBrandRequest>>();
             Validator<GetBrandValidator>();
         }
 

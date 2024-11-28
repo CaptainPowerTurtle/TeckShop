@@ -10,11 +10,12 @@ import { getFiltersStateParser, getSortingStateParser } from '@teckshop/ui/lib/p
 import { brandSchema } from './brand-schema';
 
 export const addProductSchema = z.object({
-  name: z.string().max(255),
+  name: z.string().min(1).max(255),
   description: z.string().optional(),
   isActive: z.boolean(),
   productSKU: z.string().default("").optional(),
   gtin: z.string().default("").optional(),
+  brandId: z.string().uuid().nullable(),
 });
 export type AddProduct = z.infer<typeof addProductSchema>
 
@@ -26,7 +27,7 @@ export const productSchema = z.object({
   isActive: z.boolean(),
   productSKU: z.string().default("").optional(),
   gtin: z.string().default("").optional(),
-  brand: z.object({brandSchema})
+  brand: brandSchema.nullable()
 });
 export type Product = z.infer<typeof productSchema>
 

@@ -6,14 +6,14 @@ import { flattenValidationErrors } from "next-safe-action";
 import { auth } from "~/src/server/auth";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { addProductSchema, deleteProductSchema, deleteProductsSchema, updateProductSchema } from "~/src/schemas/product-schema";
+import { addProductSchema, deleteProductSchema, deleteProductsSchema, productSchema, updateProductSchema } from "~/src/schemas/product-schema";
+import { problemDetailsSchema } from "~/src/schemas/problem-details-schema";
 
 export const addProductAction = actionClient
     .schema(addProductSchema, {
         handleValidationErrorsShape: (ve) => flattenValidationErrors(ve).fieldErrors,
     })
-    .action(async ({ parsedInput: { name, description, isActive, productSKU, gtin } }) => {
-
+    .action(async ({ parsedInput: { name, description, isActive, productSKU, gtin, brandId } }) => {
         // Check valid login here
         const session = await auth();
         if (session == null || session == undefined) {
@@ -24,7 +24,8 @@ export const addProductAction = actionClient
             description: description,
             isActive: isActive,
             productSKU: productSKU,
-            gtin: gtin
+            gtin: gtin,
+            brandId: brandId
         });
 
         const crypto = require('crypto');
@@ -39,9 +40,11 @@ export const addProductAction = actionClient
             body: body,
         });
         if (!res.ok) {
-            return { error: res.statusText }
+            const errorResponse = await problemDetailsSchema.parseAsync(await res.json())
+            return { failure: errorResponse }
         }
-        return { message: "Product created!" }
+        var responseData = await res.json()
+        return { success: await productSchema.parseAsync(responseData) }
     });
 
 export const updateProductAction = actionClient

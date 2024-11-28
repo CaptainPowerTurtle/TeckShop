@@ -5,8 +5,11 @@ using Catalog.Domain.Entities.ProductPriceTypes;
 using Catalog.Domain.Entities.Products;
 using Catalog.Domain.Entities.Promotions;
 using Catalog.Domain.Entities.Suppliers;
+using Finbuckle.MultiTenant;
+using Finbuckle.MultiTenant.Abstractions;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using TeckShop.Infrastructure.Multitenant;
 using TeckShop.Persistence.Database.EFCore;
 
 namespace Catalog.Infrastructure.Persistence
@@ -17,8 +20,9 @@ namespace Catalog.Infrastructure.Persistence
     /// <remarks>
     /// Initializes a new instance of the <see cref="AppDbContext"/> class.
     /// </remarks>
+    /// <param name="multiTenantContextAccessor"></param>
     /// <param name="options">The options.</param>
-    public class AppDbContext(DbContextOptions<AppDbContext> options) : BaseDbContext(options)
+    public class AppDbContext(IMultiTenantContextAccessor<TeckShopTenant> multiTenantContextAccessor, DbContextOptions<AppDbContext> options) : BaseDbContext(options, multiTenantContextAccessor)
     {
         /// <summary>
         /// On model creating.
@@ -31,14 +35,14 @@ namespace Catalog.Infrastructure.Persistence
             modelBuilder.AddInboxStateEntity();
             modelBuilder.AddOutboxMessageEntity();
             modelBuilder.AddOutboxStateEntity();
+
+            modelBuilder.Entity<Brand>().IsMultiTenant();
         }
 
         /// <summary>
         /// Gets or sets the brands.
         /// </summary>
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        public DbSet<Brand> Brands { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+        public required DbSet<Brand> Brands { get; set; }
 
         /// <summary>
         /// Gets or sets the products.
