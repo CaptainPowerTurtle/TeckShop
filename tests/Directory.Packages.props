@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
-    <PackageVersion Include="FluentAssertions" Version="6.12.1" />
+    <PackageVersion Include="FluentAssertions" Version="7.0.0" />
     <PackageVersion Include="FluentAssertions.Web" Version="1.4.0" />
     <PackageVersion Include="FluentResults.Extensions.FluentAssertions" Version="2.1.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
