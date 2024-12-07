@@ -31,7 +31,7 @@ namespace TeckShop.Infrastructure.Swagger
                         {
                                 { "openid", "openid" },
                                 { "profile", "profile" },
-                                { "organization", "organization" }
+                                { "organization", "organization" },
                         }
                     }
                 }

@@ -4,6 +4,7 @@ using Finbuckle.MultiTenant.Stores.DistributedCacheStore;
 using Keycloak.AuthServices.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using TeckShop.Core.Auth;
 
 namespace TeckShop.Infrastructure.Multitenant
 {
@@ -47,10 +48,11 @@ namespace TeckShop.Infrastructure.Multitenant
                         await Task.FromResult(0);
                     };
                 })
-                    .WithHeaderStrategy("x-tenant-id")
+                    .WithHeaderStrategy(AuthConstants.TenantHeader)
                     .WithFusionCacheStore<TeckShopTenant>(TimeSpan.FromMinutes(60))
                     .WithHttpRemoteStore(url, httpClientBuilder =>
                     {
+                        httpClientBuilder.AddClientCredentialsTokenHandler(AuthConstants.TeckShop);
                         httpClientBuilder.AddHttpMessageHandler<KeycloakMessageHandler>();
                     });
             }

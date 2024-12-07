@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Finbuckle.MultiTenant;
+using TeckShop.Core.Auth;
 using TeckShop.Infrastructure.Multitenant;
 
 namespace TeckShop.Infrastructure.Endpoints
@@ -18,7 +19,7 @@ namespace TeckShop.Infrastructure.Endpoints
         /// <returns>A Task.</returns>
         public async Task PreProcessAsync(IPreProcessorContext<TRequest> context, CancellationToken ct)
         {
-            Microsoft.Extensions.Primitives.StringValues tID = context.HttpContext.Request.Headers["x-tenant-id"];
+            Microsoft.Extensions.Primitives.StringValues tID = context.HttpContext.Request.Headers[AuthConstants.TenantHeader];
             TeckShopTenant? tenant = context.HttpContext.GetMultiTenantContext<TeckShopTenant>()?.TenantInfo;
             if (tID.Count == 0 || tID[0] is null)
             {

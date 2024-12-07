@@ -5,6 +5,8 @@ import { Button } from "@teckshop/ui/components/ui/button";
 import { getTranslations } from "next-intl/server";
 import { auth, signIn } from "~/src/server/auth";
 import { LanguageSelect } from "./language-select";
+import { getUserOrganizations } from "~/src/lib/data/keycloak-queries";
+import { OrganizationSelect } from "./organization-select";
 
 interface NavbarProps {
   title: string;
@@ -13,7 +15,9 @@ interface NavbarProps {
 export async function Navbar({ title }: NavbarProps) {
   const session = await auth()
   const t = await getTranslations("rootlayout");
-  session?.user.provider
+  const organizations = await getUserOrganizations();
+
+  
   return (
     <header className="sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
       <div className="mx-4 sm:mx-8 flex h-14 items-center">
@@ -22,6 +26,7 @@ export async function Navbar({ title }: NavbarProps) {
           <h1 className="font-bold">{title}</h1>
         </div>
         <div className="flex flex-1 items-center space-x-2 justify-end">
+          <OrganizationSelect organizations={organizations} />
           <LanguageSelect />
           <ModeToggle />
           {session?.user != null ? (

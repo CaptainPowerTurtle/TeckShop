@@ -139,6 +139,8 @@
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Abstractions" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Dns" Version="9.0.0" />
+    <PackageVersion Include="Duende.AccessTokenManagement" Version="3.0.1" />
+    <PackageVersion Include="IdentityModel" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">

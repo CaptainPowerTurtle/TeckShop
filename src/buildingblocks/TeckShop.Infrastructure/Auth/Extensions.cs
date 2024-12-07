@@ -2,9 +2,12 @@ using FastEndpoints;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using TeckShop.Core.Auth;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace TeckShop.Infrastructure.Auth
 {
@@ -61,6 +64,15 @@ namespace TeckShop.Infrastructure.Auth
             });
             services.AddAuthorization().AddKeycloakAuthorization().AddAuthorizationServer(config);
             services.AddHealthChecks().AddIdentityServer(new Uri(uriString: $"{keycloakOptions.AuthServerUrl}/realms/{keycloakOptions.Realm}/"), tags: ["openId", "identity", "keycloak"], failureStatus: HealthStatus.Degraded);
+
+            services.AddHttpClient<IKeycloakHttpClient, KeycloakHttpClient>((servicProvider, httpCLient) =>
+            {
+                httpCLient.BaseAddress = new Uri($"{keycloakOptions.AuthServerUrl}admin/realms/{keycloakOptions.Realm}");
+            }).AddClientCredentialsTokenHandler(AuthConstants.TeckShop);
+
+            services.AddTransient<IAuthorizationHandler, IsTenantMemberAuthorizationHandler>();
+            services.AddTransient<IFusionCache, FusionCache>();
+
             return services;
         }
     }

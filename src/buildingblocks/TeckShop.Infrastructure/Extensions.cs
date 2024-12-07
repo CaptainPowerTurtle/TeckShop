@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
+using TeckShop.Core.Auth;
 using TeckShop.Core.Exceptions;
 using TeckShop.Infrastructure.Behaviors;
 using TeckShop.Infrastructure.Caching;
@@ -92,6 +93,21 @@ namespace TeckShop.Infrastructure
             if (enableSwagger)
             {
                 builder.Services.AddSwaggerExtension(builder.Configuration, swaggerDocumentOptions, keycloakOptions);
+            }
+
+            if (keycloakOptions is not null)
+            {
+                builder.Services
+                    .AddClientCredentialsTokenManagement()
+                    .AddClient(
+                    AuthConstants.TeckShop,
+                    client =>
+                    {
+                        client.ClientId = keycloakOptions.Resource;
+                        client.ClientSecret = keycloakOptions.Credentials.Secret;
+                        client.TokenEndpoint = keycloakOptions.KeycloakTokenEndpoint;
+                    }
+                    );
             }
 
             builder.Services.Configure<ForwardedHeadersOptions>(options =>

@@ -3,6 +3,7 @@ import KeycloakProvider from "next-auth/providers/keycloak"
 import { env } from "../env"
 import NextAuth, { type DefaultSession, type Profile, type User, type Session, type Account, } from "next-auth"
 import authConfig from "../config/auth/auth.config";
+import { ProviderType } from "next-auth/providers/index";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -13,29 +14,71 @@ import authConfig from "../config/auth/auth.config";
 declare module "next-auth" {
   interface Session {
     user: {
+      sub: string;
+      email_verified: boolean;
+      name: string;
+      preferred_username: string;
+      given_name: string;
+      family_name: string;
+      email: string;
       id: string;
+      org_name?: string;
+      telephone?: string;
     } & DefaultSession["user"];
-    error?: "RefreshTokenError";
+    error?: string | null;
     token_provider?: string;
     access_token: (string & DefaultSession) | any;
   }
   interface User {
-    provider?: string;
-    firstName: string | null | undefined;
-    lastName?: string | null | undefined;
-    isEmailVerified?: boolean | null | undefined;
-    access_token: string | null;
+    sub: string;
+    email_verified: boolean;
+    name?: string | null | undefined;
+    telephone: string;
+    preferred_username: string;
+    org_name: string;
+    given_name: string;
+    family_name: string;
+    email?: string | null | undefined;
+    id?: string | undefined;
+    organization: any;
+  }
+
+  interface Account {
+    provider: string;
+    type: ProviderType;
+    id: string;
+    access_token: string;
+    refresh_token: string;
+    idToken: string;
+    expires_in: number;
+    refresh_expires_in: number;
+    token_type: string;
+    id_token: string;
+    "not-before-policy": number;
+    session_state: string;
+    scope: string;
+  }
+
+  interface Profile {
+    sub?: string | null;
+    email_verified?: boolean | null;
+    name?: string | null;
+    telephone: string;
+    preferred_username?: string | null;
+    org_name: string;
+    given_name?: string | null;
+    family_name?: string | null;
+    email?: string | null;
   }
 }
 declare module "next-auth/jwt" {
   interface JWT {
     access_token: string;
-    expires_at: number
-    refresh_token: string
-    id_token: string
-    error?: "RefreshTokenError"
-    provider?: string
+    refresh_token: string;
+    refresh_expires_in: number;
+    expires_in: number;
     user: User
+    error?: string | null;
   }
 }
 
@@ -53,26 +96,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async jwt({ token, account, user, profile }) {
-      if (user) {
-        user.email = profile?.email;
-        user.firstName = profile?.given_name;
-        user.lastName = profile?.family_name;
-        user.isEmailVerified = profile?.email_verified;
-        token.id = user.id
-      }
-      if (account && account?.provider === 'keycloak' && account?.type === 'oidc') {
-
-        token.access_token = account.access_token as string,
-          token.expires_at = account.expires_at as number,
-          token.refresh_token = account.refresh_token as string,
-          token.id_token = account.id_token as string;
-        token.provider = 'keycloak'
-
+      if (account && user) {
+        // Update token with account information
+        token.access_token = account.access_token;
+        token.refresh_token = account.refresh_token;
+        token.id_token = account.id_token as string;
+        token.access_token_expired =
+          Date.now() + (account.expires_in - 15) * 1000;
+        token.refresh_token_expired =
+          Date.now() + (account.refresh_expires_in - 15) * 1000;
         token.user = user;
-
         return token;
-      } else if (Date.now() < token.expires_at * 1000) {
-        return token
       } else {
         if (!token.refresh_token) throw new TypeError("Missing refresh_token")
 
@@ -97,21 +131,31 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           if (!response.ok) throw tokensOrError
 
-          const newTokens = tokensOrError as {
-            access_token: string
-            expires_in: number
-            refresh_token?: string
-          }
+          return {
+            ...token,
+            access_token: tokensOrError.access_token,
+            refresh_token: tokensOrError.refresh_token ?? token.refresh_token,
+            refresh_token_expired:
+            tokensOrError.refresh_expires_in ?? token.refresh_token_expired,
+            expires_in: Math.floor(Date.now() / 1000 + tokensOrError.expires_in),
+            error: null,
+          };
 
-          token.access_token = newTokens.access_token
-          token.expires_at = Math.floor(
-            Date.now() / 1000 + newTokens.expires_in
-          )
+          // const newTokens = tokensOrError as {
+          //   access_token: string
+          //   expires_in: number
+          //   refresh_token?: string
+          // }
 
-          if (newTokens.refresh_token)
-            token.refresh_token = newTokens.refresh_token
+          // token.access_token = newTokens.access_token
+          // token.expires_at = Math.floor(
+          //   Date.now() / 1000 + newTokens.expires_in
+          // )
 
-          return token
+          // if (newTokens.refresh_token)
+          //   token.refresh_token = newTokens.refresh_token
+
+          // return token
         }
         catch (error) {
           console.error("Error refreshing access_token", error)
@@ -122,19 +166,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
     },
     async session({ session, token }) {
-      // if (!token.sub || typeof token.id !== "string") {
-      //   return {} as Session
-      // }
-
-      if (token.provider) {
-        session.token_provider = token.provider;
-      }
-      //session.user.id = token.sub as string
-
       session.error = token.error
-      session.user.name = token.name;
+      session.user.name = token.name ?? "";
       session.user.email = token.email ?? "";
-      session.user.id = token.sub as string
+      session.user.id = token.user.sub as string
       session.access_token = token.access_token;
 
       return session;

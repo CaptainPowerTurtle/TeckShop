@@ -8,7 +8,12 @@ export default { secret: env.AUTH_SECRET , providers: [keycloak({
     issuer: env.KEYCLOAK_ISSUER,
     authorization: {
       params: {
-        audience: 'catalog',
+        audience: 'TeckShop',
+        scope: 'openid profile organization'
       }
-    }
+    },
+    profile: (profile) => {
+      profile.id = profile.sub;
+      return profile;
+    },
   })] } satisfies NextAuthConfig

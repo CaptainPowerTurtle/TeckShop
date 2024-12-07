@@ -2,6 +2,7 @@ using Catalog.Application.Features.Brands.Dtos;
 using FastEndpoints;
 using Keycloak.AuthServices.Authorization;
 using MediatR;
+using TeckShop.Infrastructure.Auth;
 using TeckShop.Infrastructure.Endpoints;
 
 namespace Catalog.Application.Features.Brands.GetBrands.V1
@@ -27,6 +28,7 @@ namespace Catalog.Application.Features.Brands.GetBrands.V1
         {
             Get("/Brands/All");
             Options(ep => ep.RequireProtectedResource("brands", "read"));
+            Policy(ep => ep.AddRequirements(new IsTenantMember()));
             Version(1);
             PreProcessor<TenantChecker<GetBrandsRequest>>();
         }

@@ -22,9 +22,9 @@ export function LanguageSelect() {
   const pathname = usePathname();
   const locale = useLocale();
 
-  function setSelectedLanguage(localetest: string) {
+  function setSelectedLanguage(locale: string) {
     startTransition(() => {
-      router.replace(pathname, {locale: localetest}
+      router.replace(pathname, {locale: locale}
       );
       // router.replace(
       //   // @ts-expect-error -- TypeScript will validate that only known `params`
