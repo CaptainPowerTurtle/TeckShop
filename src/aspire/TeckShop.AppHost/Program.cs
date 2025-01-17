@@ -12,7 +12,7 @@ var catalogdb = postgres.AddDatabase("catalogdb");
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq").WithManagementPlugin();
 
-var keycloak = builder.AddKeycloakContainer("keycloak", "26.0.6")
+var keycloak = builder.AddKeycloakContainer("keycloak", "26.0.7")
     //.WithImage("phasetwo-keycloak")
     //.WithImageRegistry("quay.io/phasetwo")
     //.WithImageTag("25.0.6")

@@ -5,6 +5,7 @@ using Keycloak.AuthServices.Sdk.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using TeckShop.Core.Auth;
+using TeckShop.Core.Auth.Keycloak;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace TeckShop.Infrastructure.Auth
@@ -42,9 +43,23 @@ namespace TeckShop.Infrastructure.Auth
             AuthorizationHandlerContext context,
             IsTenantMember requirement)
         {
+            string? organizationClaim = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(claim => claim.Type == "organization")?.Value;
+
+            if (!string.IsNullOrWhiteSpace(organizationClaim))
+            {
+                ErrorOr<OrganizationRepresentation> organizationRepresentation = GetOrganizationFromClaim(organizationClaim);
+
+                if (!organizationRepresentation.IsError)
+                {
+                    context.Succeed(requirement);
+                    return;
+                }
+            }
+
             string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             string? tenantId = _httpContextAccessor.HttpContext?.Request.Headers[AuthConstants.TenantHeader];
-            if (userId is null || tenantId is null)
+
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(tenantId))
             {
                 context.Fail();
                 return;
@@ -70,6 +85,60 @@ namespace TeckShop.Infrastructure.Auth
             {
                 context.Succeed(requirement);
             }
+        }
+
+        private ErrorOr<OrganizationRepresentation> GetOrganizationFromClaim(string organizationClaim)
+        {
+            try
+            {
+                // Parse the JSON string (organization claim is expected to be a JSON array)
+                JsonElement jsonElement = JsonDocument.Parse(organizationClaim).RootElement;
+
+                if (jsonElement.ValueKind == JsonValueKind.Array)
+                {
+                    // Handle the array case
+                    if (jsonElement.GetArrayLength() > 0)
+                    {
+                        JsonElement firstElement = jsonElement[0];
+                        return ExtractObjectNameAndId(firstElement);
+                    }
+                }
+                else if (jsonElement.ValueKind == JsonValueKind.Object)
+                {
+                    // Handle the object case
+                    return ExtractObjectNameAndId(jsonElement);
+                }
+
+                return Errors.Organization.ParsingError;
+            }
+            catch (JsonException)
+            {
+                return Errors.Organization.ParsingError;
+            }
+        }
+
+        private ErrorOr<OrganizationRepresentation> ExtractObjectNameAndId(JsonElement jsonElement)
+        {
+            JsonProperty property = jsonElement.EnumerateObject().FirstOrDefault();
+
+            OrganizationRepresentation organizationRepresentation = new()
+            {
+                Name = property.Name // Name of the object (e.g., "Test")
+            };
+
+            if (property.Value.TryGetProperty("id", out JsonElement id))
+            {
+                string? tenantId = id.GetString();
+
+                if (tenantId is null)
+                {
+                    return Errors.Organization.IdNotFound;
+                }
+
+                organizationRepresentation.Id = Guid.Parse(tenantId);
+            }
+
+            return organizationRepresentation;
         }
     }
 }
